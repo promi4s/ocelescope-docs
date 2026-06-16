@@ -1,0 +1,113 @@
+<div class="code-to-form not-content">
+	<section class="code-pane" aria-label="Python plugin declaration">
+		<header>plugin.py</header>
+		<pre><code>class DiscoveryInput(PluginInput):
+    object_type: str
+    min_support: float = 0.2
+
+@plugin_method(label="Discover model")
+def discover(log: OCEL, params: DiscoveryInput):
+    return model</code></pre>
+	</section>
+	<section class="form-pane" aria-label="Generated plugin form">
+		<header>Generated form</header>
+		<label>
+			<span>Object type</span>
+			<select>
+				<option>Order</option>
+				<option>Item</option>
+				<option>Delivery</option>
+			</select>
+		</label>
+		<label>
+			<span>Minimum support</span>
+			<input type="range" min="0" max="1" step="0.1" value="0.2" />
+		</label>
+		<button type="button">Discover model</button>
+	</section>
+</div>
+
+<style>
+	.code-to-form {
+		display: grid;
+		grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+		gap: 1rem;
+	}
+
+	section {
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 8px;
+		background: var(--sl-color-black);
+		overflow: hidden;
+	}
+
+	header {
+		border-bottom: 1px solid var(--sl-color-gray-5);
+		padding: 0.65rem 0.85rem;
+		background: var(--sl-color-gray-6);
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-xs);
+		font-weight: 800;
+		text-transform: uppercase;
+	}
+
+	pre {
+		margin: 0;
+		padding: 1rem;
+		overflow: auto;
+		color: var(--sl-color-white);
+		font-size: var(--sl-text-sm);
+		line-height: 1.65;
+	}
+
+	code {
+		font-family: var(--__sl-font-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace);
+	}
+
+	.form-pane {
+		padding-bottom: 1rem;
+	}
+
+	label {
+		display: grid;
+		gap: 0.45rem;
+		margin: 1rem;
+		color: var(--sl-color-gray-2);
+		font-size: var(--sl-text-sm);
+		font-weight: 700;
+	}
+
+	select,
+	input,
+	button {
+		width: 100%;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 6px;
+		background: var(--sl-color-gray-6);
+		color: var(--sl-color-white);
+	}
+
+	select {
+		padding: 0.65rem;
+	}
+
+	input {
+		accent-color: var(--sl-color-text-accent);
+	}
+
+	button {
+		width: calc(100% - 2rem);
+		margin: 0.25rem 1rem 0;
+		padding: 0.7rem 0.85rem;
+		background: var(--sl-color-text-accent);
+		color: var(--sl-color-black);
+		font-weight: 800;
+		cursor: default;
+	}
+
+	@media (max-width: 52rem) {
+		.code-to-form {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

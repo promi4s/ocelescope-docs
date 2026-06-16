@@ -1,0 +1,313 @@
+---
+title: Ocelescope
+description: An extensible web framework for object-centric process mining.
+template: splash
+hero:
+  title: Ocelescope
+  tagline: An extensible web framework for object-centric process mining.
+  actions:
+    - text: Get Started
+      link: /getting-started/
+      icon: right-arrow
+    - text: Download
+      link: /download/
+      icon: document
+      variant: secondary
+    - text: Documentation
+      link: /documentation/
+      icon: open-book
+      variant: secondary
+---
+
+import {
+	Badge,
+	Card,
+	CardGrid,
+	FileTree,
+	LinkButton,
+	LinkCard,
+	Steps,
+	Tabs,
+	TabItem,
+} from '@astrojs/starlight/components';
+import CodeToForm from '../../components/landing/CodeToForm.astro';
+import ComparisonColumns from '../../components/landing/ComparisonColumns.astro';
+import FeatureSplit from '../../components/landing/FeatureSplit.astro';
+import KernelOrbit from '../../components/landing/KernelOrbit.astro';
+import MediaFrame from '../../components/landing/MediaFrame.astro';
+import NumberedGrid from '../../components/landing/NumberedGrid.astro';
+import StatementBand from '../../components/landing/StatementBand.astro';
+import OCPN from '../../components/landing/ObjectCentricPetriNet.astro';
+
+
+
+<FeatureSplit
+	kicker="Object-centric process mining"
+	title="Use the power of object-centric process mining"
+	statement="Ocelescope provides built-in functionality from the start."
+	reverse
+>
+	<Fragment slot="body">
+		Ocelescope ships with the core OCEL workflow already in place: load object-centric event logs, inspect events and object relations, filter by object type and time window, prepare data for analysis, and discover process models without wiring up extra tooling first.
+	</Fragment>
+
+	<OCPN/>
+</FeatureSplit>
+
+<StatementBand
+	eyebrow="The promise"
+>
+	<Fragment slot="title">
+		Ocelescope is where research code becomes reusable software.
+	</Fragment>
+	<Fragment slot="body">
+	  Ocelescope provides a plugin system to integrate new funtionality at runtime. A method should not disappear into a one-off prototype for publication. Package it, upload it, run it, and let others build on it.
+	</Fragment>
+</StatementBand>
+
+
+<FeatureSplit
+	kicker="Why it matters"
+	title="Stop rebuilding the same infrastructure around every OCPM method."
+	reverse
+>
+	<Fragment slot="body">
+		Object-centric process mining is powerful, but the tool landscape is fragmented. Ocelescope separates reusable core infrastructure from runtime-loaded functionality, so researchers can focus on analysis instead of importers, forms, deployment, and UI plumbing.
+	</Fragment>
+	<ComparisonColumns
+		columns={[
+			{
+				title: 'Typical research prototype',
+				items: [
+					'Custom setup instructions',
+					'Project-specific UI',
+					'Repeated import and export code',
+					'Repeated filtering and inspection logic',
+					'Hard to maintain after publication',
+					'Difficult for others to extend',
+				],
+			},
+			{
+				title: 'Ocelescope',
+				tone: 'accent',
+				items: [
+					'Shared web interface',
+					'Runtime-loadable plugins',
+					'Reusable OCEL management',
+					'Built-in log inspection and filtering',
+					'Containerized deployment',
+					'Plugin and module architecture for long-term extensibility',
+				],
+			},
+		]}
+	/>
+</FeatureSplit>
+
+## One core, many tools
+
+<CardGrid>
+	<Card title="Log Overview" icon="open-book">
+		Inspect activities, objects, attributes, value ranges, and timeframes directly after import.
+	</Card>
+	<Card title="Discovery" icon="setting">
+		Run built-in DFG and Petri net discovery, and let plugins add further discovery methods.
+	</Card>
+	<Card title="Filtering" icon="filter">
+		Restrict the log by object type, event type, time range, attributes, and relation counts.
+	</Card>
+	<Card title="Reusable setup" icon="document">
+		Run frontend and backend in a container-based setup that behaves consistently across machines.
+	</Card>
+	<Card title="Plugins at runtime" icon="add-document">
+		Upload ZIP plugins while Ocelescope is running and make new analyses available immediately.
+	</Card>
+	<Card title="Modules" icon="rocket">
+		Add larger frontend and backend components when the logic needs code changes beyond a plugin.
+	</Card>
+</CardGrid>
+
+<FeatureSplit
+	kicker="Runtime extensibility"
+	title="The core stays small. Capabilities arrive as plugins."
+	body="Ocelescope works like a process-mining workbench: the core manages sessions, logs, resources, execution, and UI integration. Plugins bring the concrete algorithms, transformations, and visualizations."
+	statement="Upload a ZIP at runtime. The tool becomes part of the workbench."
+>
+	<KernelOrbit />
+</FeatureSplit>
+
+<StatementBand
+	eyebrow="Developer experience"
+	title="Write Python logic. Get a usable interface."
+	body="Plugin declarations describe what a method needs. Ocelescope turns that structure into forms, execution flows, and reusable results."
+/>
+
+<FeatureSplit
+	kicker="Generated UI"
+	title="Typed plugin inputs become graphical forms."
+	body="A plugin author describes inputs once. Ocelescope uses that declaration to render the corresponding form, bind OCEL and resource inputs, execute the method, and store the result."
+	reverse
+>
+	<CodeToForm />
+</FeatureSplit>
+
+## From log to insight
+
+Ocelescope gives users a focused workflow for working with object-centric event data.
+
+<Steps>
+1. **Start Ocelescope.** 
+
+    Run frontend and backend with a reproducible container-based setup.
+2. **Load an OCEL.** 
+
+    Import object-centric event logs and manage them inside one session.
+3. **Inspect the log.** 
+
+    Explore events, objects, relations, and summary information before analysis.
+4. **Filter and prepare.** 
+ 
+    Focus on the relevant object types, event types, relations, and time ranges.
+5. **Run plugins.**
+ 
+    Apply OCPM methods through generated forms based on plugin declarations.
+6. **Export results.** 
+
+    Continue with generated OCELs, resources, visualizations, and output files.
+</Steps>
+
+<NumberedGrid
+	items={[
+		{
+			title: 'Log Overview',
+			body: 'Confirm the imported OCEL structure before running analyses.',
+		},
+		{
+			title: 'Generated Plugin Form',
+			body: 'Fill method inputs rendered from Python plugin definitions.',
+		},
+		{
+			title: 'Results and Resources',
+			body: 'Inspect outputs, reuse resources, and export generated artifacts.',
+		},
+	]}
+/>
+
+<FeatureSplit
+	kicker="For users"
+	title="Use OCPM tools through one modern interface."
+	body="Load logs, inspect object-centric structure, apply filters, run plugins, view results, and export artifacts without switching between isolated prototypes."
+	statement="Ocelescope is a workbench first, not a script collection."
+>
+	<MediaFrame
+		label="User workflow"
+		title="Workflow screencast placeholder"
+		caption="Show: installation -> first startup -> first OCEL log -> Log Overview -> generated plugin form."
+	/>
+</FeatureSplit>
+
+<FeatureSplit
+	kicker="For plugin developers"
+	title="Package research code so others can run it."
+	body="Write the method in Python, declare its inputs and outputs, build the ZIP, upload it into Ocelescope, and run it from the UI. The surrounding application is already there."
+	reverse
+	statement="A reusable plugin is easier to evaluate, teach, compare, and extend."
+>
+	<Tabs>
+		<TabItem label="Plugin structure">
+			<FileTree>
+				- my-plugin/
+				  - \_\_init\_\_.py
+				  - plugin.py
+				  - pyproject.toml
+			</FileTree>
+		</TabItem>
+		<TabItem label="Plugin skeleton">
+
+```python
+from typing import Annotated
+
+from ocelescope import OCEL, OCEL_FIELD, OCELAnnotation, Plugin, PluginInput, plugin_method
+
+class Input(PluginInput):
+    object_type_field: str = OCEL_FIELD(field_type="object_type", ocel_id="ocel")
+
+class MinimalPlugin(Plugin):
+    label = "Minimal Plugin"
+    description = "An Ocelescope plugin"
+    version = "0.1.0"
+
+    @plugin_method(label="Example Method", description="An example plugin method")
+    def example(
+        self,
+        ocel: Annotated[OCEL, OCELAnnotation(label="Event Log")],
+        input: Input,
+    ) -> OCEL:
+        ...
+```
+
+		</TabItem>
+	</Tabs>
+</FeatureSplit>
+
+## Plugins and modules
+
+Ocelescope supports two extension paths.
+
+<CardGrid>
+	<Card title="Plugins" icon="add-document">
+		Best for lightweight OCPM functionality: algorithms, transformations, resources, visualizations, and reusable analysis functions that can be zipped and loaded at runtime.
+	</Card>
+	<Card title="Modules" icon="setting">
+		Best for larger tools with custom frontend views, backend endpoints, and specialized workflows that require actual code adjustments in the application.
+	</Card>
+</CardGrid>
+
+Use plugins when you want to add a method quickly.
+Use modules when Ocelescope should become the foundation for a larger OCPM application.
+
+<StatementBand
+	eyebrow="Community"
+	title="Object-centric process mining needs a shared tool ecosystem."
+	body="Instead of publishing isolated tools that users install and understand separately, developers can publish plugins that run in the same environment and reuse the same core workflow."
+/>
+
+<CardGrid>
+	<LinkCard
+		title="Available plugins"
+		description="Browse plugins that can be loaded into Ocelescope."
+		href="/plugins/available-plugins/"
+	/>
+	<LinkCard
+		title="Example plugins"
+		description="Learn from small, focused plugins that demonstrate the framework."
+		href="/plugins/example-plugins/"
+	/>
+	<LinkCard
+		title="Submit your plugin"
+		description="Share your OCPM method with users and developers."
+		href="/plugins/submit-plugin/"
+	/>
+</CardGrid>
+
+## Who is it for?
+
+<CardGrid>
+	<Card title="For researchers">
+		Turn your method into something others can run, evaluate, and build on beyond the paper.
+	</Card>
+	<Card title="For developers">
+		Stop reimplementing log management, filtering, inspection, plugin loading, and deployment.
+	</Card>
+	<Card title="For users">
+		Work with OCPM tools through one modern interface instead of installing a new environment for every technique.
+	</Card>
+	<Card title="For the OCPM community">
+		Reduce fragmentation and make tools easier to discover, run, compare, and extend.
+	</Card>
+</CardGrid>
+
+## Ready to try it?
+
+<LinkButton href="/getting-started/" icon="right-arrow">Get started</LinkButton>
+<LinkButton href="/plugin-development/" icon="pencil" variant="secondary">Develop a plugin</LinkButton>
+<LinkButton href="/community/" icon="open-book" variant="secondary">Community and feedback</LinkButton>

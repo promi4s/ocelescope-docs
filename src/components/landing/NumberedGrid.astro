@@ -1,0 +1,78 @@
+---
+interface Item {
+	title: string;
+	body: string;
+}
+
+interface Props {
+	items: Item[];
+}
+
+const { items } = Astro.props;
+---
+
+<ol class="numbered-grid">
+	{
+		items.map((item) => (
+			<li>
+				<span>{items.indexOf(item) + 1}</span>
+				<h3>{item.title}</h3>
+				<p>{item.body}</p>
+			</li>
+		))
+	}
+</ol>
+
+<style>
+	.numbered-grid {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1rem;
+		padding: 0;
+		margin: 1.5rem 0 2.5rem;
+		list-style: none;
+	}
+
+	li {
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 8px;
+		padding: 1.25rem;
+		background: var(--sl-color-black);
+	}
+
+	span {
+		display: inline-grid;
+		place-items: center;
+		width: 2rem;
+		height: 2rem;
+		margin-bottom: 0.9rem;
+		border-radius: 999px;
+		background: var(--sl-color-text-accent);
+		color: var(--sl-color-black);
+		font-size: var(--sl-text-sm);
+		font-weight: 800;
+	}
+
+	h3 {
+		margin: 0;
+		color: var(--sl-color-white);
+		font-size: var(--sl-text-h4);
+	}
+
+	p {
+		margin: 0.6rem 0 0;
+		color: var(--sl-color-gray-2);
+	}
+
+	@media (max-width: 60rem) {
+		.numbered-grid {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+	}
+
+	@media (max-width: 38rem) {
+		.numbered-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
