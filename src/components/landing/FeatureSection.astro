@@ -1,0 +1,13 @@
+---
+import BrowserFrame from "./BrowserFrame.astro";
+import FeatureCopy from "./FeatureCopy.astro";
+
+const { feature } = Astro.props;
+---
+
+<section id={feature.id} class:list={["feature-section", `feature-${feature.tone}`]}>
+  <div class:list={["landing-container", "feature-grid", feature.layout === "media-text" && "feature-grid-reverse"]}>
+    <FeatureCopy feature={feature} />
+    <BrowserFrame media={feature.media} />
+  </div>
+</section>

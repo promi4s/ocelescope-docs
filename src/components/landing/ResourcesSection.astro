@@ -1,0 +1,26 @@
+---
+const { heading, groups } = Astro.props;
+---
+
+<section class="resources-section">
+  <div class="landing-container">
+    <div class="section-heading">
+      <p class="eyebrow">{heading.eyebrow}</p>
+      <h2>{heading.title}</h2>
+    </div>
+    {groups.map((group: any, i: number) => (
+      <div class:list={["resource-group", i > 0 && "resource-group--divided"]}>
+        <p class="resource-group-label">{group.label}</p>
+        <div class="card-grid auto">
+          {group.items.map((resource: any) => (
+            <a class="resource-card lift-card" href={resource.href}>
+              <span>{resource.kicker}</span>
+              <strong>{resource.title}</strong>
+              <p>{resource.description}</p>
+            </a>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>

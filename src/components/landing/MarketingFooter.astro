@@ -1,0 +1,16 @@
+---
+import LogoMark from "./LogoMark.astro";
+
+const { brand, footer, year } = Astro.props;
+---
+
+<footer class="landing-footer">
+  <div class="landing-container footer-minimal">
+    <a class="brand brand-dark" href={brand.homeHref}><LogoMark /> <span>{brand.name}</span></a>
+    <p>{footer.brandBody}</p>
+  </div>
+  <div class="landing-container footer-bottom">
+    <span>© {year} {footer.copyright}</span>
+    <span>{footer.credit}</span>
+  </div>
+</footer>

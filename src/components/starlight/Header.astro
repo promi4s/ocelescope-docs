@@ -1,0 +1,258 @@
+---
+import config from "virtual:starlight/user-config";
+
+import LanguageSelect from "virtual:starlight/components/LanguageSelect";
+import Search from "virtual:starlight/components/Search";
+import SiteTitle from "virtual:starlight/components/SiteTitle";
+import ThemeSelect from "virtual:starlight/components/ThemeSelect";
+import { Icon } from "@astrojs/starlight/components";
+
+const shouldRenderSearch =
+  config.pagefind || config.components.Search !== "@astrojs/starlight/components/Search.astro";
+
+const repoUrl = "https://github.com/promi4s/ocelescope";
+const isLandingPage = Astro.url.pathname === "/";
+
+function repoApiBase(githubUrl: string) {
+  try {
+    const url = new URL(githubUrl);
+    const [owner, repo] = url.pathname.split("/").filter(Boolean);
+    if (url.hostname !== "github.com" || !owner || !repo) return null;
+    return { owner, repo, apiBase: `https://api.github.com/repos/${owner}/${repo}` };
+  } catch {
+    return null;
+  }
+}
+
+async function latestGithubVersion(githubUrl: string) {
+  const repo = repoApiBase(githubUrl);
+  if (!repo) return null;
+
+  try {
+    const release = await fetch(`${repo.apiBase}/releases/latest`, {
+      headers: {
+        Accept: "application/vnd.github+json",
+        "User-Agent": "ocelescope-docs",
+      },
+    });
+    if (release.ok) {
+      const data = await release.json();
+      return data.tag_name || data.name || null;
+    }
+  } catch {
+    // Continue with non-API fallbacks.
+  }
+
+  try {
+    const feed = await fetch(`https://github.com/${repo.owner}/${repo.repo}/releases.atom`, {
+      headers: { Accept: "application/atom+xml" },
+    });
+    if (feed.ok) {
+      const text = await feed.text();
+      const titles = [...text.matchAll(/<title>\s*([^<]+?)\s*<\/title>/g)].map((match) => match[1]?.trim());
+      const title = titles.find((item) => item && !item.toLowerCase().includes("release notes from"));
+      if (title) return title;
+    }
+  } catch {
+    // Continue with tag fallback.
+  }
+
+  try {
+    const tags = await fetch(`${repo.apiBase}/tags?per_page=10`, {
+      headers: {
+        Accept: "application/vnd.github+json",
+        "User-Agent": "ocelescope-docs",
+      },
+    });
+    if (!tags.ok) return null;
+    const tagList = await tags.json();
+    const tag = tagList.find((item: { name?: string }) => typeof item?.name === "string" && item.name.trim());
+    return tag?.name || null;
+  } catch {
+    return null;
+  }
+}
+
+const githubVersion = await latestGithubVersion(repoUrl);
+---
+
+<div class="header">
+  <div class="title-wrapper sl-flex">
+    <SiteTitle />
+  </div>
+  <div class="sl-flex print:hidden">
+    {!isLandingPage && shouldRenderSearch && <Search />}
+  </div>
+  <div class="sl-hidden md:sl-flex print:hidden right-group">
+    <nav class="top-links" aria-label="Primary">
+      <a href="/documentation/">Docs</a>
+      <a class="download-link" href="/download/">Download</a>
+    </nav>
+    <a class="version-link sl-flex" href={repoUrl} rel="me" aria-label="Ocelescope on GitHub" data-header-version-link>
+      <Icon name="github" />
+      <span data-header-github-version={repoUrl} hidden={!githubVersion}>{githubVersion}</span>
+    </a>
+    <ThemeSelect />
+    <LanguageSelect />
+  </div>
+</div>
+
+<script>
+  function repoApiBase(githubUrl) {
+    try {
+      const url = new URL(githubUrl);
+      const [owner, repo] = url.pathname.split("/").filter(Boolean);
+      if (url.hostname !== "github.com" || !owner || !repo) return null;
+      return `https://api.github.com/repos/${owner}/${repo}`;
+    } catch {
+      return null;
+    }
+  }
+
+  async function latestRepoVersion(githubUrl) {
+    const apiBase = repoApiBase(githubUrl);
+    if (!apiBase) return null;
+
+    try {
+      const release = await fetch(`${apiBase}/releases/latest`, {
+        headers: { Accept: "application/vnd.github+json" },
+      });
+      if (release.ok) {
+        const data = await release.json();
+        return data.tag_name || data.name || null;
+      }
+
+      const tags = await fetch(`${apiBase}/tags?per_page=10`, {
+        headers: { Accept: "application/vnd.github+json" },
+      });
+      if (!tags.ok) return null;
+      const tagList = await tags.json();
+      const tag = tagList.find((item) => typeof item?.name === "string" && item.name.trim());
+      return tag?.name || null;
+    } catch {
+      return null;
+    }
+  }
+
+  document.querySelectorAll("[data-header-github-version]").forEach((versionTarget) => {
+    const githubUrl = versionTarget.getAttribute("data-header-github-version");
+    if (githubUrl) {
+      latestRepoVersion(githubUrl).then((version) => {
+        if (!version) return;
+        versionTarget.textContent = version;
+        versionTarget.hidden = false;
+      });
+    }
+  });
+</script>
+
+<style>
+  @layer starlight.core {
+    .header {
+      display: flex;
+      gap: var(--sl-nav-gap);
+      justify-content: space-between;
+      align-items: center;
+      height: 100%;
+    }
+
+    .title-wrapper {
+      overflow: clip;
+      padding: 0.25rem;
+      margin: -0.25rem;
+      min-width: 0;
+    }
+
+    .right-group {
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .top-links {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .top-links a,
+    .version-link {
+      color: var(--sl-color-gray-2);
+      font-size: var(--sl-text-sm);
+      font-weight: 600;
+      line-height: 1;
+      text-decoration: none;
+      transition: color 150ms, background-color 150ms, border-color 150ms;
+    }
+
+    .top-links a {
+      border-radius: 0.4rem;
+      padding: 0.55rem 0.7rem;
+    }
+
+    .top-links a:hover,
+    .version-link:hover {
+      color: var(--sl-color-white);
+    }
+
+    .download-link {
+      border: 1px solid var(--sl-color-gray-5);
+      background: var(--sl-color-gray-6);
+    }
+
+    .download-link:hover {
+      border-color: var(--sl-color-accent);
+      background: var(--sl-color-accent-low);
+    }
+
+    .version-link {
+      align-items: center;
+      gap: 0.45rem;
+      border-inline-start: 1px solid var(--sl-color-gray-5);
+      padding-inline-start: 1rem;
+      color: var(--sl-color-text-accent);
+    }
+
+    .version-link span {
+      border: 1px solid var(--sl-color-gray-5);
+      border-radius: 0.4rem;
+      padding: 0.25rem 0.5rem;
+      color: var(--sl-color-gray-2);
+      font-family: var(--__sl-font-mono);
+      font-size: var(--sl-text-xs);
+    }
+
+    .version-link span[hidden] {
+      display: none;
+    }
+
+    @media (min-width: 50rem) {
+      :global(:root[data-has-sidebar]) {
+        --__sidebar-pad: calc(2 * var(--sl-nav-pad-x));
+      }
+
+      :global(:root:not([data-has-toc])) {
+        --__toc-width: 0rem;
+      }
+
+      .header {
+        --__sidebar-width: max(0rem, var(--sl-content-inline-start, 0rem) - var(--sl-nav-pad-x));
+        --__main-column-fr: calc(
+          (
+              100% + var(--__sidebar-pad, 0rem) - var(--__toc-width, var(--sl-sidebar-width)) -
+                (2 * var(--__toc-width, var(--sl-nav-pad-x))) - var(--sl-content-inline-start, 0rem) -
+                var(--sl-content-width)
+            ) / 2
+        );
+        display: grid;
+        grid-template-columns:
+          minmax(
+            calc(var(--__sidebar-width) + max(0rem, var(--__main-column-fr) - var(--sl-nav-gap))),
+            auto
+          )
+          1fr
+          auto;
+        align-content: center;
+      }
+    }
+  }
+</style>

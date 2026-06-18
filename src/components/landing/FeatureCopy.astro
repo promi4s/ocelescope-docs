@@ -1,0 +1,16 @@
+---
+const { feature } = Astro.props;
+---
+
+<div class="feature-copy">
+  <p class="eyebrow">{feature.eyebrow}</p>
+  <h2>{feature.title}</h2>
+  <p>{feature.body}</p>
+  {feature.tags && (
+    <div class="tag-row">
+      {feature.tags.map((tag: string, index: number) => (
+        <span class:list={[feature.accentTagIndex === index && "tag-accent"]}>{tag}</span>
+      ))}
+    </div>
+  )}
+</div>

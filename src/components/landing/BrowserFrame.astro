@@ -1,0 +1,15 @@
+---
+import TrafficLights from "./TrafficLights.astro";
+
+const { media } = Astro.props;
+---
+
+<div class="browser-frame">
+  <div class="window-bar light"><TrafficLights /><span>{media.url}</span></div>
+  <div class="browser-placeholder">
+    <button type="button" class="play-button" aria-label={media.playLabel ?? `Play ${media.caption}`}>
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M9 7l9 5-9 5V7z" fill="currentColor" /></svg>
+    </button>
+    <span class="media-caption">{media.caption}</span>
+  </div>
+</div>

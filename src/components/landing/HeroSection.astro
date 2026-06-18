@@ -1,0 +1,54 @@
+---
+import TerminalCard from "./TerminalCard.astro";
+
+const { hero, terminal, context } = Astro.props;
+---
+
+<header class="hero">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="hero-orb hero-orb-teal" aria-hidden="true"></div>
+  <div class="hero-orb hero-orb-violet" aria-hidden="true"></div>
+
+  <div class="landing-container hero-inner">
+    <div class="hero-copy">
+      <p class="eyebrow">{hero.eyebrow}</p>
+      <h1>
+        {hero.titlePrefix ? (
+          <>
+            {hero.titlePrefix}{" "}
+            <span class="grad-text">{hero.titleAccent}</span>
+          </>
+        ) : hero.title}
+      </h1>
+      <p class="lead">{hero.body}</p>
+      <div class="button-row">
+        <a class="button button-primary" href={hero.primaryCta.href}>{hero.primaryCta.label}</a>
+        <a class="button button-outline" href={hero.secondaryCta.href}>{hero.secondaryCta.label}</a>
+      </div>
+      <div class="trust-row" aria-label={hero.trustLabel}>
+        {hero.trust.map((item: string, index: number) => (
+          <>
+            {index > 0 && <span aria-hidden="true"></span>}
+            <strong>{item}</strong>
+          </>
+        ))}
+      </div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="terminal-glow" aria-hidden="true"></div>
+      <TerminalCard terminal={terminal} />
+    </div>
+  </div>
+
+  <div class="hero-band" aria-label={context.label}>
+    <div class="landing-container context-row">
+      {context.items.map((item: string, index: number) => (
+        <>
+          {index > 0 && <span class="context-dot" aria-hidden="true">.</span>}
+          <span>{item}</span>
+        </>
+      ))}
+    </div>
+  </div>
+</header>

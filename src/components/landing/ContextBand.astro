@@ -1,0 +1,14 @@
+---
+const { context } = Astro.props;
+---
+
+<section class="context-strip" aria-label={context.label}>
+  <div class="landing-container context-row">
+    {context.items.map((item: string, index: number) => (
+      <>
+        {index > 0 && <span class="context-dot">.</span>}
+        <span>{item}</span>
+      </>
+    ))}
+  </div>
+</section>

@@ -14,6 +14,10 @@ export default defineConfig({
           href: "https://github.com/promi4s/ocelescope",
         },
       ],
+      components: {
+        Header: "./src/components/starlight/Header.astro",
+        SiteTitle: "./src/components/starlight/SiteTitle.astro",
+      },
       sidebar: [
         {
           label: "Getting Started",

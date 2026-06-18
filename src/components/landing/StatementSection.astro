@@ -1,0 +1,27 @@
+---
+const { statement } = Astro.props;
+
+const prefixWords = statement.titlePrefix.trim().split(/\s+/);
+const accentWords = statement.accent.trim().split(/\s+/);
+const allWords = [
+  ...prefixWords.map((text: string) => ({ text, accent: false })),
+  ...accentWords.map((text: string) => ({ text, accent: true })),
+];
+---
+
+<section class="statement-section">
+  <div class="statement-inner">
+    <p class="eyebrow">{statement.eyebrow}</p>
+    <h2>
+      {allWords.map((word: { text: string; accent: boolean }, i: number) => (
+        <>
+          <span
+            class:list={["statement-word", word.accent && "statement-accent"]}
+            data-word-index={i}
+          >{word.text}</span>{" "}
+        </>
+      ))}
+    </h2>
+    <p class="statement-body">{statement.body}</p>
+  </div>
+</section>

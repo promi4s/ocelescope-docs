@@ -1,0 +1,53 @@
+---
+import { Code } from 'astro:components';
+import TrafficLights from "./TrafficLights.astro";
+
+const { content } = Astro.props;
+
+const pythonCode = `class OcelGraph(Plugin):
+    root = params.ObjectType()
+    depth = params.Int(min=1, max=5, default=3)
+    direction = params.Choice(["forward", "backward", "both"])
+    include_events = params.Bool(default=True)
+
+    def run(self, ocel):
+        return build_graph(
+            ocel,
+            root=self.root,
+            depth=self.depth,
+            direction=self.direction,
+            include_events=self.include_events,
+        )`;
+---
+
+<section id="build" class="plugin-section">
+  <div class="landing-container">
+    <div class="section-heading">
+      <p class="eyebrow">{content.eyebrow}</p>
+      <h2>{content.title}</h2>
+      <p>{content.body}</p>
+    </div>
+
+    <div class="builder-grid">
+      <div class="code-card">
+        <div class="window-bar dark"><TrafficLights /><span>ocel_graph.py</span></div>
+        <Code code={pythonCode} lang="python" theme="github-dark" />
+      </div>
+
+      <div class="browser-frame builder-preview">
+        <div class="window-bar light">
+          <TrafficLights />
+          <span>localhost:3000/plugin/ocel-graph</span>
+        </div>
+        <div class="browser-placeholder">
+          <span class="media-caption">{content.previewCaption}</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-row plugin-links">
+      <a class="button button-primary" href={content.guide.href}>{content.guide.label}</a>
+      <a class="text-link" href={content.tutorial.href}>{content.tutorial.label} &rarr;</a>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,18 @@
+---
+import TrafficLights from "./TrafficLights.astro";
+
+const { compact = false, terminal } = Astro.props;
+---
+
+<div class:list={["terminal-card", compact && "terminal-compact"]}>
+  <div class="window-bar dark"><TrafficLights /><span>{terminal.title}</span></div>
+  <div class="terminal-body">
+    {!compact && terminal.intro && <span class="muted">{terminal.intro}</span>}
+    {terminal.lines.map((line: { prompt?: string; text: string; muted?: boolean; accent?: boolean }) => (
+      <span class:list={[line.muted && "muted", line.accent && "accent-line"]}>
+        {line.prompt && <><b>{line.prompt}</b>{" "}</>}
+        {line.text}
+      </span>
+    ))}
+  </div>
+</div>
