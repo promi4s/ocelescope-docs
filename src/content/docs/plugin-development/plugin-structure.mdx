@@ -1,10 +1,36 @@
 ---
 title: Plugin Structure
-description: Files, imports, package layout, and discovery rules for plugins.
 ---
 
-This page should explain how a plugin ZIP is organized.
+Plugins are packaged as Python modules and distributed as `.zip` archives.
 
-The story should cover the Python package directory, `__init__.py`, the top-level plugin class, relative imports, resource and input modules, utility code, and the expected ZIP shape.
+:::note[Example Ocelescope plugin structure]
 
-This is where authors should learn the constraints that make runtime loading reliable.
+```sh
+plugin.zip/
+└── plugin/
+    ├── __init__.py  # Entry point
+    ├── plugin.py
+    └── util/
+        ├── discovery.py
+        └── ...
+```
+
+:::
+
+The `__init__.py` file serves as the plugin's entry point.
+
+## Available Templates
+
+Ocelescope provides ready-to-use templates to simplify development:
+
+### Minimal Plugin Template (GitHub)
+
+A minimal example plugin is available on GitHub:
+
+```bash
+git clone https://github.com/Grkmr/minimal-plugin.git
+cd minimal-plugin
+```
+
+For detailed setup instructions, refer to the [Setup section of the tutorial](tutorial-ocel-graph#step-1-setup).

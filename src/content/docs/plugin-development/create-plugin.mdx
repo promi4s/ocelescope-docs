@@ -3,8 +3,64 @@ title: Create a Plugin
 description: Start a new Ocelescope plugin from the template.
 ---
 
-This page should show the first authoring step.
+The quickest way to start is from the [plugin template](https://github.com/promi4s/plugin-template):
 
-The story should cover creating a plugin project, choosing a meaningful plugin class name, setting metadata, installing dependencies, and identifying where plugin code belongs.
+```bash
+git clone https://github.com/promi4s/plugin-template.git
+cd plugin-template
+```
 
-Keep the goal narrow: by the end, the author has a minimal plugin project ready to edit.
+Install the dependencies (we recommend [uv](https://docs.astral.sh/uv/)):
+
+```bash
+uv sync
+```
+
+Most of your work happens in `plugin.py`. See [Plugin Structure](/plugin-development/plugin-structure/)
+for the expected package layout.
+
+## The Plugin Class
+
+Plugins are defined by a **single plugin class** that inherits from the `Plugin` base class provided by the Ocelescope Python package.
+
+A plugin class contains:
+
+- **Metadata** (e.g., label, description, version) that is displayed in the frontend's plugin interface.
+- **Runnable functions** (plugin methods) that can be invoked from within Ocelescope.
+
+![Example of an Ocelescope plugin in code and in the app.](../../../assets/plugintouimapping.png)
+
+Each plugin package must export **exactly one** plugin class via its `__init__.py`.
+
+:::note[An example plugin]
+```py title="plugin.py"
+from ocelescope import OCEL, PetriNet, Plugin, plugin_method
+
+class DiscoveryPlugin(Plugin):
+    label = "Discovery Plugin"
+    description = "An Ocelescope plugin"
+    version = "1.0.0"
+
+    @plugin_method(
+        label="Discover Petri Net",
+        description="Discover an object-centric Petri net",
+    )
+    def discover_ocpn(self, ocel: OCEL) -> PetriNet: ...
+```
+
+```py title="__init__.py"
+from .plugin import DiscoveryPlugin
+
+__all__ = [
+    "DiscoveryPlugin",
+]
+```
+:::
+
+- The class name (`DiscoveryPlugin`) is the unique name of your plugin and helps distinguish it from other plugins.
+- The `label` is what will be shown in the UI.
+- The `description` briefly explains what your plugin does.
+- The `version` lets you update your plugin over time.
+
+Once you have a plugin class, the next step is to add [Functions](/plugin-development/functions/)
+that can be run from Ocelescope.
