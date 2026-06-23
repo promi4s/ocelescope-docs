@@ -3,8 +3,136 @@ title: Build and Package
 description: Turn plugin source code into an uploadable ZIP artifact.
 ---
 
-This page should cover the last mile before runtime upload.
+Ocelescope plugins are distributed as `.zip` files.
 
-The story should be: validate imports, expose the plugin class, run the build command, inspect the generated ZIP, upload it to Ocelescope, and diagnose packaging errors.
+We strongly recommend starting from the [plugin template](https://github.com/promi4s/plugin-template).
 
-Mention any checks performed by the build tool, especially restrictions that prevent runtime import failures.
+## ZIP structure
+
+Your ZIP should contain the plugin package directly:
+
+```sh
+MyPlugin.zip/
+└── my_plugin/
+    ├── __init__.py
+    ├── plugin.py
+    └── ...
+```
+
+You can zip your plugin manually, or use one of the following options.
+
+## Option 1: Use `ocelescope build`
+
+`ocelescope build` expects the template-style project structure, with your plugin package inside `src/`.
+
+```sh
+my-plugin/
+├── src/
+│   └── my_plugin/
+│       ├── __init__.py
+│       ├── plugin.py
+│       └── ...
+└── dist/
+```
+
+From the project root:
+
+```sh
+ocelescope build
+```
+
+Or with `uv`:
+
+```sh
+uv run ocelescope build
+```
+
+The generated plugin ZIP is written to `dist/`. The build script also checks for absolute imports and raises an error if it finds any.
+
+:::caution[Use relative imports only]
+```python
+from .resource import MyResource
+from .util import helper
+```
+:::
+
+## Option 2: Use the GitHub Action from the template
+
+The template also includes a GitHub Actions workflow that builds the plugin ZIP and publishes it to a GitHub release.
+
+Create and push a version tag:
+
+```sh
+git tag v0.1.0
+git push origin v0.1.0
+```
+
+After the workflow runs, you can find the plugin ZIP:
+
+- in the workflow artifacts, and
+- in the GitHub release assets.
+
+## The plugin environment
+
+Ocelescope plugins run in a **fixed Python environment** provided by the Ocelescope runtime.
+Plugins can only rely on packages that are available in the Ocelescope environment.
+
+If you need a package that is not available in the plugin environment, please
+[open a package request on GitHub](https://github.com/promi4s/ocelescope/issues/new?template=plugin-package-request.yml).
+
+### Installing the plugin extra
+
+Ocelescope exposes an optional dependency group for plugin-related packages.
+You can install it with:
+
+```bash
+pip install "ocelescope[plugin]"
+```
+
+This is the recommended way to install packages that are intended to be available in the shared plugin environment.
+
+### Bundling wheel files inside a plugin
+
+If your plugin needs a dependency that is **not** available in the shared plugin environment, you can bundle wheel files directly inside the plugin.
+
+This is especially useful for compiled packages such as **Rust bindings**.
+
+Store the wheels inside a `wheels/` folder in your plugin package:
+
+```sh
+my-plugin/
+├── src/
+│   └── my_plugin/
+│       ├── __init__.py
+│       ├── plugin.py
+│       └── wheels/
+│           ├── some_package-1.0.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+│           └── some_package-1.0.0-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+└── pyproject.toml
+```
+
+After building, the plugin ZIP should look like this:
+
+```sh
+MyPlugin.zip/
+└── my_plugin/
+    ├── __init__.py
+    ├── plugin.py
+    └── wheels/
+        ├── some_package-1.0.0-cp313-cp313-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
+        └── some_package-1.0.0-cp313-cp313-manylinux_2_17_aarch64.manylinux2014_aarch64.whl
+```
+
+Build wheels that are compatible with **Python 3.13**.
+If you want to support both **amd64** and **arm64**, include one wheel for each platform.
+
+:::caution[Bundle self-contained wheels]
+Bundled wheels should not rely on additional wheels being loaded in a specific order.
+If you use bundled wheels, they should already contain everything needed to be imported successfully in the plugin environment.
+:::
+
+## Submit a Plugin
+
+Currently, plugins can only be submitted through GitHub.
+
+Upload your plugin ZIP to a GitHub release in your plugin repository, then submit it using our [Issue template](https://github.com/promi4s/ocelescope/issues/new?template=plugin-submission.yml).
