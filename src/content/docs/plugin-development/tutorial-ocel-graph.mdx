@@ -1,6 +1,5 @@
 ---
-title: "Tutorial: OCEL Graph"
-description: Build a complete plugin that visualizes an OCEL neighborhood graph.
+title: Tutorial OCEL Graph
 ---
 
 This tutorial provides a general example for developing an Ocelescope plugin from scratch.
@@ -9,19 +8,45 @@ In this tutorial, we will build an **OCEL Graph** inspired by the OCELGraph feat
 
 An **OCEL graph** visualizes how objects and events are related to each other. The plugin lets you choose an object or event ID as the starting point (the root), and then builds a spanning tree from that root based on the connected relationships in the ocel. You can also set how far the graph should expand from the starting point.
 
-![The input of the OCEL Graph](../../../assets/ocel-graph-input.png)
+<div style="display: flex; gap: 1rem; flex-wrap: nowrap; align-items: flex-start;">
+  <div
+    style="
+      display: inline-block;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      width: 50%;
+    "
+  >
+    ![The input of the OCEL Graph](../../../assets/ocel-graph-input.png)
+    <p align="center"><em>The input of the OCEL Graph</em></p>
+  </div>
 
-![The output of the OCEL Graph](../../../assets/ocel-graph.png)
+  <div
+    style="
+      display: inline-block;
+      padding: 1rem;
+      border-radius: 0.75rem;
+      width: 50%;
+    "
+  >
+    ![The input of the OCEL Graph](../../../assets/ocel-graph.png)
+    <p align="center"><em>The output of the OCEL Graph</em></p>
+  </div>
+</div>
 
 :::tip[Try out OCELGraph]
+
 You can explore the source code in the repository below, or download the plugin and try it out yourself.
 
-[**Download**](https://github.com/Grkmr/OcelGraph/releases/download/v1.0.2/OcelGraphDiscovery.zip) ·
-[**Source**](https://github.com/Grkmr/ocelgraph)
+- [**Download**](https://github.com/Grkmr/OcelGraph/releases/download/v1.0.2/OcelGraphDiscovery.zip)
+- [**Source**](https://github.com/Grkmr/ocelgraph)
+
 :::
 
-:::note[Requirements]
+:::caution[Requirements]
+
 This project requires Python 3.13 to be installed on your system. For easy and reproducible package management, we recommend using [uv](https://docs.astral.sh/uv/).
+
 :::
 
 ## Step 1: Setup
@@ -89,7 +114,7 @@ class OcelGraphDiscovery(Plugin):
 
 ### Adding a Plugin Method
 
-Now let's add the function that will generate the OCEL Graph.
+Now let’s add the function that will generate the OCEL Graph.
 
 Add a new method to your plugin class called `mine_ocel_graph`. You mark plugin methods with `@plugin_method`. The label and description you set there will be shown in the UI.
 
@@ -118,14 +143,23 @@ For our OCEL Graph plugin, we need the following inputs:
 
 As output, the method should return the OCEL graph.
 
-In Ocelescope, plugin methods can only return either an `OCEL` or a `Resource`.
+In Ocelescope, plugin methods can only return either an `OCEL` or a `Resource`.  
 So we will implement the OCEL Graph as a custom `Resource` and return that.
 
-![OCEL Graph overview](../../../assets/ocelGraphTutorial/OCELGraphPluginOverview.png)
+<div
+  style="
+    display: inline-block;
+    background: white;
+    padding: 1rem;
+    border-radius: 0.75rem;
+  "
+>
+  ![OCEL Graph overview](../../../assets/ocelGraphTutorial/OCELGraphPluginOverview.png)
+</div>
 
 ### Adding an OCEL Input
 
-Since we want to build an OCEL Graph, our method needs an OCEL as input.
+Since we want to build an OCEL Graph, our method needs an OCEL as input.  
 You can add it by adding an `ocel: OCEL` parameter to `mine_ocel_graph`:
 
 ```python title="src/plugin-template/plugin.py"
@@ -141,7 +175,7 @@ class OcelGraphDiscovery(Plugin):
         pass
 ```
 
-To make this input nicer in the UI, you can add a label and description with `OCELAnnotation`.
+To make this input nicer in the UI, you can add a label and description with `OCELAnnotation`.  
 For that, wrap the type using `Annotated[...]`:
 
 ```python title="src/plugin-template/plugin.py"
@@ -172,7 +206,7 @@ Now users will see a friendly label and description when selecting the OCEL inpu
 
 ### Adding a Configuration Input
 
-Now we add the remaining settings (`root_id`, `max_depth`, `max_neighbours`).
+Now we add the remaining settings (`root_id`, `max_depth`, `max_neighbours`).  
 For that, we create a **configuration input** class.
 
 Create a new file called `input.py` next to `plugin.py`. In it, create a class called `OCELGraphInput` that inherits from `PluginInput`:
@@ -190,7 +224,7 @@ Now extend `OCELGraphInput` with two numeric settings:
 - the maximum depth of the OCEL graph
 - the maximum number of neighbours per node
 
-Use Pydantic's [`Field`](https://docs.pydantic.dev/latest/concepts/fields/) to set titles, descriptions, defaults, and constraints:
+Use Pydantic’s [`Field`](https://docs.pydantic.dev/latest/concepts/fields/) to set titles, descriptions, defaults, and constraints:
 
 ```python title="src/plugin-template/input.py"
 from ocelescope import PluginInput
@@ -214,7 +248,7 @@ class OCELGraphInput(PluginInput, frozen=True):
     )
 ```
 
-Next, we need a way for users to select the **root** of the graph.
+Next, we need a way for users to select the **root** of the graph.  
 The root can be either:
 
 - an object ID, or
@@ -225,12 +259,14 @@ To let users select the root, we define two small input models:
 - `ObjectRoot` for selecting an object by its ID
 - `EventRoot` for selecting an event by its ID
 
-Both models use `OCEL_FIELD`.
+Both models use `OCEL_FIELD`.  
 This links the field to the selected OCEL log, so the UI can offer autocomplete and validation.
 
-:::caution
-The `ocel_id` in `OCEL_FIELD` must match the name of your OCEL parameter in the plugin method.
+:::caution[Important]
+
+The `ocel_id` in `OCEL_FIELD` must match the name of your OCEL parameter in the plugin method.  
 In our case the parameter is named `ocel`, so we use `ocel_id="ocel"`.
+
 :::
 
 ```python title="src/plugin-template/input.py"
@@ -290,7 +326,16 @@ class OCELGraphInput(PluginInput, frozen=True):
 
 This will create an input form like this:
 
-![OCEL Graph input example](../../../assets/ocel-graph-input.png)
+<div
+  style="
+    display: inline-block;
+    background: white;
+    padding: 1rem;
+    border-radius: 0.75rem;
+  "
+>
+  ![OCEL Graph input example](../../../assets/ocel-graph-input.png)
+</div>
 
 ### Adding the Configuration Input to the plugin method
 
@@ -324,15 +369,17 @@ class OcelGraphDiscovery(Plugin):
         ...
 ```
 
-:::caution
+:::caution[Important]
+
 Each plugin method can have **exactly one** `PluginInput` parameter. It must be named `input`.
+
 :::
 
 ### Defining a Resource
 
 Now that we have the inputs, we can define the output.
 
-Our plugin should return an **OCEL Graph**. In Ocelescope, custom outputs are implemented as [resources](/plugin-development/resources/).
+Our plugin should return an **OCEL Graph**. In Ocelescope, custom outputs are implemented as **resources**.  
 A resource is a Python class that inherits from `Resource`.
 
 Create a new file called `resource.py` next to `plugin.py` and define the resource like this:
@@ -368,9 +415,11 @@ class OCELGraph(Resource):
     relations: list[Relation] = []
 ```
 
-:::caution
-Any nested types you use inside a resource (like `EventNode`, `ObjectNode`, or `Relation`) should inherit from Pydantic's `BaseModel`.
+:::caution[Important]
+
+Any nested types you use inside a resource (like `EventNode`, `ObjectNode`, or `Relation`) should inherit from Pydantic’s `BaseModel`.  
 This makes sure the resource can be validated and serialized correctly.
+
 :::
 
 You can also add helper properties or methods to your resource. For example:
@@ -403,11 +452,11 @@ class OcelGraphDiscovery(Plugin):
 
 #### Visualization
 
-At this point, `OCELGraph` can already be returned as a resource.
+At this point, `OCELGraph` can already be returned as a resource.  
 But it is only a data structure. By default, it has no visualization in the frontend.
 
-To visualize the resource in Ocelescope, add a `visualize()` method.
-This method returns one of Ocelescope's visualization objects (for example, `Graph`).
+To visualize the resource in Ocelescope, add a `visualize()` method.  
+This method returns one of Ocelescope’s visualization objects, for example `Graph`.
 
 Add this to your `OCELGraph` class:
 
@@ -471,16 +520,25 @@ class OCELGraph(Resource):
 
 Now your resource will show up as an interactive graph in the frontend:
 
-![OCEL Graph visualization](../../../assets/ocel-graph.png)
+<div
+  style="
+    display: inline-block;
+    background: white;
+    padding: 1rem;
+    border-radius: 0.75rem;
+  "
+>
+  ![OCEL Graph visualization](../../../assets/ocel-graph.png)
+</div>
 
 ### Implementing the Plugin Method
 
 Now you can implement the plugin method that transforms your input (the OCEL and configuration) and returns your resource.
 
-For this tutorial, we won't go into the implementation details.
+For this tutorial, we won’t go into the implementation details.  
 Instead, we will put the logic in a utility function to keep `plugin.py` clean and readable.
 
-Download [`util.py`](/downloads/ocelGraphTutorial/util.py) and add it next to `plugin.py`:
+Download `util.py` and add it next to `plugin.py`:
 
 ```text
 src/plugin-template/
@@ -506,8 +564,9 @@ class OcelGraphDiscovery(Plugin):
         return mine_ocel_graph(ocel, input)
 ```
 
-:::caution
-Currently, **Ocelescope plugins only support relative imports**.
+:::caution[Relative imports only]
+
+Currently, **Ocelescope plugins only support relative imports**.  
 This means all imports inside your plugin must use relative paths:
 
 ```python title="src/plugin-template/plugin.py"
@@ -521,6 +580,7 @@ from plugin_template.input import OCELGraphInput
 from plugin_template.resource import OCELGraph
 from plugin_template.util import mine_ocel_graph
 ```
+
 :::
 
 ## Step 3: Build Plugin
@@ -563,5 +623,5 @@ Or, if you are using `uv`:
 uv run ocelescope build
 ```
 
-The build script also checks for absolute imports and raises an error if it finds any.
-That's it. You can now upload the zip from `dist/` to an Ocelescope instance and run your plugin.
+The build script also checks for absolute imports and raises an error if it finds any.  
+That’s it. You can now upload the zip from `dist/` to an Ocelescope instance and run your plugin.

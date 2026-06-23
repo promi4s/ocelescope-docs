@@ -1,6 +1,5 @@
 ---
 title: Extensions
-description: Attach plugin-specific data to OCEL logs.
 ---
 
 OCEL extensions let you store and load **extra data** that is not part of the OCEL 2.0 standard.
@@ -23,6 +22,7 @@ Your extension should:
 Ocelescope loads and exports extensions based on the OCEL file path suffix (for example `.json`, `.xml`, or `.sqlite`).
 
 :::note[Example]
+
 This extension stores a message inside a `.json` OCEL file under a custom field called `hello_message`.
 
 ```python
@@ -30,7 +30,6 @@ import json
 from pathlib import Path
 
 from ocelescope import OCEL, OCELExtension
-
 
 class HelloWorldExtension(OCELExtension):
     name = "HelloWorld"
@@ -68,6 +67,7 @@ class HelloWorldExtension(OCELExtension):
         data["hello_message"] = self.message
         path.write_text(json.dumps(data, indent=2), encoding="utf-8")
 ```
+
 :::
 
 ## Requiring an extension in a plugin method
@@ -81,17 +81,15 @@ from typing import Annotated
 
 from ocelescope import OCEL, OCELAnnotation, Plugin, plugin_method
 
-
 class ExamplePlugin(Plugin):
     @plugin_method(label="Uses extension")
     def uses_extension(
         self,
         ocel: Annotated[OCEL, OCELAnnotation(label="log", extension=HelloWorldExtension)],
     ):
+        extension = ocel.extensions.get(HelloWorldExtension)
+        if extension is not None:
+            print(extension.message)
 
-      extension = ocel.extensions.get(HelloWorldExtension)
-      if extension is not None:
-          print(extension.message)
-
-      ...
+        ...
 ```

@@ -1,11 +1,11 @@
 ---
 title: Plugin Structure
-description: Files, imports, package layout, and discovery rules for plugins.
 ---
 
 Plugins are packaged as Python modules and distributed as `.zip` archives.
 
 :::note[Example Ocelescope plugin structure]
+
 ```sh
 plugin.zip/
 └── plugin/
@@ -15,10 +15,10 @@ plugin.zip/
         ├── discovery.py
         └── ...
 ```
+
 :::
 
-The `__init__.py` file serves as the plugin's entry point. It must export **exactly one**
-plugin class (see [Create a Plugin](/plugin-development/create-plugin/)).
+The `__init__.py` file serves as the plugin's entry point.
 
 ## Available Templates
 
@@ -33,4 +33,4 @@ git clone https://github.com/Grkmr/minimal-plugin.git
 cd minimal-plugin
 ```
 
-For detailed setup instructions, refer to the [Setup section of the tutorial](/plugin-development/tutorial-ocel-graph/#step-1-setup).
+For detailed setup instructions, refer to the [Setup section of the tutorial](tutorial-ocel-graph#step-1-setup).
