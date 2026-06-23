@@ -56,7 +56,7 @@ export const landing = {
       ],
       media: {
         url: "localhost:3000/logOverview",
-        caption: "log-overview walkthrough",
+        caption: "log-overview",
       },
       layout: "text-media",
       tone: "light",
@@ -84,7 +84,7 @@ export const landing = {
       addableTagIndex: 2,
       media: {
         url: "localhost:3000/discovery",
-        caption: "discovery result preview",
+        caption: "discovery",
       },
       layout: "text-media",
       tone: "light",
@@ -110,12 +110,12 @@ export const landing = {
   customModule: {
     eyebrow: "EXTENSIBLE UI",
     title: "When a form is not enough, ship a full module.",
-    body: "Each plugin gets a generated page. For richer workflows, custom React modules mount as first-class views, including integrations such as the Ocelot module.",
+    body: "Each plugin gets a generated page. For richer workflows, custom React modules mount as first-class views. This way, the OCELOT module was integrated.",
     tags: ["per-plugin pages", "custom React modules", "Ocelot module"],
     accentTagIndex: 2,
     media: {
       url: "localhost:3000/modules/ocelot",
-      caption: "custom module demo",
+      caption: "OCELOT module",
     },
   },
   plugins: [

@@ -603,6 +603,11 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
     0 0 0 1px color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
+.browser-media {
+  display: block;
+  width: 100%;
+  height: auto;
+}
 .browser-placeholder {
   position: relative;
   display: grid;
@@ -783,6 +788,17 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   border: 1px solid rgba(255,255,255,.08);
   background: #0d1117; /* matches github-dark theme background */
   position: relative;
+  --astro-code-foreground: #c9d1d9;
+  --astro-code-background: #0d1117;
+  --astro-code-token-constant: #79c0ff;
+  --astro-code-token-string: #a5d6ff;
+  --astro-code-token-comment: #8b949e;
+  --astro-code-token-keyword: #ff7b72;
+  --astro-code-token-parameter: #ffa657;
+  --astro-code-token-function: #d2a8ff;
+  --astro-code-token-string-expression: #a5d6ff;
+  --astro-code-token-punctuation: #c9d1d9;
+  --astro-code-token-link: #a5d6ff;
 }
 .code-card::before {
   content: '';
