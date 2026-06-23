@@ -24,7 +24,10 @@ export const landing = {
     title: "bash",
     intro: "# two commands and you are running",
     lines: [
-      { prompt: "$", text: "curl -O ocelescope.org/docker-compose.yaml" },
+      {
+        prompt: "$",
+        text: "curl -LO https://www.ocelescope.org/docker-compose.yaml",
+      },
       { prompt: "$", text: "docker compose up -d" },
       { text: "ok backend ghcr.io/promi4s/ocelescope-backend", muted: true },
       { text: "ok frontend http://localhost:3000", muted: true },
@@ -218,7 +221,7 @@ export const landing = {
     body: "Download the compose file, start the stack, and open the frontend on localhost.",
     primaryCta: {
       label: "Download compose file",
-      href: "https://www.ocelescope.org/assets/docker-compose.yaml",
+      href: "https://www.ocelescope.org/docker-compose.yaml",
     },
     secondaryCta: { label: "Documentation", href: "/documentation/" },
   },
