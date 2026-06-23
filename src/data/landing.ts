@@ -66,9 +66,9 @@ export const landing = {
       title: "Carve a large log down to the slice you need.",
       body: "Compose filters visually to shrink an OCEL. Stack conditions across object and event types, attribute values, time windows and the existence of O2O or E2O relations - then carry the reduced log straight into discovery.",
       tags: [
-        "Object-type & event-type selection",
-        "Attribute-value conditions",
-        "Time-range windows",
+        "object-type & event-type selection",
+        "attribute-value conditions",
+        "time-range windows",
         "O2O & E2O existence filters",
       ],
       media: { url: "localhost:3000/filter", caption: "filter constructor" },
@@ -81,6 +81,7 @@ export const landing = {
       title: "Discover models - and add your own methods.",
       body: "Out of the box, the discovery tab renders object-centric Petri nets and directly-follows graphs. Need a different algorithm? Define it plugin-style, upload the zip, and it appears as a selectable method right in the tab.",
       tags: ["OC Petri nets", "directly-follows graphs", "+ your method"],
+      addableTagIndex: 2,
       media: {
         url: "localhost:3000/discovery",
         caption: "discovery result preview",

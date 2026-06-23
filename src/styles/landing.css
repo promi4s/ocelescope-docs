@@ -574,6 +574,17 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   background: color-mix(in srgb, var(--sl-color-accent) 10%, transparent);
   color: var(--accent);
 }
+.tag-row .tag-addable {
+  border: 1px dashed color-mix(in srgb, var(--sl-color-accent) 45%, transparent);
+  background: repeating-linear-gradient(
+    -45deg,
+    color-mix(in srgb, var(--sl-color-accent) 7%, transparent) 0px,
+    color-mix(in srgb, var(--sl-color-accent) 7%, transparent) 2px,
+    transparent 2px,
+    transparent 9px
+  );
+  color: var(--accent);
+}
 
 .browser-frame {
   overflow: hidden;
@@ -760,7 +771,7 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 22px;
-  align-items: stretch;
+  align-items: start;
 }
 .code-card,
 .form-card {
@@ -780,6 +791,41 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   height: 1px;
   background: linear-gradient(90deg, hsl(192 82% 43% / .4), hsl(249 100% 67% / .3));
 }
+/* Editor tab switcher */
+.window-bar.has-tabs { padding-block: 0; }
+.editor-tabs {
+  display: flex;
+  align-self: stretch;
+  margin-left: 8px;
+  overflow: hidden;
+}
+.editor-tab {
+  all: unset;
+  box-sizing: border-box;
+  cursor: pointer;
+  font: 500 12px/1 "Geist Mono", monospace;
+  padding: 0 16px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  color: #4d6070;
+  border-left: 1px solid rgba(255,255,255,.07);
+  white-space: nowrap;
+  transition: color .15s, background .15s;
+}
+.editor-tab:hover { color: #8b9eb0; background: rgba(255,255,255,.04); }
+.editor-tab.active {
+  color: #c9d5e0;
+  background: rgba(255,255,255,.05);
+  box-shadow: inset 0 -2px 0 hsl(192, 72%, 55%);
+}
+.code-panel {
+  height: 420px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.code-panel[hidden] { display: none !important; }
+
 /* Shiki / Astro <Code> output: reset injected background and sizing */
 .code-card :global(pre) {
   margin: 0 !important;

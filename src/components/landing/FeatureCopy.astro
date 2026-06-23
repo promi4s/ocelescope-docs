@@ -9,7 +9,10 @@ const { feature } = Astro.props;
   {feature.tags && (
     <div class="tag-row">
       {feature.tags.map((tag: string, index: number) => (
-        <span class:list={[feature.accentTagIndex === index && "tag-accent"]}>{tag}</span>
+        <span class:list={[
+          feature.accentTagIndex === index && "tag-accent",
+          feature.addableTagIndex === index && "tag-addable",
+        ]}>{tag}</span>
       ))}
     </div>
   )}
