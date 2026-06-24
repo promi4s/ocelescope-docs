@@ -142,7 +142,7 @@ from ocelescope.visualization.default.graph import (
     Graph,
     GraphEdge,
     GraphNode,
-    GraphvizLayoutConfig,
+    LayoutConfig,
 )
 
 class GraphExample(Resource):
@@ -251,9 +251,13 @@ class GraphExample(Resource):
         return Graph(
             nodes=nodes,
             edges=edges,
-            layout_config=GraphvizLayoutConfig(
-                engine="dot",
-                graphAttrs={"rankdir": "LR", "nodesep": 1, "ranksep": 1},
+            layout_config=LayoutConfig(
+                elk_options={
+                    "elk.algorithm": "layered",
+                    "elk.direction": "RIGHT",
+                    "elk.spacing.nodeNode": "40",
+                    "elk.layered.spacing.nodeNodeBetweenLayers": "60",
+                }
             ),
         )
 ```
@@ -535,7 +539,7 @@ You can annotate Graph nodes and edges with other visualizations, which the fron
 import plotly.graph_objects as go
 
 from ocelescope import Resource
-from ocelescope.visualization.default.graph import Graph, GraphEdge, GraphNode, GraphvizLayoutConfig
+from ocelescope.visualization.default.graph import Graph, GraphEdge, GraphNode, LayoutConfig
 from ocelescope.visualization.default.plotly import Plotly
 
 
@@ -608,7 +612,12 @@ class InteractiveGraphExample(Resource):
                     annotation=Plotly(figure=fig_edge),
                 )
             ],
-            layout_config=GraphvizLayoutConfig(engine="dot"),
+            layout_config=LayoutConfig(
+                elk_options={
+                    "elk.algorithm": "layered",
+                    "elk.direction": "RIGHT",
+                }
+            ),
         )
 ```
 
