@@ -5,14 +5,23 @@ const { quickstart, terminal } = Astro.props;
 ---
 
 <section id="download" class="quickstart-section">
-  <div class="quickstart-inner">
-    <p class="eyebrow eyebrow-dark">{quickstart.eyebrow}</p>
-    <h2>{quickstart.title}</h2>
-    <p>{quickstart.body}</p>
-    <TerminalCard compact={true} terminal={terminal} />
-    <div class="button-row centered">
-      <a class="button button-primary" href={quickstart.primaryCta.href}>{quickstart.primaryCta.label}</a>
-      <a class="button button-dark-outline" href={quickstart.secondaryCta.href}>{quickstart.secondaryCta.label}</a>
+    <div class="quickstart-inner">
+        <p class="eyebrow eyebrow-dark">{quickstart.eyebrow}</p>
+        <h2>{quickstart.title}</h2>
+        <p>{quickstart.body}</p>
+        <TerminalCard compact={true} terminal={terminal} />
+        <div class="button-row centered">
+            <a
+                class="button button-primary"
+                href={quickstart.primaryCta.href}
+                download="docker-compose.yaml"
+                >{quickstart.primaryCta.label}</a
+            >
+            <a
+                class="button button-dark-outline"
+                href={quickstart.secondaryCta.href}
+                >{quickstart.secondaryCta.label}</a
+            >
+        </div>
     </div>
-  </div>
 </section>

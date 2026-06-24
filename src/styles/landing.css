@@ -980,6 +980,10 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
 .card-grid.two   { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .card-grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .card-grid.auto  { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+/* Starlight's markdown content adds margin-top to every block that follows a
+   sibling, which shrinks the stretched height of all cards except the first.
+   Neutralise it so equal-height grid cards stay equal. */
+.card-grid > * { margin-top: 0 !important; }
 
 .lift-card {
   border: 1px solid var(--line);
@@ -998,9 +1002,18 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
 }
 
 .plugin-card {
+  position: relative;
   display: flex;
   gap: 16px;
   padding: 20px;
+}
+/* Stretched link: covers the whole card so it links to the repo, while the
+   download button sits above it (higher z-index) and stays independently clickable. */
+.plugin-card-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
 }
 .monogram {
   display: grid;
@@ -1022,6 +1035,10 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   color: var(--body);
 }
 .plugin-card strong { color: var(--ink); }
+.plugin-author {
+  color: var(--muted);
+  font: 500 12px "Geist Mono", monospace;
+}
 .plugin-card em {
   margin-left: 6px;
   color: var(--muted);
@@ -1031,6 +1048,10 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
 .plugin-about {
   color: var(--muted);
   line-height: 1.5;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
 }
 .plugin-meta {
   display: flex;
@@ -1045,10 +1066,19 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   padding: 4px 9px;
   font: 500 11px "Geist Mono", monospace;
 }
+.plugin-download {
+  position: relative;
+  z-index: 2;
+  align-self: flex-start;
+  margin-top: auto;
+  padding-top: 6px;
+  text-decoration: none;
+}
 .plugin-card small {
   color: var(--t2);
   font-weight: 700;
 }
+.plugin-download:hover small { text-decoration: underline; }
 
 /* ─── Resources ──────────────────────────────────────────────────────────── */
 .resources-section {

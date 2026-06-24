@@ -127,6 +127,31 @@ async function latestRepoVersion(githubUrl: string) {
   }
 }
 
+async function latestReleaseAsset(githubUrl: string) {
+  const repo = repoParts(githubUrl);
+  if (!repo) return undefined;
+
+  try {
+    const release = await fetch(`${repo.apiBase}/releases/latest`, {
+      headers: {
+        Accept: "application/vnd.github+json",
+        "User-Agent": "ocelescope-docs",
+      },
+    });
+    if (!release.ok) return undefined;
+    const data = await release.json();
+    const asset = Array.isArray(data.assets) ? data.assets[0] : undefined;
+    if (asset?.browser_download_url) return asset.browser_download_url;
+    // No uploaded asset on the release — fall back to the tagged source zip.
+    if (data.tag_name) {
+      return `https://github.com/${repo.owner}/${repo.repo}/archive/refs/tags/${data.tag_name}.zip`;
+    }
+    return undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 async function repoDetails(githubUrl: string) {
   const repo = repoParts(githubUrl);
   if (!repo) return {};
@@ -177,10 +202,13 @@ async function repoDetails(githubUrl: string) {
 }
 
 const plugins = await Promise.all(
-  landing.plugins.map(async (plugin) => ({
+  landing.plugins
+    .filter((plugin) => plugin.showLanding)
+    .map(async (plugin) => ({
     ...plugin,
     ...(await repoDetails(plugin.href)),
     version: await latestRepoVersion(plugin.href),
+    download: await latestReleaseAsset(plugin.href),
   })),
 );
 ---
@@ -220,8 +248,10 @@ const plugins = await Promise.all(
     const descriptionTargets = document.querySelectorAll("[data-github-description]");
     const starsTargets = document.querySelectorAll("[data-github-stars]");
     const updatedTargets = document.querySelectorAll("[data-github-updated]");
+    const downloadTargets = document.querySelectorAll("[data-github-download]");
     const repoDetailsCache = new Map();
     const repoVersionCache = new Map();
+    const releaseAssetCache = new Map();
 
     function repoApiBase(githubUrl) {
       try {
@@ -356,6 +386,37 @@ const plugins = await Promise.all(
       repoVersionCache.set(githubUrl, versionPromise);
       return versionPromise;
     }
+
+    async function latestReleaseAsset(githubUrl) {
+      if (releaseAssetCache.has(githubUrl)) return releaseAssetCache.get(githubUrl);
+      const repo = repoApiBase(githubUrl);
+      if (!repo) return null;
+
+      const assetPromise = (async () => {
+        const release = await fetch(`${repo.apiBase}/releases/latest`, {
+          headers: { Accept: "application/vnd.github+json" },
+        });
+        if (!release.ok) return null;
+        const data = await release.json();
+        const asset = Array.isArray(data.assets) ? data.assets[0] : null;
+        if (asset?.browser_download_url) return asset.browser_download_url;
+        // No uploaded asset on the release — fall back to the tagged source zip.
+        if (data.tag_name) {
+          return `https://github.com/${repo.owner}/${repo.repo}/archive/refs/tags/${data.tag_name}.zip`;
+        }
+        return null;
+      })().catch(() => null);
+
+      releaseAssetCache.set(githubUrl, assetPromise);
+      return assetPromise;
+    }
+
+    downloadTargets.forEach(async (target) => {
+      const githubUrl = target.getAttribute("data-github-download");
+      if (!githubUrl) return;
+      const asset = await latestReleaseAsset(githubUrl);
+      if (asset) target.setAttribute("href", asset);
+    });
 
     versionTargets.forEach(async (target) => {
       const githubUrl = target.getAttribute("data-github-version");

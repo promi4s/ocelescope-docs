@@ -139,10 +139,10 @@ class Curve(Resource):
 ```python
 from ocelescope import Resource
 from ocelescope.visualization.default.graph import (
+    DIRECTED_ELK_GRAPH_LAYOUT,
     Graph,
     GraphEdge,
     GraphNode,
-    LayoutConfig,
 )
 
 class GraphExample(Resource):
@@ -251,14 +251,7 @@ class GraphExample(Resource):
         return Graph(
             nodes=nodes,
             edges=edges,
-            layout_config=LayoutConfig(
-                elk_options={
-                    "elk.algorithm": "layered",
-                    "elk.direction": "RIGHT",
-                    "elk.spacing.nodeNode": "40",
-                    "elk.layered.spacing.nodeNodeBetweenLayers": "60",
-                }
-            ),
+            layout_config=DIRECTED_ELK_GRAPH_LAYOUT,
         )
 ```
 
@@ -274,6 +267,25 @@ class GraphExample(Resource):
 >
   ![Basic graph example](../../../assets/visualizations/simplegraph.png)
 </div>
+
+:::note[Layout presets]
+
+A `Graph` is laid out through its `layout_config`. Instead of hand-tuning layout
+options, prefer one of the ready-made presets exported from
+`ocelescope.visualization.default.graph`:
+
+| Preset | Best for |
+| --- | --- |
+| `DIRECTED_ELK_GRAPH_LAYOUT` | Large directed model graphs (Petri nets, DFGs) — high-quality ELK layered layout. |
+| `DIRECTED_GRAPH_LAYOUT` | Directed model graphs where edge direction shows progression (Graphviz `dot`). |
+| `ORDERED_TREE_LAYOUT` | Rooted trees where sibling order matters (process trees, parse trees). |
+| `RADIAL_GRAPH_LAYOUT` | Object-to-object / relationship graphs with no single process direction. |
+| `FORCE_GRAPH_LAYOUT` | Dense or cyclic graphs where layering doesn't produce a readable result. |
+
+You can still build a custom layout by passing a `GraphvizLayoutConfig` or
+`ElkLayoutConfig` to `layout_config` when you need full control.
+
+:::
 
 #### SVG through markup (`SVGVis`)
 
@@ -539,7 +551,12 @@ You can annotate Graph nodes and edges with other visualizations, which the fron
 import plotly.graph_objects as go
 
 from ocelescope import Resource
-from ocelescope.visualization.default.graph import Graph, GraphEdge, GraphNode, LayoutConfig
+from ocelescope.visualization.default.graph import (
+    DIRECTED_ELK_GRAPH_LAYOUT,
+    Graph,
+    GraphEdge,
+    GraphNode,
+)
 from ocelescope.visualization.default.plotly import Plotly
 
 
@@ -612,12 +629,7 @@ class InteractiveGraphExample(Resource):
                     annotation=Plotly(figure=fig_edge),
                 )
             ],
-            layout_config=LayoutConfig(
-                elk_options={
-                    "elk.algorithm": "layered",
-                    "elk.direction": "RIGHT",
-                }
-            ),
+            layout_config=DIRECTED_ELK_GRAPH_LAYOUT,
         )
 ```
 

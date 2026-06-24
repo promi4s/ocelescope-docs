@@ -462,10 +462,10 @@ Add this to your `OCELGraph` class:
 
 ```python title="src/plugin-template/resource.py"
 from ocelescope.visualization.default.graph import (
+    RADIAL_GRAPH_LAYOUT,
     Graph,
     GraphEdge,
     GraphNode,
-    LayoutConfig,
 )
 from ocelescope.visualization.util.color import generate_color_map
 
@@ -520,15 +520,7 @@ class OCELGraph(Resource):
             type="graph",
             nodes=object_nodes + event_nodes,
             edges=edges,
-            layout_config=LayoutConfig(
-                elk_options={
-                    "elk.algorithm": "layered",
-                    "elk.direction": "RIGHT",
-                    "elk.edgeRouting": "SPLINES",
-                    "elk.spacing.nodeNode": "60",
-                    "elk.layered.spacing.nodeNodeBetweenLayers": "120",
-                }
-            ),
+            layout_config=RADIAL_GRAPH_LAYOUT,
         )
 ```
 
