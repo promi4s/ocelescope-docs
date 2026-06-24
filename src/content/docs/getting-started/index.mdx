@@ -1,10 +1,56 @@
 ---
 title: Getting Started
-description: The shortest path from a fresh Ocelescope instance to a useful analysis.
 ---
 
-This section should guide a new user from zero to the first useful interaction with Ocelescope.
+:::note[System Requirements]
 
-The story is practical: install Docker, start the services, open the frontend, load an OCEL log, inspect the Log Overview, upload a plugin, and run one plugin method.
+To run Ocelescope locally, you must have [Docker](https://docs.docker.com/get-docker/) and [Docker Compose](https://docs.docker.com/compose/install/) installed on your system.
 
-Keep the conceptual explanations short here. Link to the concept pages when users need background on OCEL, object-centric process mining, plugins, or resources.
+:::
+
+To get Ocelescope running with Docker Compose, you can use the configuration below.
+
+```yaml title="docker-compose.yaml"
+services:
+  backend:
+    image: ghcr.io/promi4s/ocelescope-backend:latest
+    volumes:
+      - plugins_store:/plugins
+    restart: unless-stopped
+  frontend:
+    image: ghcr.io/promi4s/ocelescope-frontend:latest
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+volumes:
+  plugins_store:
+```
+
+<a href="/assets/docker-compose.yaml" download="docker-compose.yaml">Download</a>
+
+## Starting the Services
+
+Run the following command in the same directory as your `docker-compose.yml`:
+
+```bash
+docker compose up -d
+```
+
+This will start both the **backend** (API) and **frontend** (web interface).
+
+## Uploading Plugins
+
+You can upload plugins directly from the **web interface** at:
+
+👉 [http://localhost:3000/plugins](http://localhost:3000/plugins)
+
+Uploaded plugins will be stored in the `plugins_store` volume and made available for execution.
+
+## Stopping Ocelescope
+
+To stop the services, run:
+
+```bash
+docker compose down
+```

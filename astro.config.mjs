@@ -22,19 +22,7 @@ export default defineConfig({
 			sidebar: [
 				{
 					label: "Getting Started",
-					items: [
-						{ label: "Overview", slug: "getting-started" },
-						{ label: "Installation", slug: "getting-started/installation" },
-						{ label: "First Log", slug: "getting-started/first-log" },
-						{
-							label: "Loading Plugins",
-							slug: "getting-started/loading-plugins",
-						},
-						{
-							label: "Troubleshooting",
-							slug: "getting-started/troubleshooting",
-						},
-					],
+					slug: "getting-started",
 				},
 				{
 					label: "Download",
