@@ -105,7 +105,9 @@ export const landing = {
 		eyebrow: "WHY OCELESCOPE",
 		titlePrefix: "Ocelescope is where research code",
 		accent: "becomes reusable software.",
-		body: "Ocelescope provides a plugin system to integrate new funtionality at runtime. A method should not disappear into a one-off prototype for publication. Package it, upload it, run it, and let others build on it.",
+		body: "Ocelescope provides a plugin system to integrate new functionality at runtime. " +
+			"A method should not disappear into a one-off prototype for publication. " +
+			"Package it, upload it, run it - and let others build on it.",
 	},
 	pluginBuilder: {
 		eyebrow: "BUILD A PLUGIN",
@@ -212,10 +214,10 @@ export const landing = {
 		title: "Running in two commands.",
 		body: "Download the compose file, start the stack, and open the frontend on localhost.",
 		primaryCta: {
-			label: "Download compose file",
-			href: "/docker-compose.yaml",
+			label: "Step-by-Step Guide",
+			href: "/download/",
 		},
-		secondaryCta: { label: "Documentation", href: "/documentation/" },
+		secondaryCta: { label: "Download compose file", href: "/docker-compose.yaml" },
 	},
 	footer: {
 		brandBody: "An extensible web framework for object-centric process mining.",
