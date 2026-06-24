@@ -1,9 +1,9 @@
 ---
 import { enrichPlugins } from "../../lib/github";
+import { plugins as pluginCatalog } from "../../data/plugins";
 import { landing } from "../../data/landing";
 
-// The full catalog — every plugin, not just the ones flagged for the landing page.
-const plugins = await enrichPlugins(landing.plugins);
+const plugins = await enrichPlugins(pluginCatalog);
 const cardCta = landing.ecosystem.cardCta;
 ---
 

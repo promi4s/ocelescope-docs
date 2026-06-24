@@ -843,12 +843,15 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
 .code-panel[hidden] { display: none !important; }
 
 /* Shiki / Astro <Code> output: reset injected background and sizing */
-.code-card :global(pre) {
+.code-card pre {
   margin: 0 !important;
   padding: 20px !important;
   background: transparent !important;
   overflow-x: auto;
-  font: 500 13px/1.8 "Geist Mono", monospace !important;
+  font-family: "Geist Mono", monospace !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  line-height: 1.7 !important;
   border-radius: 0 !important;
 }
 .form-card {
