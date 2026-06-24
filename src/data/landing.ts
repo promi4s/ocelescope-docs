@@ -221,7 +221,7 @@ export const landing = {
     body: "Download the compose file, start the stack, and open the frontend on localhost.",
     primaryCta: {
       label: "Download compose file",
-      href: "https://www.ocelescope.org/docker-compose.yaml",
+      href: "/docker-compose.yaml",
     },
     secondaryCta: { label: "Documentation", href: "/documentation/" },
   },
