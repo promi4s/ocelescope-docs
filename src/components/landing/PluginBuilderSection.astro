@@ -328,49 +328,50 @@ def mine_ocel_graph(ocel: OCEL, input: OCELGraphInput):
 ---
 
 <section id="build" class="plugin-section">
-    <div class="landing-container feature-grid">
-        <div class="feature-copy">
+    <div class="landing-container">
+        <div class="section-heading">
             <p class="eyebrow">{content.eyebrow}</p>
             <h2>{content.title}</h2>
             <p>{content.body}</p>
-            <div class="button-row plugin-links">
-                <a class="button button-primary" href={content.guide.href}
-                    >{content.guide.label}</a
-                >
-                <a class="text-link" href={content.tutorial.href}
-                    >{content.tutorial.label} &rarr;</a
-                >
-            </div>
         </div>
 
-        <div class="builder-preview">
-            <BrowserFrame media={content.media} />
-        </div>
-    </div>
-
-    <div class="landing-container builder-code">
-        <div class="code-card">
-            <div class="window-bar dark has-tabs">
-                <TrafficLights />
-                <div class="editor-tabs" role="tablist">
-                    <button class="editor-tab active" role="tab" aria-selected="true" data-target="panel-plugin">plugin.py</button>
-                    <button class="editor-tab" role="tab" aria-selected="false" data-target="panel-input">input.py</button>
-                    <button class="editor-tab" role="tab" aria-selected="false" data-target="panel-resource">resource.py</button>
-                    <button class="editor-tab" role="tab" aria-selected="false" data-target="panel-util">util.py</button>
+        <div class="builder-grid">
+            <div class="code-card">
+                <div class="window-bar dark has-tabs">
+                    <TrafficLights />
+                    <div class="editor-tabs" role="tablist">
+                        <button class="editor-tab active" role="tab" aria-selected="true" data-target="panel-plugin">plugin.py</button>
+                        <button class="editor-tab" role="tab" aria-selected="false" data-target="panel-input">input.py</button>
+                        <button class="editor-tab" role="tab" aria-selected="false" data-target="panel-resource">resource.py</button>
+                        <button class="editor-tab" role="tab" aria-selected="false" data-target="panel-util">util.py</button>
+                    </div>
+                </div>
+                <div id="panel-plugin" class="code-panel">
+                    <Code code={pluginCode} lang="python" theme="css-variables" />
+                </div>
+                <div id="panel-input" class="code-panel" hidden>
+                    <Code code={inputCode} lang="python" theme="css-variables" />
+                </div>
+                <div id="panel-resource" class="code-panel" hidden>
+                    <Code code={resourceCode} lang="python" theme="css-variables" />
+                </div>
+                <div id="panel-util" class="code-panel" hidden>
+                    <Code code={utilCode} lang="python" theme="css-variables" />
                 </div>
             </div>
-            <div id="panel-plugin" class="code-panel">
-                <Code code={pluginCode} lang="python" theme="css-variables" />
+
+            <div class="builder-preview">
+                <BrowserFrame media={content.media} />
             </div>
-            <div id="panel-input" class="code-panel" hidden>
-                <Code code={inputCode} lang="python" theme="css-variables" />
-            </div>
-            <div id="panel-resource" class="code-panel" hidden>
-                <Code code={resourceCode} lang="python" theme="css-variables" />
-            </div>
-            <div id="panel-util" class="code-panel" hidden>
-                <Code code={utilCode} lang="python" theme="css-variables" />
-            </div>
+        </div>
+
+        <div class="button-row plugin-links">
+            <a class="button button-primary" href={content.guide.href}
+                >{content.guide.label}</a
+            >
+            <a class="text-link" href={content.tutorial.href}
+                >{content.tutorial.label} &rarr;</a
+            >
         </div>
     </div>
 </section>
