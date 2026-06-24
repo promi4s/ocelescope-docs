@@ -68,15 +68,20 @@ export const landing = {
     },
     {
       eyebrow: "FILTER CONSTRUCTOR",
-      title: "Carve a large log down to the slice you need.",
-      body: "Compose filters visually to shrink an OCEL. Stack conditions across object and event types, attribute values, time windows and the existence of O2O or E2O relations - then carry the reduced log straight into discovery.",
+      title: "Get the perspective you need.",
+      body: "Compose filters visually to shrink an OCEL. " +
+          "Stack conditions across object and event types, attribute values, time windows and the existence of O2O or E2O relations - then carry the reduced log straight into discovery.",
       tags: [
-        "object-type & event-type selection",
+        "object type & activity selection",
         "attribute-value conditions",
-        "time-range windows",
+        "time range windows",
         "O2O & E2O existence filters",
       ],
-      media: { url: "localhost:3000/filter", caption: "filter constructor" },
+      media: {
+        url: "localhost:3000/filter",
+        caption: "filter constructor",
+        src: "/assets/videos/filter-constructor.mov",
+      },
       layout: "media-text",
       tone: "alt",
     },
@@ -121,6 +126,7 @@ export const landing = {
     media: {
       url: "localhost:3000/modules/ocelot",
       caption: "OCELOT module",
+      src: "/assets/videos/custom-module.mov",
     },
   },
   plugins: [
