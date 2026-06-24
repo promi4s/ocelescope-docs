@@ -776,7 +776,7 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 22px;
-  align-items: start;
+  align-items: end;
 }
 .code-card,
 .form-card {

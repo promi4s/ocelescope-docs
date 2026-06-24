@@ -113,7 +113,11 @@ export const landing = {
 			label: "Follow the tutorial",
 			href: "/plugin-development/tutorial-ocel-graph/",
 		},
-		previewCaption: "auto-generated plugin UI",
+		media: {
+			url: "localhost:3000/plugin/ocel-graph",
+			caption: "auto-generated plugin UI",
+			src: "/assets/videos/plugin-creation.mov",
+		},
 	},
 	customModule: {
 		eyebrow: "EXTENSIBLE UI",

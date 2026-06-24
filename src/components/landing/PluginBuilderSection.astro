@@ -1,5 +1,6 @@
 ---
 import { Code } from "astro:components";
+import BrowserFrame from "./BrowserFrame.astro";
 import TrafficLights from "./TrafficLights.astro";
 
 const { content } = Astro.props;
@@ -359,14 +360,8 @@ def mine_ocel_graph(ocel: OCEL, input: OCELGraphInput):
                 </div>
             </div>
 
-            <div class="browser-frame builder-preview">
-                <div class="window-bar light">
-                    <TrafficLights />
-                    <span>localhost:3000/plugin/ocel-graph</span>
-                </div>
-                <div class="browser-placeholder">
-                    <span class="media-caption">{content.previewCaption}</span>
-                </div>
+            <div class="builder-preview">
+                <BrowserFrame media={content.media} />
             </div>
         </div>
 
