@@ -62,7 +62,7 @@ export const landing = {
           media: {
             url: "localhost:3000/logOverview",
             caption: "log-overview",
-            src: "/assets/videos/log-overview.mov",
+            src: "/assets/videos/log-overview.mp4",
           },
           layout: "text-media",
           tone: "light",
@@ -80,7 +80,7 @@ export const landing = {
           media: {
             url: "localhost:3000/filter",
             caption: "filter constructor",
-            src: "/assets/videos/filter-constructor.mov",
+            src: "/assets/videos/filter-constructor.mp4",
           },
           layout: "media-text",
           tone: "alt",
@@ -95,7 +95,7 @@ export const landing = {
 			media: {
 				url: "localhost:3000/discovery",
 				caption: "discovery",
-				src: "/assets/videos/discovery.mov",
+				src: "/assets/videos/discovery.mp4",
 			},
 			layout: "text-media",
 			tone: "light",
@@ -121,7 +121,7 @@ export const landing = {
 		media: {
 			url: "localhost:3000/plugin/ocel-graph",
 			caption: "auto-generated plugin UI",
-			src: "/assets/videos/plugin-creation.mov",
+			src: "/assets/videos/plugin-creation.mp4",
 		},
 	},
 	customModule: {
@@ -133,7 +133,7 @@ export const landing = {
         media: {
           url: "localhost:3000/modules/ocelot",
           caption: "OCELOT module",
-          src: "/assets/videos/custom-module.mov",
+          src: "/assets/videos/custom-module.mp4",
         },
 	},
 	plugins,
