@@ -1,3 +1,5 @@
+import { plugins } from "./plugins";
+
 export const landing = {
 	meta: {
 		title: "Ocelescope - Object-Centric Process Mining",
@@ -132,46 +134,17 @@ export const landing = {
           src: "/assets/videos/custom-module.mov",
         },
 	},
-	plugins: [
-		{
-			name: "PM4PY Discovery",
-			href: "https://github.com/Grkmr/pm4py-discovery",
-			monogram: "PD",
-			author: "Görkem Öztürk",
-			showLanding: true,
-		},
-		{
-			name: "TOTeM",
-			href: "https://github.com/Grkmr/TOTeM",
-			monogram: "TM",
-			author: "Görkem Öztürk",
-			showLanding: true,
-		},
-		{
-			name: "OC-DECLARE",
-			href: "https://github.com/Grkmr/OC-Declare",
-			monogram: "OD",
-			author: "Görkem Öztürk",
-			showLanding: true,
-		},
-		{
-			name: "OCEL Graph",
-			href: "https://github.com/Grkmr/OcelGraph",
-			monogram: "OG",
-			author: "Görkem Öztürk",
-			showLanding: true,
-		},
-	],
+	plugins,
 	ecosystem: {
 		eyebrow: "PLUGIN ECOSYSTEM",
 		title: "A growing library of analyses.",
+        browse: {
+          label: "Browse all plugins",
+          href: "/plugins/available-plugins/",
+        },
 		submit: {
 			label: "Submit your plugin",
 			href: "https://github.com/promi4s/ocelescope/issues/new?template=plugin-submission.yml",
-		},
-		requestEnv: {
-			label: "Request an environment package",
-			href: "https://github.com/promi4s/ocelescope/issues/new?template=plugin-package-request.yml",
 		},
 		cardCta: "Download",
 	},

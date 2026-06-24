@@ -16,15 +16,15 @@ const { ecosystem, plugins } = Astro.props;
           <span class="plugin-card-body">
             <strong>
               {plugin.name}
-              <em data-github-version={plugin.href} hidden={!plugin.version}>{plugin.version}</em>
+              <em hidden={!plugin.version}>{plugin.version}</em>
             </strong>
             <span class="plugin-author" hidden={!plugin.author}>by {plugin.author}</span>
-            <span class="plugin-about" data-github-description={plugin.href} hidden={!plugin.description && !plugin.about}>{plugin.description ?? plugin.about}</span>
+            <span class="plugin-about" hidden={!plugin.description && !plugin.about}>{plugin.description ?? plugin.about}</span>
             <span class="plugin-meta" hidden={!plugin.stars && !plugin.updated}>
-              <span data-github-stars={plugin.href} hidden={!plugin.stars}>{plugin.stars}</span>
-              <span data-github-updated={plugin.href} hidden={!plugin.updated}>{plugin.updated}</span>
+              <span hidden={!plugin.stars}>{plugin.stars}</span>
+              <span hidden={!plugin.updated}>{plugin.updated}</span>
             </span>
-            <a class="plugin-download" href={plugin.download ?? plugin.href} data-github-download={plugin.href} rel="noreferrer">
+            <a class="plugin-download" href={plugin.download ?? plugin.href} rel="noreferrer">
               <small>{ecosystem.cardCta} -&gt;</small>
             </a>
           </span>
@@ -32,8 +32,8 @@ const { ecosystem, plugins } = Astro.props;
       ))}
     </div>
     <div class="ecosystem-cta">
-      <a class="button button-primary" href={ecosystem.submit.href}>{ecosystem.submit.label}</a>
-      <a class="text-link" href={ecosystem.requestEnv.href}>{ecosystem.requestEnv.label} &rarr;</a>
+      <a class="button button-primary" href={ecosystem.browse.href}>{ecosystem.browse.label}</a>
+      <a class="text-link" href={ecosystem.submit.href}>{ecosystem.submit.label} &rarr;</a>
     </div>
   </div>
 </section>
