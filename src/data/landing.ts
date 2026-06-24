@@ -93,6 +93,7 @@ export const landing = {
 			media: {
 				url: "localhost:3000/discovery",
 				caption: "discovery",
+				src: "/assets/videos/discovery.mov",
 			},
 			layout: "text-media",
 			tone: "light",
