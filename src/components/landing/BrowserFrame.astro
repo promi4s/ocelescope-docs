@@ -1,5 +1,6 @@
 ---
 import TrafficLights from "./TrafficLights.astro";
+import VideoMedia from "./VideoMedia.astro";
 
 const { media } = Astro.props;
 
@@ -10,7 +11,7 @@ const isImage = media.src && /\.(png|jpe?g|gif|webp|avif|svg)$/i.test(media.src)
 <div class="browser-frame">
   <div class="window-bar light"><TrafficLights /><span>{media.url}</span></div>
   {isVideo ? (
-    <video class="browser-media" src={media.src} autoplay loop muted playsinline aria-label={media.caption} />
+    <VideoMedia src={media.src} caption={media.caption} />
   ) : isImage ? (
     <img class="browser-media" src={media.src} alt={media.caption} loading="lazy" />
   ) : (

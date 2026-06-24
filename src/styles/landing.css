@@ -538,6 +538,17 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
 .feature-grid-reverse { grid-template-columns: 1.18fr .82fr; }
 .feature-grid-reverse .feature-copy { order: 2; }
 
+/* Bleed the video to the viewport edge for more readable screen content */
+.feature-grid:not(.feature-grid-reverse) .browser-frame,
+.builder-preview .browser-frame {
+  margin-right: calc((max((100vw - var(--max)) / 2, var(--pad)) - 60px) * -1);
+  border-radius: 16px;
+}
+.feature-grid-reverse .browser-frame {
+  margin-left: calc((max((100vw - var(--max)) / 2, var(--pad)) - 60px) * -1);
+  border-radius: 16px;
+}
+
 .feature-copy h2,
 .section-heading h2,
 .section-title-row h2,
@@ -772,11 +783,8 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
 }
 
 .section-heading { max-width: 680px; margin-bottom: 40px; }
-.builder-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 22px;
-  align-items: end;
+.builder-preview {
+  align-self: center;
 }
 .code-card,
 .form-card {
@@ -1205,11 +1213,17 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   .hero-inner,
   .feature-grid,
   .feature-grid-reverse,
-  .builder-grid,
   .footer-minimal {
     grid-template-columns: 1fr;
   }
   .feature-grid-reverse .feature-copy { order: 0; }
+  .feature-grid:not(.feature-grid-reverse) .browser-frame,
+  .feature-grid-reverse .browser-frame,
+  .builder-preview .browser-frame {
+    margin-right: 0;
+    margin-left: 0;
+    border-radius: 16px;
+  }
   .card-grid.three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
