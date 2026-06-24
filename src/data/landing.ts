@@ -14,8 +14,9 @@ export const landing = {
     title: "An extensible web framework for object-centric process mining.",
     titlePrefix: "An extensible web framework for",
     titleAccent: "object-centric process mining.",
-    body: "Upload an OCEL log, filter it down, discover models, and extend everything with plugins. Spin it up with Docker and analyze in minutes - entirely in your browser.",
-    primaryCta: { label: "Download", href: "#download" },
+    body: "Upload an OCEL, filter it down, discover models, and extend everything with plugins. " +
+        "Spin it up with Docker and analyze in minutes - entirely in your browser.",
+    primaryCta: { label: "Get started", href: "#download" },
     secondaryCta: { label: "Documentation", href: "/documentation/" },
     trustLabel: "Project details",
     trust: ["Open source", "Runs locally", "Docker", "RWTH PADS"],
@@ -39,7 +40,7 @@ export const landing = {
     items: [
       "OCEL 2.0",
       "PM4PY-compatible",
-      "Plugin marketplace",
+      "Plugin library",
       "Custom React modules",
       "Self-hosted",
     ],
@@ -48,8 +49,8 @@ export const landing = {
     {
       id: "features",
       eyebrow: "LOG OVERVIEW",
-      title: "Understand any OCEL log at a glance.",
-      body: "Upload a log and Ocelescope profiles it instantly: events and objects, every type, attribute value ranges and the time span they cover. Know what you are working with before you write a single query.",
+      title: "Understand any OCEL at a glance.",
+      body: "Upload a log and Ocelescope profiles it instantly: events and objects, every type, attribute value ranges and the time span it covers. Know what you are working with before you start.",
       tags: [
         "events",
         "objects",
@@ -60,6 +61,7 @@ export const landing = {
       media: {
         url: "localhost:3000/logOverview",
         caption: "log-overview",
+        src: "/assets/videos/log-overview.mov",
       },
       layout: "text-media",
       tone: "light",
