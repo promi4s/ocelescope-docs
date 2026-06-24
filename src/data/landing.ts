@@ -154,6 +154,10 @@ export const landing = {
 	ecosystem: {
 		eyebrow: "PLUGIN ECOSYSTEM",
 		title: "A growing library of analyses.",
+		browse: {
+			label: "Browse all plugins",
+			href: "/plugins/available-plugins/",
+		},
 		submit: {
 			label: "Submit your plugin",
 			href: "https://github.com/promi4s/ocelescope/issues/new?template=plugin-submission.yml",
