@@ -18,7 +18,7 @@ export const landing = {
 		titleAccent: "object-centric process mining.",
 		body: "Upload an OCEL, filter it down, discover models, and extend everything with plugins. Spin it up with Docker and analyze in minutes - entirely in your browser.",
 		primaryCta: { label: "Get started", href: "#quickstart" },
-		secondaryCta: { label: "Documentation", href: "/documentation/" },
+		secondaryCta: { label: "Documentation", href: "/getting-started/download/" },
 		trustLabel: "Project details",
 		trust: ["Open source", "Runs locally", "Docker", "RWTH PADS"],
 	},
@@ -113,10 +113,10 @@ export const landing = {
 		eyebrow: "BUILD A PLUGIN",
 		title: "Declare your parameters. Ocelescope renders the UI.",
 		body: "No frontend work. Type your plugin inputs in Python and the form on the right is generated for you.",
-		guide: { label: "Read the plugin guide", href: "/plugin-development/" },
+		guide: { label: "Read the plugin guide", href: "/plugin-development/plugin-structure/" },
 		tutorial: {
 			label: "Follow the tutorial",
-			href: "/plugin-development/tutorial-ocel-graph/",
+			href: "/plugin-development/tutorial-plugin-development/",
 		},
 		media: {
 			url: "localhost:3000/plugin/ocel-graph",
@@ -142,7 +142,7 @@ export const landing = {
 		title: "A growing library of analyses.",
         browse: {
           label: "Browse all plugins",
-          href: "/plugins/available-plugins/",
+          href: "/community/plugin-library/",
         },
 		submit: {
 			label: "Submit your plugin",
@@ -162,13 +162,13 @@ export const landing = {
 					kicker: "START",
 					title: "Get started guide",
 					description: "Install Ocelescope and load your first OCEL log.",
-					href: "/getting-started/",
+					href: "/getting-started/download/",
 				},
 				{
 					kicker: "PLUGINS",
 					title: "Plugin guide",
 					description: "Build, package, and load reusable analysis methods.",
-					href: "/plugin-development/",
+					href: "/plugin-development/plugin-structure/",
 				},
 			],
 		},
@@ -215,7 +215,7 @@ export const landing = {
 		body: "Download the compose file, start the stack, and open the frontend on localhost.",
 		primaryCta: {
 			label: "Step-by-Step Guide",
-			href: "/download/",
+			href: "/getting-started/download/",
 		},
 		secondaryCta: { label: "Download compose file", href: "/docker-compose.yaml" },
 	},
