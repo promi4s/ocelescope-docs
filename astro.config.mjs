@@ -22,57 +22,57 @@ export default defineConfig({
 			sidebar: [
 				{
 					label: "Getting Started",
-					slug: "getting-started",
-				},
-				{
-					label: "Download",
-					items: [{ label: "Download Ocelescope", slug: "download" }],
-				},
-				{
-					label: "Documentation",
-					items: [{ label: "Overview", slug: "documentation" }],
-				},
-				{
-					label: "Plugins",
 					items: [
-						{ label: "Overview", slug: "plugins" },
-						{ label: "Available Plugins", slug: "plugins/available-plugins" },
-						{ label: "Example Plugins", slug: "plugins/example-plugins" },
-						{ label: "Submit a Plugin", slug: "plugins/submit-plugin" },
+						{
+							label: "Download Ocelescope",
+							slug: "getting-started/download",
+						},
+						{
+							label: "Explore your first OCEL",
+							slug: "getting-started/explore-first-ocel",
+						},
+						{
+							label: "Loading Plugins",
+							slug: "getting-started/loading-plugins",
+						},
+						{
+							label: "Loading Modules",
+							slug: "getting-started/loading-modules",
+						},
 					],
 				},
-
 				{
-					label: "User Guide",
+					label: "Community",
 					items: [
-						{ label: "Overview", slug: "user-guide" },
-						{ label: "Log Overview", slug: "user-guide/log-overview" },
-						{ label: "Filtering", slug: "user-guide/filtering" },
+						{ label: "Plugin Library", slug: "community/plugin-library" },
+						{ label: "Submit a Plugin", slug: "community/submit-plugin" },
+						{ label: "Report a Bug", slug: "community/report-bug" },
+						{ label: "Request a Feature", slug: "community/request-feature" },
+					],
+				},
+				{
+					label: "Ocelescope",
+					items: [
+						{ label: "Structure", slug: "ocelescope/structure" },
+						{ label: "Base Tool", slug: "ocelescope/base-tool" },
+						{ label: "Plugins", slug: "ocelescope/plugins" },
+						{ label: "Modules", slug: "ocelescope/modules" },
+						{ label: "Resources", slug: "ocelescope/resources" },
+						{ label: "Extensions", slug: "ocelescope/extensions" },
 						{
-							label: "Importing and Exporting",
-							slug: "user-guide/importing-exporting",
-						},
-						{
-							label: "Running Plugin Methods",
-							slug: "user-guide/running-plugin-methods",
-						},
-						{
-							label: "Results and Visualizations",
-							slug: "user-guide/results-and-visualizations",
+							label: "Ocelescope Library",
+							slug: "ocelescope/ocelescope-library",
 						},
 					],
 				},
 				{
 					label: "Plugin Development",
 					items: [
-						{ label: "Overview", slug: "plugin-development" },
 						{
 							label: "Plugin Structure",
 							slug: "plugin-development/plugin-structure",
 						},
 						{ label: "Plugin Class", slug: "plugin-development/plugin-class" },
-						{ label: "Resources", slug: "plugin-development/resources" },
-						{ label: "Extensions", slug: "plugin-development/extensions" },
 						{
 							label: "Plugin Environment",
 							slug: "plugin-development/environment",
@@ -82,36 +82,22 @@ export default defineConfig({
 							slug: "plugin-development/build-and-package",
 						},
 						{
-							label: "Tutorial: OCEL Graph",
-							slug: "plugin-development/tutorial-ocel-graph",
+							label: "Tutorial: Plugin Development",
+							slug: "plugin-development/tutorial-plugin-development",
+						},
+						{
+							label: "Request additional package",
+							slug: "plugin-development/request-package",
 						},
 					],
 				},
 				{
-					label: "Developer Guide",
-					items: [
-						{ label: "Overview", slug: "developer-guide" },
-						{ label: "Architecture", slug: "developer-guide/architecture" },
-						{ label: "Backend", slug: "developer-guide/backend" },
-						{ label: "Frontend", slug: "developer-guide/frontend" },
-						{ label: "Reference", slug: "developer-guide/reference" },
-						{
-							label: "Local Development",
-							slug: "developer-guide/local-development",
-						},
-					],
+					label: "Module Development",
+					slug: "module-development",
 				},
 				{
-					label: "Community",
-					items: [
-						{ label: "Overview", slug: "community" },
-						{ label: "Report a Bug", slug: "community/report-bug" },
-						{ label: "Request a Feature", slug: "community/request-feature" },
-						{
-							label: "Request a Dependency",
-							slug: "community/request-dependency",
-						},
-					],
+					label: "API References",
+					slug: "api-references",
 				},
 			],
 		}),
