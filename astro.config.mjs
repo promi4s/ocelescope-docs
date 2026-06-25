@@ -102,6 +102,10 @@ export default defineConfig({
 					],
 				},
 				{
+					label: "API References",
+					items: [{ autogenerate: { directory: "api-references" } }],
+				},
+				{
 					label: "Community",
 					items: [
 						{ label: "Overview", slug: "community" },

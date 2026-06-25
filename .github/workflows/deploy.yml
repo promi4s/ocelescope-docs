@@ -24,6 +24,12 @@ jobs:
     steps:
       - name: Checkout your repository using git
         uses: actions/checkout@v6
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+      - name: Clone ocelescope for API reference generation
+        run: git clone --depth 1 https://github.com/promi4s/ocelescope.git /tmp/ocelescope
+      - name: Generate API reference pages
+        run: uv run scripts/generate-api-docs.py /tmp/ocelescope src/content/docs/api-references
       - name: Install, build, and upload your site
         uses: withastro/action@v6
         # Lets the build-time plugin fetcher authenticate to the GitHub API
