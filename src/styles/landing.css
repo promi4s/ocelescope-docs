@@ -649,7 +649,6 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
 /* ─── Statement section ──────────────────────────────────────────────────── */
 .statement-section {
   position: relative;
-  min-height: 280svh;
   padding: 0 28px;
   /* Dark mode: cinematic deep dark */
   background:
@@ -681,10 +680,8 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
 }
 
 .statement-inner {
-  position: sticky;
-  top: 0;
+  position: relative;
   z-index: 1;
-  min-height: 100svh;
   padding: clamp(72px, 10vh, 120px) 0;
   display: grid;
   place-items: center;
@@ -710,16 +707,12 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   text-wrap: balance;
 }
 
-/* Word-by-word reveal — dark mode: words start near-invisible on dark bg */
+/* Statement words: dark mode */
 .statement-word {
   display: inline;
-  color: color-mix(in srgb, hsl(200, 22%, 90%) 15%, transparent);
-  transition: color .5s cubic-bezier(.22, 1, .36, 1);
-}
-.statement-word.word-lit {
   color: hsl(200, 22%, 90%);
 }
-.statement-word.statement-accent.word-lit {
+.statement-word.statement-accent {
   color: var(--t2);
   background: linear-gradient(135deg, var(--t2) 0%, var(--t1) 50%, var(--t3) 100%);
   -webkit-background-clip: text;
@@ -727,30 +720,20 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   background-clip: text;
 }
 
-/* Light mode: words start near-invisible on light bg, reveal to dark text */
+/* Light mode */
 [data-theme="light"] .statement-word {
-  color: color-mix(in srgb, hsl(215, 28%, 14%) 12%, transparent);
-}
-[data-theme="light"] .statement-word.word-lit {
   color: hsl(215, 28%, 14%);
 }
 
 .statement-body {
   max-width: 620px;
   margin: 28px auto 0;
-  color: color-mix(in srgb, hsl(200, 18%, 70%) 30%, transparent);
+  color: hsl(200, 18%, 70%);
   font-size: clamp(18px, 2vw, 22px);
   line-height: 1.6;
-  transition: color .8s ease;
-}
-.statement-body.body-lit {
-  color: hsl(200, 18%, 70%);
 }
 
 [data-theme="light"] .statement-body {
-  color: color-mix(in srgb, hsl(215, 18%, 36%) 30%, transparent);
-}
-[data-theme="light"] .statement-body.body-lit {
   color: hsl(215, 18%, 36%);
 }
 
@@ -1222,31 +1205,10 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   .resources-section,
   .quickstart-section { padding-block: 68px; }
   .statement-section {
-    min-height: auto;
     padding-block: 0;
   }
   .statement-inner {
-    position: relative;
-    min-height: auto;
     padding-block: 88px;
-  }
-  .statement-word {
-    color: hsl(200, 22%, 90%);
-  }
-  [data-theme="light"] .statement-word {
-    color: hsl(215, 28%, 14%);
-  }
-  .statement-word.statement-accent {
-    background: linear-gradient(135deg, var(--t2), var(--t1));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .statement-body {
-    color: hsl(200, 18%, 70%);
-  }
-  [data-theme="light"] .statement-body {
-    color: hsl(215, 18%, 36%);
   }
   .card-grid.two,
   .card-grid.three { grid-template-columns: 1fr; }

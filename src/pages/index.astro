@@ -91,34 +91,4 @@ const plugins = await enrichPlugins(
     }
   </script>
 
-  <script>
-    // Statement section: word-by-word scroll reveal driven by scroll progress.
-    const statementSection = document.querySelector<HTMLElement>(".statement-section");
-    const statementWords = document.querySelectorAll<HTMLElement>(".statement-word");
-    const statementBody = document.querySelector<HTMLElement>(".statement-body");
-
-    if (statementSection && statementWords.length) {
-      function updateStatementReveal() {
-        const rect = statementSection!.getBoundingClientRect();
-        const scrollRange = statementSection!.offsetHeight - window.innerHeight;
-        if (scrollRange <= 0) return;
-        const progress = Math.max(0, Math.min(1, -rect.top / scrollRange));
-
-        const wordCount = statementWords.length;
-        statementWords.forEach((word, i) => {
-          // Each word lights up as progress crosses its threshold.
-          // Words span from 0..0.85 of progress so the body fades in at the end.
-          const threshold = (i / wordCount) * 0.85;
-          word.classList.toggle("word-lit", progress >= threshold);
-        });
-
-        if (statementBody) {
-          statementBody.classList.toggle("body-lit", progress >= 0.88);
-        }
-      }
-
-      window.addEventListener("scroll", updateStatementReveal, { passive: true });
-      updateStatementReveal();
-    }
-  </script>
 </StarlightPage>
