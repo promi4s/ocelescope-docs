@@ -1,6 +1,36 @@
 ---
-title: Module Development
-description: Build custom React modules that extend Ocelescope.
+title: Overview
+description: Build full-stack modules that extend Ocelescope with custom views and APIs.
 ---
 
-This page should explain how to develop a module: the expected project structure, how a module mounts into the Ocelescope frontend, what APIs it can call, and how to build and load it for testing.
+A **module** extends Ocelescope with a complete feature: its own backend API and its own frontend views. Where a [plugin](/plugin-development/) contributes a single process mining method with a generated form, a module gives you full control over both the interface and the endpoints behind it.
+
+Reach for a module when:
+
+- a generated plugin form is not enough and you need a **custom, interactive UI**,
+- you need **API endpoints** beyond running one method,
+- you are adding a **new kind of view** to the application rather than a single analysis.
+
+If your idea is really a method that consumes and produces OCELs or resources, build a [plugin](/plugin-development/) instead. It is the lighter path and loads at runtime without a rebuild.
+
+## How a module is built
+
+A module has two halves that are developed together:
+
+- A **backend package** that mounts a [FastAPI](https://fastapi.tiangolo.com/) sub-application, discovered through a Python entry point. See [Backend Module](/module-development/backend-module/).
+- A **frontend package** that defines the module's metadata and routes as React views. See [Frontend Module](/module-development/frontend-module/).
+
+The frontend talks to the backend through a typed API client generated from the backend module's OpenAPI schema.
+
+## Built into the build
+
+Modules are not uploaded at runtime like plugins. Both halves are compiled into the Ocelescope backend and frontend images, so they are developed inside the Ocelescope project as workspace packages. The bundled **Ocelot** view is a module integrated exactly this way, and it is the best reference to read alongside these pages.
+
+## This guide
+
+<br />
+
+- [Module Structure](/module-development/module-structure/) introduces the two-package layout.
+- [Backend Module](/module-development/backend-module/) covers the Python sub-application and its entry point.
+- [Frontend Module](/module-development/frontend-module/) covers the React module, its routes, and the generated API client.
+- [Register a Module](/module-development/register-module/) wires both halves into Ocelescope.

@@ -1,8 +1,33 @@
 ---
 title: Modules
-description: First-class custom UI views that extend Ocelescope beyond generated plugin forms.
+description: Full-stack extensions that add custom views and APIs to Ocelescope.
 ---
 
-This page should explain modules as the richer counterpart to plugins: instead of a generated form, a module mounts a full custom React view inside Ocelescope.
+A **module** is a full-stack extension of Ocelescope. Where a [plugin](/ocelescope/plugins/) contributes a process mining method whose UI is generated for you, a module contributes a complete feature: its own backend API and its own frontend views.
 
-The story should cover when to build a module instead of a plugin, and reference an existing example such as the OCELOT module.
+## What a module is made of
+
+A module has two halves:
+
+- **A backend package.** A Python package that defines a `Module` and exposes a [FastAPI](https://fastapi.tiangolo.com/) sub-application. Ocelescope discovers it through a Python entry point and mounts it under a versioned path such as `/modules/<key>/v<major>`.
+- **A frontend package.** A React package that defines the module's metadata and its **routes**, each route being a page that mounts as a first-class view in the Ocelescope UI, complete with its own entry in the navigation.
+
+The two halves talk to each other through a typed API client that is generated from the backend module's OpenAPI schema.
+
+## Built into the build
+
+Unlike plugins, modules are not uploaded at runtime. Both halves are compiled into the Ocelescope backend and frontend images. Using a module therefore means running a build that includes it (see [Loading Modules](/getting-started/loading-modules/)).
+
+The bundled **Ocelot** view, which explores how events and objects relate, is integrated exactly this way.
+
+## When to build a module instead of a plugin
+
+Reach for a plugin first. A plugin is the right tool when your feature is a method that consumes and produces OCELs or resources, because Ocelescope generates the form and wires up import, export, and visualization for you, and it loads at runtime with no rebuild.
+
+Build a module when:
+
+- a generated form is not enough and you need a **custom, interactive interface**,
+- you need **API endpoints** beyond running a single method,
+- you are adding a **new kind of view** to the application rather than a single analysis.
+
+To build one, see [Module Development](/module-development/).

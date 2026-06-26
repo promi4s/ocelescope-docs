@@ -1,0 +1,44 @@
+---
+title: Module Structure
+description: The two-package layout of an Ocelescope module.
+---
+
+A module is two packages that ship together: a Python backend package and a TypeScript/React frontend package. Because modules are compiled into Ocelescope, they live as workspace packages inside the Ocelescope project, next to the built-in modules.
+
+## Where modules live
+
+In the Ocelescope repository, modules are split across the backend and frontend workspaces:
+
+```sh
+src/
+├── backend/
+│   └── modules/
+│       └── ocelescope-module-<name>/   # Python package (FastAPI sub-app)
+│           ├── pyproject.toml
+│           └── src/ocelescope_module_<name>/
+│               ├── __init__.py
+│               ├── module.py            # Module class + create_app()
+│               ├── routes.py            # API endpoints
+│               └── models.py            # Pydantic request/response models
+└── frontend/
+    └── modules/
+        └── <name>/                      # React package
+            ├── package.json
+            ├── tsdown.config.ts
+            ├── orval.config.ts          # generated API client config
+            └── src/
+                ├── index.ts             # default-exports the module
+                ├── config.ts            # defineModule({ ... })
+                ├── routes/              # one component per route
+                └── api/base.ts          # generated client (do not edit)
+```
+
+The naming convention used by the built-in modules is `ocelescope-module-<name>` for the Python package and `@ocelescope/<name>` for the frontend package.
+
+## How the halves connect
+
+- The **backend package** exposes a FastAPI sub-app and registers itself with the backend through a Python entry point. Ocelescope mounts it under `/modules/<key>/v<major>`.
+- The **frontend package** declares its routes and is registered in the app configuration so its views appear in the navigation.
+- The frontend's **API client** (`src/api/base.ts`) is generated from the backend module's OpenAPI schema, so the two stay in sync.
+
+The next pages cover each half in turn: [Backend Module](/module-development/backend-module/) and [Frontend Module](/module-development/frontend-module/).

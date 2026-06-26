@@ -1,8 +1,26 @@
 ---
 title: Loading Modules
-description: Load custom modules into your running Ocelescope instance.
+description: How modules are added to Ocelescope and how they differ from plugins.
 ---
 
-This page should explain how to load a module into Ocelescope, analogous to [Loading Plugins](/getting-started/loading-plugins/).
+Modules and plugins both extend Ocelescope, but they are loaded in very different ways.
 
-The story should cover where modules come from, how they differ from plugins, and how to upload and enable one through the web interface.
+## Plugins vs. modules
+
+- **Plugins** are uploaded at runtime. You drop a plugin ZIP into a running Ocelescope instance (see [Loading Plugins](/getting-started/loading-plugins/)) and it becomes available immediately, no rebuild required.
+- **Modules** are built into the application. A module is a full-stack extension: a backend Python package that mounts its own API, plus a frontend React package that adds first-class views to the UI. Both parts are compiled into the Ocelescope backend and frontend images, so a module cannot be uploaded through the web interface.
+
+:::note[Why the difference]
+Plugins declare their inputs and outputs declaratively, so Ocelescope can generate their UI automatically and load them at runtime. Modules ship their own user interface and API routes, which have to be part of the build.
+:::
+
+## Running a build that includes a module
+
+To use a module, you need an Ocelescope build that bundles it:
+
+- The **backend** discovers modules through Python entry points, so the module's Python package must be installed in the backend image.
+- The **frontend** includes the module as a workspace package that is registered in the app configuration and compiled into the frontend image.
+
+The bundled **Ocelot** module is integrated this way and is already part of the default images.
+
+If you want to develop your own module or produce a custom build that includes one, see [Module Development](/module-development/). For the conceptual difference between plugins and modules, see [Modules](/ocelescope/modules/).

@@ -48,6 +48,7 @@ export default defineConfig({
 						{ label: "Submit a Plugin", slug: "community/submit-plugin" },
 						{ label: "Report a Bug", slug: "community/report-bug" },
 						{ label: "Request a Feature", slug: "community/request-feature" },
+						{ label: "Troubleshooting", slug: "community/troubleshooting" },
 					],
 				},
 				{
@@ -93,7 +94,25 @@ export default defineConfig({
 				},
 				{
 					label: "Module Development",
-					slug: "module-development",
+					items: [
+						{ label: "Overview", slug: "module-development" },
+						{
+							label: "Module Structure",
+							slug: "module-development/module-structure",
+						},
+						{
+							label: "Backend Module",
+							slug: "module-development/backend-module",
+						},
+						{
+							label: "Frontend Module",
+							slug: "module-development/frontend-module",
+						},
+						{
+							label: "Register a Module",
+							slug: "module-development/register-module",
+						},
+					],
 				},
 				{
 					label: "API References",

@@ -1,0 +1,86 @@
+---
+title: Backend Module
+description: Build the FastAPI sub-application that backs an Ocelescope module.
+---
+
+The backend half of a module is a Python package that exposes a [FastAPI](https://fastapi.tiangolo.com/) sub-application. Ocelescope discovers it through a Python entry point and mounts it under a versioned path.
+
+## The `Module` class
+
+Define a class that inherits from `Module` (from `ocelescope_backend.app.modules`). It declares its identity through `meta` and builds its FastAPI app in `create_app`.
+
+```python title="module.py"
+from fastapi import FastAPI
+from ocelescope_backend.app.modules import Module, ModuleMeta
+from packaging.version import Version
+
+from ocelescope_module_example.routes import router
+
+
+class Example(Module):
+    meta = ModuleMeta(key="example", version=Version("1.0"))
+
+    @classmethod
+    def create_app(cls) -> FastAPI:
+        app = FastAPI(
+            title="Example",
+            version=str(cls.meta.version),
+            docs_url=None,
+            redoc_url=None,
+        )
+        app.include_router(router)
+        return app
+```
+
+- `meta.key` is the module's unique identifier and `meta.version` its version. The module is mounted at `/modules/<key>/v<major>`, so the major version is part of the URL and you can run multiple major versions side by side.
+- `create_app` returns a fully independent FastAPI app. Include your routers on it and return it.
+
+## Defining routes
+
+Put your endpoints on an `APIRouter`. Give every operation a stable `operation_id`, because it becomes the name of the generated frontend hook.
+
+```python title="routes.py"
+from fastapi import APIRouter
+from ocelescope_backend.app.dependencies import ApiSession, ApiOcel
+
+router = APIRouter()
+
+
+@router.get("/{ocel_id}/summary", operation_id="getSummary")
+def get_summary(ocel_id: str, session: ApiSession) -> dict:
+    ...
+```
+
+### Accessing the session and OCELs
+
+Two dependencies from `ocelescope_backend.app.dependencies` give you access to the current session and its logs:
+
+- `ApiSession` injects the active `Session`, which holds the uploaded OCELs and resources.
+- `ApiOcel` injects an `OCEL` directly, resolved from the request's `ocel_id`.
+
+```python
+@router.get("/{ocel_id}/object-types", operation_id="getObjectTypes")
+def get_object_types(ocel: ApiOcel) -> list[str]:
+    return ocel.objects.types
+```
+
+The injected `OCEL` is the same [`ocelescope` library](/ocelescope/ocelescope-library/) class used everywhere else, so its managers (`objects`, `events`, `e2o`, `o2o`, ...) are available.
+
+## Registering the entry point
+
+Ocelescope finds modules through the `ocelescope_backend.modules` entry point group. Declare it in your `pyproject.toml`:
+
+```toml title="pyproject.toml"
+[project]
+name = "ocelescope-module-example"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = ["fastapi", "ocelescope-backend"]
+
+[project.entry-points."ocelescope_backend.modules"]
+exampleV1 = "ocelescope_module_example.module:Example"
+```
+
+When the backend starts, it loads every entry point in that group, checks each is a `Module` subclass, and mounts it. Duplicate `key` and major-version pairs are skipped, so install only one package per major version.
+
+Once the backend is in place, build the [Frontend Module](/module-development/frontend-module/) that consumes it.

@@ -1,8 +1,32 @@
 ---
 title: Base Tool
-description: What Ocelescope provides out of the box, without any plugins or modules.
+description: What Ocelescope provides out of the box, before adding any plugins.
 ---
 
-This page should describe the core Ocelescope application: importing and exporting OCELs, filtering, and the base UI, independent of any plugin or module functionality.
+A fresh Ocelescope install already does a lot before you load a single plugin. The base tool is a set of built-in views for importing, inspecting, filtering, and discovering object-centric event logs.
 
-The story should explain what an analyst can already do with a bare Ocelescope install before loading any plugins or modules.
+## Import and management
+
+Upload OCELs in OCEL 2.0 formats (`.jsonocel`, `.xmlocel`, `.sqlite`) or import a classic XES log, which is converted to an OCEL automatically. The same dropzone also accepts plugins and saved resources.
+
+The **management** view lists the OCELs and resources in your session, lets you export them again, and supports exporting logs to XES.
+
+## Log Overview
+
+The **Log Overview** profiles a log at a glance: event and object counts, the object types and activities present, and the attributes attached to events and objects, including their value types and ranges. It is the quickest way to confirm a log imported as expected. See [Explore your first OCEL](/getting-started/explore-first-ocel/) for a walkthrough.
+
+## Filtering
+
+The **Filter** view composes filters visually to narrow a log before analysis. You can stack conditions on object and event types, attribute values, time windows, and the existence of object-to-object or event-to-object relations, then carry the reduced log straight into discovery.
+
+## Discovery
+
+The **Discovery** view renders models out of the box: object-centric Petri nets and directly-follows graphs. Discovery is also extensible, so plugin-provided discovery methods appear here as selectable algorithms.
+
+## Plugins
+
+The **Plugins** view is where you upload plugin ZIPs and run their methods. Each method renders as a generated form built from its declared inputs. This is the entry point for everything in the plugin ecosystem; see [Plugins](/ocelescope/plugins/).
+
+## Bundled module: Ocelot
+
+Beyond the core views, Ocelescope ships with the **Ocelot** [module](/ocelescope/modules/) for interactively exploring how events and objects relate, searching entities, and visualizing their relationships as a graph.

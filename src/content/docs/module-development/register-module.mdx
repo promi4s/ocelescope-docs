@@ -1,0 +1,45 @@
+---
+title: Register a Module
+description: Wire a module's backend and frontend halves into Ocelescope.
+---
+
+With both halves built, a module is connected to Ocelescope in two places: the backend installs the Python package, and the frontend registers the React package in the app configuration.
+
+## Backend: install the package
+
+The backend discovers modules through the `ocelescope_backend.modules` [entry point](/module-development/backend-module/#registering-the-entry-point). It is enough for the Python package to be **installed** in the backend environment; on startup, Ocelescope loads every entry point in that group and mounts each module at `/modules/<key>/v<major>`.
+
+Inside the Ocelescope project the backend modules are workspace packages, so they are installed together with the backend. In a custom backend image, install your module package alongside `ocelescope-backend`.
+
+## Frontend: register in the app config
+
+The frontend app declares which modules it includes in `ocelescope.config.ts`. Add your module to the dependency list of the app package, then register it in the config:
+
+```ts title="src/frontend/app/ocelescope.config.ts"
+import type { OcelescopeConfig } from "@ocelescope/core";
+import example from "@ocelescope/example";
+// ...existing module imports
+
+export default {
+  modules: [management, overview, plugin, discovery, filter, ocelot, example],
+  navbarGroups: [
+    // ...existing groups
+    { title: "Modules", modulesNames: [ocelot.name, example.name] },
+  ],
+} satisfies OcelescopeConfig;
+```
+
+- `modules` is the list of modules compiled into the app.
+- `navbarGroups` controls how modules are grouped in the navigation. Reference modules by their `name`. A group can have an optional `title`.
+
+The app generates the routes for every registered module's routes at build time, so the new views appear in the navigation once the frontend is rebuilt.
+
+## Putting it together
+
+Because both halves are part of the build, using a module means producing an Ocelescope build that includes it (see [Loading Modules](/getting-started/loading-modules/)):
+
+1. Install the backend module package in the backend image.
+2. Add and register the frontend module in `ocelescope.config.ts`.
+3. Rebuild the backend and frontend.
+
+The bundled **Ocelot** module is wired up exactly this way and is the best end-to-end reference to read alongside this guide.

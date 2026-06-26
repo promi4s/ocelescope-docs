@@ -3,6 +3,42 @@ title: Explore your first OCEL
 description: Load an OCEL log into Ocelescope and inspect it for the first time.
 ---
 
-This page should walk a new user through loading their first OCEL log into Ocelescope.
+import { Steps } from '@astrojs/starlight/components';
 
-The story should cover where to find a sample OCEL, how to import it, and what the first screen after import shows: event count, object count, activities, object types, and relations.
+Once Ocelescope is [running](/getting-started/download/), open [http://localhost:3000](http://localhost:3000) and load a log to start exploring.
+
+## Load a log
+
+<Steps>
+
+1. **Open the upload dialog**
+
+   Use the upload action in the app to open the upload dialog.
+
+2. **Pick a log**
+
+   You have two options:
+
+   - **Use a built-in example.** Ocelescope ships with a small set of default OCELs. Select one from the list to import it instantly, which is the fastest way to look around without preparing your own data.
+   - **Upload your own file.** Drag an OCEL file onto the dropzone. Supported formats are `.jsonocel` / `.json`, `.xmlocel` / `.xml`, and `.sqlite` (OCEL 2.0). Classic XES event logs can also be imported and are converted to an OCEL on the fly.
+
+</Steps>
+
+The same dropzone also accepts plugins and resources, so you can drop an OCEL, a plugin, or a saved resource in the same place.
+
+## Inspect the log
+
+After import, the **Log Overview** gives you a first read on the data so you can confirm it loaded as expected before running any analysis. It summarizes:
+
+- the number of **events** and **objects**,
+- the **object types** and **event types (activities)** present,
+- the **attributes** attached to events and objects, including value types and ranges,
+- the **event-to-object** and **object-to-object** relations.
+
+For a deeper, interactive look at how individual events and objects connect, use the **Ocelot** view to search entities and visualize their relationships as a graph.
+
+## Next steps
+
+- Narrow the log down with the **Filter** view before analyzing it.
+- Discover models such as object-centric Petri nets and directly-follows graphs in the **Discovery** view.
+- Add more analyses by [loading plugins](/getting-started/loading-plugins/).

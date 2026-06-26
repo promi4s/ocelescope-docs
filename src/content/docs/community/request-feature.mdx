@@ -3,8 +3,22 @@ title: Request a Feature
 description: Suggest improvements to the platform or plugin ecosystem.
 ---
 
-This page should explain what makes a feature request actionable.
+import { LinkButton } from '@astrojs/starlight/components';
 
-The story should ask users to describe the workflow, audience, current workaround, expected behavior, and whether the feature belongs in Ocelescope core or could be implemented as a plugin.
+Have an idea for Ocelescope? Open a feature request on GitHub:
 
-This distinction reinforces the kernel-and-plugin architecture.
+<LinkButton href="https://github.com/promi4s/ocelescope/issues/new?template=feature-request.yml" icon="external">
+Request a feature
+</LinkButton>
+
+The issue template asks you to pick the **area** the request is for (the Python library, the Ocelescope tool, or plugins) and to describe:
+
+- the **problem or use case** you are trying to solve,
+- your **proposed solution**, the feature or improvement you would like to see,
+- any **additional context**, such as examples or references.
+
+Before opening a request, consider whether the idea is a new analysis method. Methods that consume and produce OCELs or resources usually fit best as a [plugin](/plugin-development/), which you can build and share without changing Ocelescope itself.
+
+:::note
+Feature requests are considered only if they align with the goals and scope of the project.
+:::

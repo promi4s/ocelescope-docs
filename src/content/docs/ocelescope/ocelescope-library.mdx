@@ -1,6 +1,47 @@
 ---
 title: Ocelescope Library
-description: The Ocelescope Python package that powers plugins and the core platform.
+description: The ocelescope Python package that powers the platform and its plugins.
 ---
 
-This page should introduce the `ocelescope` Python package itself: what it ships (kernel types, plugin/resource base classes, OCEL handling) and how it relates to the platform versus to individual plugins.
+`ocelescope` is the Python package at the heart of the project. It provides general tools for working with object-centric event logs and the base classes you use to build [plugins](/plugin-development/). The backend depends on it, and every plugin imports from it, so the same data model and types are shared end to end.
+
+## Installation
+
+```bash
+pip install ocelescope
+```
+
+When developing a plugin, install the optional `plugin` extra, which adds the packages available in the shared plugin environment:
+
+```bash
+pip install "ocelescope[plugin]"
+```
+
+## What it ships
+
+The package is organized into focused subpackages, each covering one part of the object-centric process mining workflow.
+
+<div
+  style="
+    display: inline-block;
+    background: white;
+    padding: 1rem;
+    border-radius: 0.75rem;
+  "
+>
+  ![The structure of the ocelescope Python package: ocel (with filter and extension), plugin, resource, and visualizations.](../../../assets/PackageStructure.png)
+</div>
+
+Everything below is importable directly from the top-level `ocelescope` package.
+
+- **The `OCEL` class.** A high-level wrapper around an OCEL 2.0 log. It reads and writes `.jsonocel`, `.xmlocel`, and `.sqlite` files (and imports XES), and exposes structured **managers** for objects, events, event-to-object and object-to-object relations, attributes, executions, and extensions.
+- **Filters.** A set of `BaseFilter` subclasses (such as `EventTypeFilter`, `ObjectAttributeFilter`, `TimeFrameFilter`, `E2OCountFilter`) that can be composed into a pipeline and applied with `OCEL.filter(...)`.
+- **Plugin building blocks.** `Plugin`, the `@plugin_method` decorator, `PluginInput`, `OCEL_FIELD`, `COMPUTED_SELECTION`, and the `OCELAnnotation` / `ResourceAnnotation` helpers used to declare plugin methods and their inputs.
+- **Resources.** The `Resource` base class plus built-in resources such as `PetriNet` and `DirectlyFollowsGraph`.
+- **Visualizations.** Visualization types (`Graph`, `Table`, `DotVis`, `SVGVis`, and Plotly support) and layout helpers used to render resources in the frontend.
+- **OCEL extensions.** `OCELExtension`, for storing extra data alongside an OCEL beyond the OCEL 2.0 standard.
+
+## Where to go next
+
+- To use these classes in a plugin, start with [Plugin Development](/plugin-development/plugin-structure/).
+- For the precise, generated reference of every class and helper, see [API References](/api-references/).

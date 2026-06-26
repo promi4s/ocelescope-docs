@@ -3,8 +3,20 @@ title: Report a Bug
 description: Provide actionable information for Ocelescope maintainers.
 ---
 
-This page should explain how to file useful bug reports.
+import { LinkButton } from '@astrojs/starlight/components';
 
-The story should ask for the affected version, runtime setup, browser if frontend-related, OCEL file details if import-related, plugin ZIP or source if plugin-related, reproduction steps, expected behavior, actual behavior, and logs or screenshots.
+Found something broken? Open a bug report on GitHub:
 
-Keep the page short and link directly to the GitHub issue template.
+<LinkButton href="https://github.com/promi4s/ocelescope/issues/new?template=bug-report.yml" icon="external">
+Report a bug
+</LinkButton>
+
+The issue template asks you to pick which **area** is affected (the Python library, the Ocelescope tool, or plugins) and to give a short summary plus a description of what happened.
+
+To help maintainers reproduce the problem, it helps to include:
+
+- the **steps to reproduce**, and what you expected to happen instead,
+- the **Ocelescope version** you are running (for example `0.2.0`),
+- any **logs or screenshots** that show the error.
+
+If the bug is tied to a specific file, mention the OCEL format you imported; if it involves a plugin, link the plugin's repository or release.

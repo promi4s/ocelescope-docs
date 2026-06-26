@@ -1,10 +1,24 @@
 ---
-title: Request Additional Package
-description: Ask for packages to be added to the plugin runtime environment.
+title: Request additional package
+description: Ask for a Python package to be added to the shared plugin environment.
 ---
 
-This page should explain how plugin authors request runtime packages.
+import { LinkButton } from '@astrojs/starlight/components';
 
-The story should ask for the package name, version constraints, why the dependency is needed, plugin or method context, license considerations, and whether a lighter alternative exists.
+Plugins run in a **fixed Python environment** provided by the Ocelescope runtime and can only import packages that are available there (see [Plugin Environment](/plugin-development/environment/)). If your plugin needs a package that is not yet included, you can ask for it to be added to the shared environment.
 
-The page should clarify that dependency requests affect the shared plugin environment and therefore need review.
+<LinkButton href="https://github.com/promi4s/ocelescope/issues/new?template=plugin-package-request.yml" icon="external">
+Request a package
+</LinkButton>
+
+The issue template asks for:
+
+- the **package name** on PyPI (for example `pandas`),
+- an optional **version** or version constraint (for example `>=2.0,<3.0`),
+- a short explanation of **why** you want it, ideally with the plugin or method you intend to use it in.
+
+Because the environment is shared by every plugin, requests are reviewed before a package is added.
+
+:::tip[Need it right away?]
+If you cannot wait for a package to be added, or it is specific to your plugin, you can bundle wheel files directly inside your plugin instead. See [bundling wheel files](/plugin-development/environment/#bundling-wheel-files-inside-a-plugin).
+:::
