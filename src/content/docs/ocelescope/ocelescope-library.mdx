@@ -3,6 +3,8 @@ title: Ocelescope Library
 description: The ocelescope Python package that powers the platform and its plugins.
 ---
 
+import { LinkCard } from '@astrojs/starlight/components';
+
 `ocelescope` is the Python package at the heart of the project. It provides general tools for working with object-centric event logs and the base classes you use to build [plugins](/plugin-development/). The backend depends on it, and every plugin imports from it, so the same data model and types are shared end to end.
 
 ## Installation
@@ -23,7 +25,8 @@ The package is organized into focused subpackages, each covering one part of the
 
 <div
   style="
-    display: inline-block;
+    width: 40%;
+    margin: 0 auto;
     background: white;
     padding: 1rem;
     border-radius: 0.75rem;
@@ -45,3 +48,9 @@ Everything below is importable directly from the top-level `ocelescope` package.
 
 - To use these classes in a plugin, start with [Plugin Development](/plugin-development/).
 - For the precise, generated reference of every class and helper, see [API References](/api-references/).
+
+<LinkCard
+  title="API References"
+  description="The generated reference for every ocelescope class and helper."
+  href="/api-references/"
+/>
