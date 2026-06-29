@@ -5,27 +5,53 @@ description: What Ocelescope provides out of the box, before adding any plugins.
 
 A fresh Ocelescope install already does a lot before you load a single plugin. The base tool is a set of built-in views for importing, inspecting, filtering, and discovering object-centric event logs.
 
-## Import and management
+## Import and resources
 
-Upload OCELs in OCEL 2.0 formats (`.jsonocel`, `.xmlocel`, `.sqlite`) or import a classic XES log, which is converted to an OCEL automatically. The same dropzone also accepts plugins and saved resources.
+Upload OCELs in OCEL 2.0 formats or import a traditional XES log, which is converted to an OCEL with a single object type automatically.
+The same dropzone also accepts plugins and saved resources.
 
-The **management** view lists the OCELs and resources in your session, lets you export them again, and supports exporting logs to XES.
+The **resource** view lists the OCELs and resources in your session.
+From there, each resource can be deleted, renamed, inspected, and exported.
+
+- A log (filtered or not) can be exported as any of the supported OCEL 2.0 formats (`.jsonocel`, `.xmlocel`, `.sqlite`), or flattened to a single object type and exported as XES, using the [pm4py](https://processintelligence.solutions/pm4py) implementation.
+- Other [resources](/ocelescope/resources/), such as discovered models, can be exported as `.ocelescope` JSON files. These can be reloaded into Ocelescope later through the same upload dialog used for logs.
+
+All resources, whether imported, filtered, or discovered, can also be used as inputs for plugin or module methods.
 
 ## Log Overview
 
-The **Log Overview** profiles a log at a glance: event and object counts, the object types and activities present, and the attributes attached to events and objects, including their value types and ranges. It is the quickest way to confirm a log imported as expected. See [Explore your first OCEL](/getting-started/explore-first-ocel/) for a walkthrough.
+The **Log Overview** profiles a log at a glance: event and object counts, the object types and activities present, and the attributes attached to events and objects, including their value types and ranges.
+It is the quickest way to confirm a log imported as expected.
 
 ## Filtering
 
-The **Filter** view composes filters visually to narrow a log before analysis. You can stack conditions on object and event types, attribute values, time windows, and the existence of object-to-object or event-to-object relations, then carry the reduced log straight into discovery.
+The **Filter** view composes filters visually to narrow a log before analysis.
+You can stack any number of the following conditions; only events/objects that fulfill **all** criteria are kept:
+
+- **Activity** filter: keep or remove all events of selected types and all objects of their E2O-relations.
+Any object without an event is dropped.
+- **Object type** filter: keep or remove all objects of selected types and all events they are related too.
+Any event without an object is dropped.
+- **Timeframe** filters: keep events within a given time window and the corresponding objects.
+- **Event attribute** filter: Select an attribute, an activity and a range or set of values to keep.
+Narrow down the events of this activity by requiring them to have a value in a specified range.
+Objects with no remaining E2O-relations are dropped.
+- **Object attribute** filter: Select an attribute, an object type and a range or set of values to keep.
+Narrow down the objects of this object type by requiring them to have a value in a specified range.
+Events with no remaining E2O-relations are dropped.
+- **Event-to-object count** filters: filter events of an activity based on the frequency of a particular e2o-relation.
+- **Object-to-object count** filters: filter objects of a type based on the frequency of a particular o2o-relation.
 
 ## Discovery
 
-The **Discovery** view renders models out of the box: object-centric Petri nets and directly-follows graphs. Discovery is also extensible, so plugin-provided discovery methods appear here as selectable algorithms.
+The **Discovery** view renders models out of the box: object-centric Petri nets and directly-follows graphs; both using the [pm4py](https://processintelligence.solutions/pm4py) implementations.
+The ad-hoc filtering is only applied for the discovery.
+Discovery is also extensible, so plugin-provided discovery methods appear here as selectable algorithms.
 
 ## Plugins
 
-The **Plugins** view is where you upload plugin ZIPs and run their methods. Each method renders as a generated form built from its declared inputs. This is the entry point for everything in the plugin ecosystem; see [Plugins](/ocelescope/plugins/).
+The **Plugins** view is where you upload plugin ZIPs and run their methods. Each method renders as a generated form built from its declared inputs.
+This is the entry point for everything in the plugin ecosystem; see [Plugins](/ocelescope/plugins/).
 
 ## Bundled module: Ocelot
 
