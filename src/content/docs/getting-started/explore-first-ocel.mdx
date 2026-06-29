@@ -1,5 +1,5 @@
 ---
-title: Explore your first OCEL
+title: Explore the Basics
 description: Load an OCEL log into Ocelescope and inspect it for the first time.
 ---
 
@@ -20,7 +20,7 @@ Once Ocelescope is [running](/getting-started/download/), open [http://localhost
    You have two options:
 
    - **Use a built-in example.** Ocelescope ships with a small set of default OCELs. Select one from the list to import it instantly, which is the fastest way to look around without preparing your own data.
-   - **Upload your own file.** Drag an OCEL file onto the dropzone. Supported formats are `.jsonocel` / `.json`, `.xmlocel` / `.xml`, and `.sqlite` (OCEL 2.0). Classic XES event logs can also be imported and are converted to an OCEL on the fly.
+   - **Upload your own file.** Drag an OCEL file onto the dropzone. Supported formats are `.jsonocel` / `.json`, `.xmlocel` / `.xml`, and `.sqlite` (OCEL 2.0). Traditional XES event logs can also be imported and are converted to an OCEL on the fly.
 
 </Steps>
 
@@ -35,10 +35,39 @@ After import, the **Log Overview** gives you a first read on the data so you can
 - the **attributes** attached to events and objects, including value types and ranges,
 - the **event-to-object** and **object-to-object** relations.
 
-For a deeper, interactive look at how individual events and objects connect, use the **Ocelot** view to search entities and visualize their relationships as a graph.
+For a deeper, interactive look at how individual events and objects connect, open the **Ocelot** module, an Ocelescope adaptation of the original [Ocelot](https://ocelot.pm/) tool. It adds four pages:
+
+- **Event Overview** and **Object Overview** give an aggregated, per-type view of the events or objects in the log.
+- **Events** and **Objects** let you browse individual records, search and filter by type, and inspect their attributes alongside the entities they relate to.
+
+From the Events or Objects pages you can also open a graph visualization that lays out how the selected events and objects connect to each other.
+
+## Filtering
+
+The **Filter** section lets you narrow a log down before analyzing it; and it offers visual support to do so.
+Get a slice of the log:
+- See the **activities**/**object types** and their frequencies and choose the ones you want to keep.
+- Zoom into everything that occurs within a specific **timeframe**
+- See all **attribute** and **type** combinations and adapt them to include only those with values in specific ranges.
+Use the filters to search for specific ones.
+- See all **e2o** and **o2o** relations and include only events/objects of the type with a specific number of these relations.
+Use the filters to search for relations you are interested in.
+
+Once you apply a filter, the log gets a small blue filter icon in the log selection dropdown above.
+Every other view in Ocelescope (Log Overview, Ocelot, Discovery, plugins) then works on the filtered version of that log, until you remove the filter.
+You can also stack the filters.
+
+## Discovery
+
+The **Discovery** section computes process models on the log you currently have selected. Out of the box it discovers:
+
+- **Object-centric Petri nets**, and
+- **Directly-follows graphs (DFGs)**
+During your discovery, you can apply ad-hoc filters scoped to that single computation: activity, object type, and frequency filters that drop infrequent event or object types, without touching the underlying log itself.
+
+Discovered models can be downloaded as **PNG**, **PDF**, or **SVG** images directly from the Discovery view.
+
 
 ## Next steps
 
-- Narrow the log down with the **Filter** view before analyzing it.
-- Discover models such as object-centric Petri nets and directly-follows graphs in the **Discovery** view.
-- Add more analyses by [loading plugins](/getting-started/loading-plugins/).
+Apply more process mining techniques via [plugins](/getting-started/loading-plugins/).

@@ -28,7 +28,7 @@ export default defineConfig({
 							slug: "getting-started/download",
 						},
 						{
-							label: "Explore your first OCEL",
+							label: "Explore the Basics",
 							slug: "getting-started/explore-first-ocel",
 						},
 						{
