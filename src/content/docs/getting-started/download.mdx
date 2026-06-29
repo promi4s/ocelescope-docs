@@ -92,7 +92,24 @@ Next time you want to use Ocelescope:
 3. Run `docker compose up -d`.
 4. Open [http://localhost:3000](http://localhost:3000).
 
-That's it. Steps 2 and 3 also work if you want to update Ocelescope to the latest version. Docker will pull any new images automatically.
+That's it.
+
+## Updating Ocelescope
+
+The `docker-compose.yaml` always points at the latest Ocelescope release, so updating just means fetching the newest images and recreating the containers. You do not need a new compose file.
+
+Whenever a new version is available, open a terminal in your Ocelescope folder and run:
+
+```bash
+docker compose pull
+docker compose up -d
+```
+
+`docker compose pull` downloads the newest images, and `docker compose up -d` restarts Ocelescope using them. Running `docker compose up -d` on its own is not enough to update, because Docker keeps using the images it already downloaded until you pull again.
+
+<Aside>
+Your data and uploaded plugins live in a Docker volume, separate from the application images, so updating this way does not delete them.
+</Aside>
 
 ---
 
