@@ -3,19 +3,49 @@ title: Base Tool
 description: What Ocelescope provides out of the box, before adding any plugins.
 ---
 
-A fresh Ocelescope install already does a lot before you load a single plugin. The base tool is a set of built-in views for importing, inspecting, filtering, and discovering object-centric event logs.
+A fresh Ocelescope install already does a lot before you load a single plugin. The base tool is a set of built-in views for importing, inspecting, filtering, discovering, and exporting object-centric event logs (OCELs) following the [OCEL 2.0 standard](https://www.ocel-standard.org/).
+
+Each view focuses on one task:
+
+- **Resource view**: import and export OCELs and resources, and manage everything in your session.
+- **Log Overview**: profile a log at a glance to confirm it imported as expected.
+- **Filter**: narrow a log down before analysis.
+- **Discovery**: compute process models from a log.
+- **Plugins**: upload plugins and run their methods.
+
+## Supported formats
+
+OCELs can be imported and exported in all three [OCEL 2.0](https://www.ocel-standard.org/) serializations, and traditional XES event logs can be imported (converted to an OCEL with a single object type) or produced by flattening an OCEL.
+
+| Format | Import / Export library |
+| :--- | :--- |
+| `.jsonocel` / `.json` | [r4pm](https://pypi.org/project/r4pm/) |
+| `.xmlocel` / `.xml` | [r4pm](https://pypi.org/project/r4pm/) |
+| `.sqlite` | [pm4py](https://processintelligence.solutions/pm4py) |
+| XES (import, converted to OCEL) | [r4pm](https://pypi.org/project/r4pm/) |
+| XES (export, flattened to one object type) | [pm4py](https://processintelligence.solutions/pm4py) |
+
+XES export flattens the OCEL to a single object type you choose, using pm4py's `ocel_flattening` and `write_xes`.
 
 ## Resource view
 
-Upload OCELs in OCEL 2.0 formats or import a traditional XES log, which is converted to an OCEL with a single object type automatically.
-The same dropzone also accepts plugins and saved resources.
+The **Resource view** lists the OCELs and resources in your current session and is where importing and exporting happen. The dropzone accepts OCELs, XES logs, plugins, and saved resources in the same place; uploaded items appear in the list, where each can be inspected, renamed, deleted, and exported.
 
+A **resource** is any artifact a method consumes or produces beyond the log itself, for example a discovered [`PetriNet` or `DirectlyFollowsGraph`](/ocelescope/resources/), or a custom type defined by a plugin. Resources are what you share with others: each one can be exported and later re-imported into Ocelescope.
 
+Resources are Python objects built on [Pydantic](https://docs.pydantic.dev/), so exporting one serializes its fields to a JSON file (with the `.ocelescope` extension) that also records the resource's type. Re-importing that file validates the JSON back into the corresponding resource object. Built-in resource types can always be inspected, but a resource produced by a plugin can only be opened if that plugin is currently loaded, since its type definition lives in the plugin.
+
+See [Resources](/ocelescope/resources/) for the full picture, including how to define your own.
 
 ## Log Overview
 
-The **Log Overview** profiles a log at a glance: event and object counts, the object types and activities present, and the attributes attached to events and objects, including their value types and ranges.
-It is the quickest way to confirm a log imported as expected.
+The **Log Overview** is the quickest way to confirm a log imported as expected and to get a feel for its shape before running any analysis. It profiles the selected log at a glance and shows:
+
+- the **event and object counts**,
+- the **activities** (event types) with their event counts, and the **object types** with their object counts, each as a frequency bar list,
+- the **attributes** attached to events and objects, including value types, ranges, and number of distinct values, broken down per activity or object type.
+
+You can search and filter the attribute tables by attribute name and by activity or object type. The frequency bars are scaled **relative to the most frequent entry**: the largest count fills the bar, and every other bar is drawn as its share of that maximum, so the bars show relative, not absolute, magnitude.
 
 ## Filtering
 
@@ -36,11 +66,26 @@ Events with no remaining E2O-relations are dropped.
 - **Event-to-object count** filters: filter events of an activity based on the frequency of a particular e2o-relation.
 - **Object-to-object count** filters: filter objects of a type based on the frequency of a particular o2o-relation.
 
+Each filter shows you what is in the log so you can choose without guessing:
+
+- Activity and object-type filters list the available activities/object types **with their frequencies** and an include/exclude toggle.
+- Attribute filters show a table of the attribute's value types, ranges, and distinct values per activity or object type, from which you build the value range or set to keep.
+- Relation-count filters show the relation counts between source and target types, with a min/max selector per relation.
+- The timeframe filter shows a **histogram of events over time** with date pickers, so you can see the distribution and highlight the window to keep.
+
 ## Discovery
 
 The **Discovery** view renders models out of the box: object-centric Petri nets and directly-follows graphs; both using the [pm4py](https://processintelligence.solutions/pm4py) implementations.
-The ad-hoc filtering is only applied for the discovery.
 Discovery is also extensible, so plugin-provided discovery methods appear here as selectable algorithms.
+
+Before computing a model, you can apply ad-hoc filters that affect **only the discovery**, leaving the underlying log untouched:
+
+- **Event type**: include or exclude selected activities.
+- **Object type**: include or exclude selected object types.
+- **Event type frequency**: drop activities that occur rarely, controlled by a threshold (a percentage of the total event count, 3% by default).
+- **Object type frequency**: drop object types that occur rarely, controlled by the same kind of threshold on the total object count.
+
+The frequency filters are the quickest way to declutter a model by removing infrequent behavior.
 
 ## Plugins
 
@@ -49,4 +94,4 @@ This is the entry point for everything in the plugin ecosystem; see [Plugins](/o
 
 ## Bundled module: Ocelot
 
-Beyond the core views, Ocelescope ships with the **Ocelot** [module](/ocelescope/modules/) for interactively exploring how events and objects relate, searching entities, and visualizing their relationships as a graph.
+Beyond the core views, Ocelescope ships with **Ocelot** for interactively exploring how events and objects relate, searching entities, and visualizing their relationships as a graph. Ocelot is technically a [module](/ocelescope/modules/) rather than part of the core, but it is bundled into the default Ocelescope images, so it is available to everyone out of the box without a custom build.
