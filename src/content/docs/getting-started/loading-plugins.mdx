@@ -3,8 +3,50 @@ title: Loading Plugins
 description: Upload plugins into your running Ocelescope instance.
 ---
 
-You can upload plugins directly from the **web interface** at:
+import { Steps, LinkCard } from '@astrojs/starlight/components';
 
-👉 [http://localhost:3000/plugins](http://localhost:3000/plugins)
+Plugins extend Ocelescope with object-centric process mining (OCPM) techniques. They are created by the community to make research code and tools available as ready-to-use functions, without anyone having to touch Ocelescope's own codebase.
 
-Uploaded plugins will be stored in the `plugins_store` volume and made available for execution.
+Plugins are integrated like any other file: drop the plugin archive onto the same upload dropzone used for OCELs and resources. Once loaded, a plugin appears in the **Plugins** section, where its methods can be applied to the OCELs and resources available in your session. A method may produce one or more resources of its own, which are then added to the resource section like any other resource.
+
+A plugin is distributed as a single archive, but it can bundle several plugin modules: independent Python packages, each contributing its own set of methods. Uploading the archive registers every module it contains, and each one shows up as its own entry in the Plugins section.
+
+The screencast below shows the full flow, from downloading a plugin to running one of its methods.
+
+<video controls style="width: 100%; border-radius: 8px;">
+  <source src="/assets/videos/loading-plugins.mp4" type="video/mp4" />
+</video>
+
+## Load a plugin
+
+<Steps>
+
+1. **Download a plugin**
+
+   Browse the [Plugin Library](/community/plugin-library/) and download the plugin you want to use.
+
+2. **Save the file**
+
+   Save the downloaded `.zip` file somewhere on your computer, for example the same folder you used for the [download setup](/getting-started/download/).
+
+3. **Drag and drop it into Ocelescope**
+
+   Drag the `.zip` file onto Ocelescope's dropzone, the same one used for uploading OCELs. The plugin is unpacked and registered, and appears as a new card in the **Plugins** section.
+
+</Steps>
+
+## Use a plugin
+
+Clicking a plugin opens its page, where every method it provides is shown as its own card with a label and description. Open a method to run it:
+
+1. **Select inputs.** Pick the OCEL(s) and any resources the method needs from the dropdowns, then fill in its parameters.
+2. **Submit.** Hit the run button to execute the method.
+3. **Inspect the result.** The output appears below as a new resource (or OCEL), which you can preview, inspect in detail, or download, and which is also saved to your session for reuse in other plugins or views.
+
+---
+
+<LinkCard
+  title="Plugin Development"
+  description="Learn how to write your own plugin instead of using one from the library."
+  href="/plugin-development/plugin-structure/"
+/>
