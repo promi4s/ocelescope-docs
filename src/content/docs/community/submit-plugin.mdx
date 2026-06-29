@@ -3,6 +3,29 @@ title: Submit a Plugin
 description: Add a plugin to the public Ocelescope plugin catalog.
 ---
 
-Currently, plugins can only be submitted through GitHub.
+import { LinkButton, LinkCard } from '@astrojs/starlight/components';
 
-Upload your plugin ZIP to a GitHub release in your plugin repository, then submit it using our [Issue template](https://github.com/promi4s/ocelescope/issues/new?template=plugin-submission.yml).
+Built a plugin you want to share? Add it to the public [Plugin Library](/community/plugin-library/) so others can find and load it.
+
+First, upload your plugin ZIP to a GitHub release in your plugin repository. Then submit it on GitHub:
+
+<LinkButton href="https://github.com/promi4s/ocelescope/issues/new?template=plugin-submission.yml" icon="external">
+Submit a plugin
+</LinkButton>
+
+:::note
+You need a GitHub account to open an issue. Signing up is free.
+:::
+
+The issue template asks for:
+
+- the **plugin name** and a short **description** of what it does,
+- your **name**, so the catalog can credit you,
+- the **repository URL** and, if there is one, the **DOI** of the publication describing the method,
+- the **Ocelescope version** you tested it with.
+
+<LinkCard
+  title="Plugin Development"
+  description="New to building plugins? Learn how to write and package one."
+  href="/plugin-development/"
+/>
