@@ -1,0 +1,51 @@
+---
+// Renders the plugin-environment package tables from generated data.
+// The data file is produced by scripts/generate-plugin-packages.py (run in CI
+// against the ocelescope checkout); the committed copy is the local fallback.
+import data from "../data/plugin-packages.json";
+
+type Pkg = { name: string; version: string };
+const { core, plugin, ocelescopeVersion } = data as {
+  core: Pkg[];
+  plugin: Pkg[];
+  ocelescopeVersion: string;
+};
+---
+
+<p>Always available (dependencies of <code>ocelescope</code>):</p>
+
+<table>
+  <thead>
+    <tr><th>Package</th><th>Version</th></tr>
+  </thead>
+  <tbody>
+    {core.map((pkg) => (
+      <tr>
+        <td><code>{pkg.name}</code></td>
+        <td><code>{pkg.version}</code></td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<p>Added by the <code>plugin</code> extra:</p>
+
+<table>
+  <thead>
+    <tr><th>Package</th><th>Version</th></tr>
+  </thead>
+  <tbody>
+    {plugin.map((pkg) => (
+      <tr>
+        <td><code>{pkg.name}</code></td>
+        <td><code>{pkg.version}</code></td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<p>
+  These are the version constraints declared by the <code>ocelescope</code> package
+  (currently <code>{ocelescopeVersion}</code>); the exact version installed in the
+  runtime may be newer within each constraint.
+</p>

@@ -30,6 +30,8 @@ jobs:
         run: git clone --depth 1 https://github.com/promi4s/ocelescope.git /tmp/ocelescope
       - name: Generate API reference pages
         run: uv run scripts/generate-api-docs.py /tmp/ocelescope src/content/docs/api-references
+      - name: Generate plugin environment package list
+        run: uv run scripts/generate-plugin-packages.py /tmp/ocelescope src/data/plugin-packages.json
       - name: Install, build, and upload your site
         uses: withastro/action@v6
         # Lets the build-time plugin fetcher authenticate to the GitHub API
