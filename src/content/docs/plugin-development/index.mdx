@@ -1,0 +1,36 @@
+---
+title: Overview
+description: What to know before writing your first Ocelescope plugin.
+---
+
+A plugin is a Python package, distributed as a `.zip`, that contributes one or more methods, object-centric process mining (OCPM) functions other users can run from the Ocelescope UI. This section covers writing one. For the user-facing side, what a plugin is and what it does for someone running Ocelescope, see [Plugins](/ocelescope/plugins/).
+
+## PLugin Capabilities
+
+The plugin system is built so that writing Python is most of the job; Ocelescope takes care of the rest:
+
+- **Resources** you define (the OCEL artifacts your methods consume or return) automatically get a JSON-based exchange format, so users can export and re-import them without you writing any serialization code.
+- Resources can ship a **visualization**, so they render in the frontend, as a graph, a table, a chart, and so on, out of the box.
+- Plugin methods declare their inputs through plain Python type hints. Ocelescope reads those hints to **auto-generate the input form** in the UI, so you never write frontend code.
+
+## Before you start
+
+- You should be comfortable writing **Python**; a plugin is just a Python package.
+- It helps to know the core types from the `ocelescope` package: `OCEL` (the event log) and `Resource` (the artifacts methods consume and produce). [Resources](/ocelescope/resources/) covers the latter in depth.
+- Walking through [Explore the Basics](/getting-started/explore-first-ocel/) first gives you the user's-eye view, how logs, resources, and filters behave, which is the side your plugin will plug into.
+
+## How this section is organized
+
+- [Plugin Structure](/plugin-development/plugin-structure/): how a plugin package is laid out, and how one archive can bundle several plugin modules.
+- [Plugin Class](/plugin-development/plugin-class/): the single `Plugin` subclass per module, its metadata, and how `@plugin_method` turns a function into a runnable method with an auto-generated form.
+- [Plugin Environment](/plugin-development/environment/): which packages are available at runtime, and how to bundle or request more.
+- [Build and Package](/plugin-development/build-and-package/): turning your project into the `.zip` Ocelescope expects, and submitting it to the plugin library.
+- [Tutorial: Plugin Development](/plugin-development/tutorial-plugin-development/): a guided, end-to-end walkthrough that builds a real plugin from scratch.
+- [Request additional package](/plugin-development/request-package/): ask for a PyPI package to be added to the shared plugin environment.
+
+## Related concepts
+
+- **[Resources](/ocelescope/resources/)**: read this when you're defining a new resource type for a method's input or output, or want to give it a custom visualization.
+- **[Extensions](/ocelescope/extensions/)**: read this when your plugin needs custom data to travel with the OCEL file itself on import/export, rather than living in a separate resource.
+
+If you'd rather dive straight in, start with the [Tutorial](/plugin-development/tutorial-plugin-development/) or fork the [minimal plugin template](https://github.com/Grkmr/minimal-plugin) referenced in [Plugin Structure](/plugin-development/plugin-structure/).

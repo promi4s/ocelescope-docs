@@ -113,7 +113,7 @@ export const landing = {
 		eyebrow: "BUILD A PLUGIN",
 		title: "Declare your parameters. Ocelescope renders the UI.",
 		body: "No frontend work. Type your plugin inputs in Python and the form on the right is generated for you.",
-		guide: { label: "Read the plugin guide", href: "/plugin-development/plugin-structure/" },
+		guide: { label: "Read the plugin guide", href: "/plugin-development/" },
 		tutorial: {
 			label: "Follow the tutorial",
 			href: "/plugin-development/tutorial-plugin-development/",
@@ -168,7 +168,7 @@ export const landing = {
 					kicker: "PLUGINS",
 					title: "Plugin guide",
 					description: "Build, package, and load reusable analysis methods.",
-					href: "/plugin-development/plugin-structure/",
+					href: "/plugin-development/",
 				},
 			],
 		},
