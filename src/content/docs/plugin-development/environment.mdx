@@ -18,6 +18,38 @@ pip install "ocelescope[plugin]"
 
 This is the recommended way to install packages that are intended to be available in the shared plugin environment.
 
+## What the plugin environment contains
+
+The runtime is **Python 3.13**. Beyond the `ocelescope` package itself, the following third-party packages are available to every plugin. They come in through the `ocelescope` package and its `plugin` extra, so installing `ocelescope[plugin]` locally gives you the same set.
+
+Always available (dependencies of `ocelescope`):
+
+| Package | Version |
+| :--- | :--- |
+| `cachetools` | `>=6.1.0` |
+| `graphviz` | `>=0.21` |
+| `matplotlib` | `>=3.10.9` |
+| `numpy` | `>=2.3.2` |
+| `orjson` | `>=3.11.7` |
+| `pandas` | `>=2.3.1` |
+| `plotly` | `>=6.3.1` |
+| `pm4py` | `~=2.7.22` |
+| `polars` | `>=1.40.1` |
+| `pydantic` | `>=2.11.7` |
+| `r4pm` | `>=0.5.3` |
+
+Added by the `plugin` extra:
+
+| Package | Version |
+| :--- | :--- |
+| `more-itertools` | `>=11.1.0` |
+| `networkx` | `>=3.5` |
+| `scikit-learn` | `>=1.9.0` |
+
+:::note
+These are the version constraints declared by the `ocelescope` package (currently `0.2.0`); the exact version installed in the runtime may be newer within each constraint. If you need a package that is not listed here, [request it](/plugin-development/request-package/) or [bundle it as a wheel](#bundling-wheel-files-inside-a-plugin).
+:::
+
 ## Bundling wheel files inside a plugin
 
 If your plugin needs a dependency that is **not** available in the shared plugin environment, you can bundle wheel files directly inside the plugin.
