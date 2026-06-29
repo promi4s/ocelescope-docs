@@ -24,6 +24,15 @@ const { ecosystem, plugins } = Astro.props;
               <span hidden={!plugin.stars}>{plugin.stars}</span>
               <span hidden={!plugin.updated}>{plugin.updated}</span>
             </span>
+            <a
+              class="plugin-doi"
+              href={plugin.doi ? `https://doi.org/${plugin.doi}` : undefined}
+              target="_blank"
+              rel="noreferrer"
+              hidden={!plugin.doi}
+            >
+              DOI: {plugin.doi}
+            </a>
             <a class="plugin-download" href={plugin.download ?? plugin.href} rel="noreferrer">
               <small>{ecosystem.cardCta} -&gt;</small>
             </a>

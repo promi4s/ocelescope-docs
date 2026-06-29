@@ -40,6 +40,15 @@ const cardCta = landing.ecosystem.cardCta;
             <span hidden={!plugin.stars}>{plugin.stars}</span>
             <span hidden={!plugin.updated}>{plugin.updated}</span>
           </span>
+          <a
+            class="plugin-doi"
+            href={plugin.doi ? `https://doi.org/${plugin.doi}` : undefined}
+            target="_blank"
+            rel="noreferrer"
+            hidden={!plugin.doi}
+          >
+            DOI: {plugin.doi}
+          </a>
           <a class="plugin-download" href={plugin.download ?? plugin.href} rel="noreferrer">
             <small>{cardCta} -&gt;</small>
           </a>
@@ -208,6 +217,22 @@ const cardCta = landing.ecosystem.cardCta;
     color: var(--sl-color-gray-2);
     padding: 4px 9px;
     font: 500 11px var(--sl-font-mono, monospace);
+  }
+  .plugin-doi {
+    position: relative;
+    z-index: 2;
+    align-self: flex-start;
+    border: 1px solid var(--sl-color-gray-5);
+    border-radius: 999px;
+    background: var(--sl-color-gray-6);
+    color: var(--sl-color-gray-2);
+    padding: 4px 9px;
+    font: 500 11px var(--sl-font-mono, monospace);
+    text-decoration: none;
+  }
+  .plugin-doi:hover {
+    color: var(--sl-color-accent);
+    border-color: color-mix(in srgb, var(--sl-color-accent) 45%, transparent);
   }
   .plugin-download {
     position: relative;

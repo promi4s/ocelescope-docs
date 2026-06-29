@@ -1052,6 +1052,22 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   padding: 4px 9px;
   font: 500 11px "Geist Mono", monospace;
 }
+.plugin-doi {
+  position: relative;
+  z-index: 2;
+  align-self: flex-start;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--chip);
+  color: var(--chip-text);
+  padding: 4px 9px;
+  font: 500 11px "Geist Mono", monospace;
+  text-decoration: none;
+}
+.plugin-doi:hover {
+  color: var(--t2);
+  border-color: color-mix(in srgb, var(--t2) 45%, transparent);
+}
 .plugin-download {
   position: relative;
   z-index: 2;

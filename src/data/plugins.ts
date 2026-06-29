@@ -4,6 +4,8 @@ export interface Plugin {
   monogram: string;
   author?: string;
   showLanding?: boolean;
+  /** Bare DOI (e.g. "10.1007/978-3-031-70418-5_7"), without the doi.org URL prefix. */
+  doi?: string;
 }
 
 export const plugins: Plugin[] = [
@@ -13,6 +15,7 @@ export const plugins: Plugin[] = [
     monogram: "PD",
     author: "Görkem Öztürk",
     showLanding: true,
+    doi: "10.3233/STAL200004",
   },
   {
     name: "TOTeM",
@@ -20,6 +23,7 @@ export const plugins: Plugin[] = [
     monogram: "TM",
     author: "Görkem Öztürk",
     showLanding: true,
+    doi: "10.1007/978-3-031-70418-5_7",
   },
   {
     name: "OC-DECLARE",
@@ -27,6 +31,7 @@ export const plugins: Plugin[] = [
     monogram: "OD",
     author: "Görkem Öztürk",
     showLanding: true,
+    doi: "10.1007/978-3-032-02867-9_11",
   },
   {
     name: "OCEL Graph",

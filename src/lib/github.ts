@@ -202,6 +202,7 @@ export type Plugin = {
 	author?: string;
 	description?: string;
 	showLanding?: boolean;
+	doi?: string;
 };
 
 // Pre-fills each plugin with repo metadata, latest version, and download link.
