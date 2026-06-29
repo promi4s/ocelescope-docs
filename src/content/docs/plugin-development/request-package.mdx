@@ -5,7 +5,7 @@ description: Ask for a Python package to be added to the shared plugin environme
 
 import { LinkButton } from '@astrojs/starlight/components';
 
-Plugins run in a **fixed Python environment** provided by the Ocelescope runtime and can only import packages that are available there (see [Plugin Environment](/plugin-development/environment/)). If your plugin needs a package that is not yet included, you can ask for it to be added to the shared environment.
+Plugins run in a **fixed Python environment** provided by the Ocelescope runtime and can only import packages that are available there. First check the [overview of available packages](/plugin-development/environment/#what-the-plugin-environment-contains) to confirm the package is not already included. If your plugin needs a package that is not yet there, you can ask for it to be added to the shared environment.
 
 <LinkButton href="https://github.com/promi4s/ocelescope/issues/new?template=plugin-package-request.yml" icon="external">
 Request a package

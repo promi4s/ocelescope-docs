@@ -3,6 +3,8 @@ title: Plugins
 description: The ecosystem of runtime-loadable Ocelescope tools.
 ---
 
+import { LinkCard } from '@astrojs/starlight/components';
+
 Plugins in **Ocelescope** are collections of object-centric process mining functions and artifacts.  
 They are designed to wrap research prototypes and provide them with a unified environment.  
 The plugin system aims to require as little additional knowledge as possible, making it easy to integrate new ideas and tools.
@@ -20,5 +22,15 @@ A plugin's methods run against the OCELs and resources already in your session, 
   ![Overview of Plugins in Ocelescope](../../../assets/PluginOverview.png)
 </div>
 
-To write your own plugins, see [Plugin Development](/plugin-development/).  
-For a hands-on walkthrough, see the [**Tutorial**](/plugin-development/tutorial-plugin-development/).
+Find out more about creating your own plugin:
+
+<LinkCard
+  title="Plugin Development"
+  description="Learn how to write and package your own Ocelescope plugin."
+  href="/plugin-development/"
+/>
+<LinkCard
+  title="Tutorial: Plugin Development"
+  description="Build a plugin from scratch in a hands-on walkthrough."
+  href="/plugin-development/tutorial-plugin-development/"
+/>
