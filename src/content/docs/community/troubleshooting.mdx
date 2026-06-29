@@ -3,21 +3,19 @@ title: Troubleshooting
 description: Common problems when running Ocelescope and how to resolve them.
 ---
 
-import { Steps } from '@astrojs/starlight/components';
+import { Steps, LinkCard } from '@astrojs/starlight/components';
 
 This page collects problems people run into when running Ocelescope, and the solutions we currently recommend.
 
 ## Phenomena
+
+These are the symptoms you might notice, what they usually mean, and how to get going again.
 
 ### The tool freezes mid-process and nothing works anymore
 
 You are working as usual when Ocelescope suddenly stops responding. Nothing reacts anymore, and you notice that the built-in default OCELs are no longer offered in any upload dialog.
 
 This means the **backend server has crashed**. To recover, use **Logout**. The backend comes back up and Ocelescope is usable again.
-
-:::caution[Progress is lost]
-After a crash, all progress is lost: the OCELs you uploaded and any resources you computed in the session are gone, and you have to start over.
-:::
 
 A crash like this is usually caused by a memory problem. See [Memory problem](#memory-problem) below.
 
@@ -34,6 +32,8 @@ When exactly this happens depends on your operating system, because different pl
 The fix is to give the container more memory. See [Memory problem](#memory-problem) below.
 
 ## Current solutions
+
+These are the fixes the phenomena above point to.
 
 ### Memory problem
 
@@ -64,9 +64,6 @@ services:
 
 Then apply it with `docker compose up -d`.
 
-:::note
-On macOS and Windows, Docker runs inside a virtual machine, so a container can only use as much memory as that VM is given. If the command above does not help, raise the VM's memory through Docker Desktop as described below.
-:::
 
 #### Option 2: Through Docker Desktop
 
@@ -94,3 +91,9 @@ On macOS and Windows, Docker runs inside a virtual machine, so a container can o
 </div>
 
 This is a known limitation of Python, which Ocelescope is built on. We are actively working on making the underlying code more memory-efficient so that large logs need less headroom.
+
+<LinkCard
+  title="Report a Bug"
+  description="Ran into something not covered here? Let the maintainers know."
+  href="/community/report-bug/"
+/>
