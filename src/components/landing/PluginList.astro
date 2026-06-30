@@ -7,7 +7,7 @@ const plugins = await enrichPlugins(pluginCatalog);
 const cardCta = landing.ecosystem.cardCta;
 ---
 
-<div class="plugin-list">
+<div class="plugin-list not-content">
   <div class="plugin-search">
     <input
       type="search"
@@ -127,10 +127,6 @@ const cardCta = landing.ecosystem.cardCta;
     gap: 18px;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   }
-  .card-grid > * {
-    margin-top: 0 !important;
-  }
-
   .plugin-card {
     position: relative;
     display: flex;
@@ -179,6 +175,7 @@ const cardCta = landing.ecosystem.cardCta;
     display: flex;
     flex-direction: column;
     gap: 6px;
+    min-width: 0;
     color: var(--sl-color-gray-2);
   }
   .plugin-card strong {
@@ -222,6 +219,7 @@ const cardCta = landing.ecosystem.cardCta;
     position: relative;
     z-index: 2;
     align-self: flex-start;
+    max-width: 100%;
     border: 1px solid var(--sl-color-gray-5);
     border-radius: 999px;
     background: var(--sl-color-gray-6);
@@ -229,6 +227,9 @@ const cardCta = landing.ecosystem.cardCta;
     padding: 4px 9px;
     font: 500 11px var(--sl-font-mono, monospace);
     text-decoration: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .plugin-doi:hover {
     color: var(--sl-color-accent);
@@ -238,7 +239,7 @@ const cardCta = landing.ecosystem.cardCta;
     position: relative;
     z-index: 2;
     align-self: flex-start;
-    margin-top: auto;
+    margin-top: 6px;
     padding-top: 6px;
     text-decoration: none;
   }

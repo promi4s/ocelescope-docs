@@ -32,7 +32,7 @@ const plugins = await enrichPlugins(
   }}
   hasSidebar={false}
 >
-  <div class="landing-shell">
+  <div class="landing-shell not-content">
     <HeroSection hero={landing.hero} terminal={landing.terminal} context={landing.context} />
 
     {landing.features.map((feature) => <FeatureSection feature={feature} />)}
