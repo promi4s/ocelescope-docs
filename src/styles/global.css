@@ -11,3 +11,16 @@
     width: calc(var(--sl-content-width) + (100% - var(--sl-content-width) - var(--sl-sidebar-width)) / 2);
   }
 }
+
+/* The header (src/components/starlight/Header.astro) also sizes its grid
+   columns assuming a TOC reserves space on the right, via --__toc-width.
+   Starlight sets that variable to 0rem on pages without a TOC, which
+   shrinks and shifts the search bar in the header. Reset it to
+   `initial` (rather than a fixed value) so it's effectively unset again:
+   each var(--__toc-width, ...) use in Header.astro falls back to its own
+   default, exactly as happens on pages that do have a TOC. */
+@media (min-width: 50rem) {
+  :root[data-has-sidebar]:not([data-has-toc]) {
+    --__toc-width: initial;
+  }
+}
