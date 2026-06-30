@@ -45,6 +45,7 @@ export const plugins: Plugin[] = [
 		href: "https://github.com/uysah/ocim_plugin",
 		monogram: "OC",
 		author: "Uy Sa Huynh",
+		doi: "10.1007/s44311-026-00052-w",
 		showLanding: true,
 	},
 ];

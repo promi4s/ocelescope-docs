@@ -16,11 +16,12 @@ import { landing } from "../data/landing";
 
 const year = new Date().getFullYear();
 
-// Landing only features the plugins flagged for it; the full catalog lives on
-// the Available Plugins page.
-const plugins = await enrichPlugins(
-  landing.plugins.filter((plugin) => plugin.showLanding),
-);
+// Landing only features a random sample of the catalog; the full catalog
+// lives on the Available Plugins page.
+const sampledPlugins = [...landing.plugins]
+  .sort(() => Math.random() - 0.5)
+  .slice(0, 4);
+const plugins = await enrichPlugins(sampledPlugins);
 ---
 
 <StarlightPage
