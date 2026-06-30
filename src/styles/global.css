@@ -1,0 +1,13 @@
+/* Starlight sizes/positions the main content pane assuming a right-hand
+   TOC column reserves space (see TwoColumnContent.astro's has-toc rule).
+   Pages with `tableOfContents: false` don't get that rule, so the pane
+   falls back to width:100% with centered content, which lands at a
+   different x-position than every other docs page. Replicate the
+   has-toc sizing/margin here (with no real TOC column) so the text
+   starts at the same horizontal position on every docs page. */
+@media (min-width: 72rem) {
+  [data-has-sidebar]:not([data-has-toc]) .main-pane {
+    --sl-content-margin-inline: auto 0;
+    width: calc(var(--sl-content-width) + (100% - var(--sl-content-width) - var(--sl-sidebar-width)) / 2);
+  }
+}

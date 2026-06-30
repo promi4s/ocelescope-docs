@@ -11,7 +11,6 @@ const shouldRenderSearch =
   config.pagefind || config.components.Search !== "@astrojs/starlight/components/Search.astro";
 
 const repoUrl = "https://github.com/promi4s/ocelescope";
-const isLandingPage = Astro.url.pathname === "/";
 
 function repoApiBase(githubUrl: string) {
   try {
@@ -81,12 +80,15 @@ const githubVersion = await latestGithubVersion(repoUrl);
     <SiteTitle />
   </div>
   <div class="sl-flex print:hidden">
-    {!isLandingPage && shouldRenderSearch && <Search />}
+    {shouldRenderSearch && <Search />}
   </div>
   <div class="sl-hidden md:sl-flex print:hidden right-group">
     <nav class="top-links" aria-label="Primary">
-      <a href="/getting-started/download/">Docs</a>
-      <a class="download-link" href="/getting-started/download/">Download</a>
+      <a href="/community/plugin-library/">Plugin Library</a>
+      <a href="/ocelescope/structure/">Docs</a>
+      <a href="/plugin-development/">Create Plugin</a>
+      <a href="/api-references/">API References</a>
+      <a class="download-link" href="/getting-started/download/">Get started</a>
     </nav>
     <a class="version-link sl-flex" href={repoUrl} rel="me" aria-label="Ocelescope on GitHub" data-header-version-link>
       <Icon name="github" />

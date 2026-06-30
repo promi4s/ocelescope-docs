@@ -19,6 +19,7 @@ export default defineConfig({
 				Header: "./src/components/starlight/Header.astro",
 				SiteTitle: "./src/components/starlight/SiteTitle.astro",
 			},
+			customCss: ["./src/styles/global.css"],
 			sidebar: [
 				{
 					label: "Getting Started",
