@@ -1,97 +1,92 @@
 ---
-title: Loading Modules
-description: How modules are added to Ocelescope and how they differ from plugins.
+title: Create an Ocelescope-Based Tool
+description: Start from the module template, add standard modules, and publish your own Ocelescope-based tool.
 ---
 
 import { Steps } from '@astrojs/starlight/components';
 
-Modules and plugins both extend Ocelescope, but they are loaded in very different ways.
+Ocelescope's module system lets you create a separate tool based on the Ocelescope framework. Instead of reimplementing standard functionality from scratch, you can start from a minimal template and add the modules you need.
 
-## Plugins vs. modules
+This page shows a simple example: start from the template, run it with only the management module, add the filter module, rebuild, and publish the result.
 
-- **Plugins** are uploaded at runtime. You drop a plugin ZIP into a running Ocelescope instance (see [Loading Plugins](/getting-started/loading-plugins/)) and it becomes available immediately, no rebuild required.
-- **Modules** are built into the application. A module is a full-stack extension: a backend Python package that mounts its own API, plus a frontend React package that adds first-class views to the UI. Both parts are compiled into the Ocelescope backend and frontend images, so a module cannot be uploaded through the web interface.
+If you want to implement your own modules, see [Module Development](/module-development/).
 
-:::note[Why the difference]
-Plugins declare their inputs and outputs declaratively, so Ocelescope can generate their UI automatically and load them at runtime. Modules ship their own user interface and API routes, which have to be part of the build.
-:::
+## Prerequisites
 
-## Running a build that includes a module
+Before you start, make sure you have:
 
-To use a module, you need an Ocelescope build that bundles it:
-
-- The **backend** discovers modules through Python entry points, so the module's Python package must be installed in the backend image.
-- The **frontend** includes the module as a workspace package that is registered in the app configuration and compiled into the frontend image.
-
-The bundled **Ocelot** module is integrated this way and is already part of the default images.
-
-If you want to develop your own module or produce a custom build that includes one, see [Module Development](/module-development/). For the conceptual difference between plugins and modules, see [Modules](/ocelescope/modules/).
-
-## Including a module from a repository
-
-Given a Git repository containing a module, a backend Python package and a frontend React package, and you want it running in Ocelescope.
-Since modules are compiled into the build, you must produce your own backend and frontend images that include it.
-Let's go through this step-by-step.
-
+- [Docker](https://www.docker.com/products/docker-desktop/)
+- [`pnpm`](https://pnpm.io/installation)
+- [`uv`](https://docs.astral.sh/uv/)
 
 <Steps>
 
-1. **Clone the Ocelescope monorepo**
+1. **Clone the template**
 
-   Modules live as workspace packages inside the main [Ocelescope repository](https://github.com/promi4s/ocelescope), so start by cloning it. You'll be adding your module's packages into this checkout rather than building it standalone.
-
-2. **Add the backend package**
-
-   Copy your module's backend package into `src/backend/modules/<your-module>/`. The repo's root `pyproject.toml` already declares `src/backend/modules/*` as a workspace member, so it's picked up automatically as long as its `pyproject.toml` registers an entry point in the `ocelescope_backend.modules` group:
-
-   ```toml title="src/backend/modules/your-module/pyproject.toml"
-   [project.entry-points."ocelescope_backend.modules"]
-   yourModuleV1 = "your_module.module:YourModule"
-   ```
-
-3. **Add the frontend package**
-
-   Copy your module's frontend package into `src/frontend/modules/<your-module>/`. `pnpm-workspace.yaml` already includes `src/frontend/modules/**/*`, so it's picked up automatically once it has a `package.json` (typically named `@ocelescope/<your-module>`).
-
-4. **Register the frontend module**
-
-   Open `src/frontend/app/ocelescope.config.ts`, import your module, and add it to the `modules` list and a `navbarGroups` entry:
-
-   ```ts title="src/frontend/app/ocelescope.config.ts"
-   import yourModule from "@ocelescope/your-module";
-   // ...existing module imports
-
-   export default {
-     modules: [management, overview, plugin, discovery, filter, ocelot, yourModule],
-     navbarGroups: [
-       // ...existing groups
-       { title: "Modules", modulesNames: [ocelot.name, yourModule.name] },
-     ],
-   } satisfies OcelescopeConfig;
-   ```
-
-5. **Build the images**
-
-   From the repo root, build both images, for example with:
+   We can use [Ocelescope module template](https://github.com/promi4s/ocelescope-module-template) as a starter point for creating our own Ocelescope-based tool or for developing new modules, lets start by cloning id:
 
    ```bash
-   docker buildx bake
+   git clone https://github.com/promi4s/ocelescope-module-template
+   cd ocelescope-module-template
    ```
 
-   This produces backend and frontend images (tagged `latest` by default; see `docker-bake.hcl` for the `REPO` and `VERSION` build variables) that include your module.
+1. **Try the template with Docker**
 
-6. **Point your compose file at the new images**
-
-   In the `docker-compose.yaml` from [Start Ocelescope](/getting-started/download/), replace the `image:` lines for `backend` and `frontend` with the tags you built in the previous step.
-
-7. **Restart Ocelescope**
+   The template is held minimal and only contains one module for managing ocels and resources. Lets run it first using the docker file:
 
    ```bash
-   docker compose up -d
+   docker compose up --build
    ```
 
-   Your module now appears in the UI alongside the built-in ones.
+   This should build and run our current version at localhost:3000 and you should see this minimal application:
+   ![Starting State](../../../assets/gettingStartedModules/template_start_state.png)
+
+1. **Adding a module**
+
+    Since the current state is not really usable we can now extend Ocelescope with one of the standard ocelescope modules. Like filtering which adds our application to fitler uploaded OCELs.
+    To allow our module to use filtering we have to add the [`ocelescope-module-filter`](https://pypi.org/project/ocelescope-module-filter/) and the ["@ocelescope/filter"](https://www.npmjs.com/package/@ocelescope/filter) from npm.
+
+    Lets start with adding the backend module:
+
+    ``sh
+    uv add ocelescope-module-filter
+    ``
+
+    To install the frontend module we can use:
+
+    ``sh
+    pnpm --filter @instance/app add @ocelescope/filter
+    ``
+
+    We also need to add the frontend module to our app by adding it in the config:
+
+    (code of how to add it in the config)
+
+1. **Build again**
+
+    Lets test if everything worked by rebuild the application so the new module is included:
+
+    ```bash
+    docker compose down 
+    docker compose up --build
+    ```
+
+    After rebuilding, the tool should now include the filter module in addition to the management module.
+
+1. **Push the repository**
+
+    Commit your changes and push them to GitHub:
+
+    ```bash
+    git add .
+    git commit -m "Add filter module"
+    git push origin main
+    ```
+
+1. **Publish using GitHub**
+
+   Use the GitHub workflows included in the template to build and publish your tool.
+
+   Once your repository is connected and configured, GitHub can be used as the place where your tool is built and released.
 
 </Steps>
-
-For the backend and frontend implementation details, see [Module Development](/module-development/).
