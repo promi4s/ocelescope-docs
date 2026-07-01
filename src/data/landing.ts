@@ -18,7 +18,7 @@ export const landing = {
 		titleAccent: "object-centric process mining.",
 		body: "Upload an OCEL, filter it down, discover models, and extend everything with plugins. Spin it up with Docker and analyze in minutes - entirely in your browser.",
 		primaryCta: { label: "Get started", href: "/getting-started/download/" },
-		secondaryCta: { label: "Documentation", href: "/getting-started/download/" },
+		secondaryCta: { label: "Documentation", href: "/ocelescope/structure/" },
 		trustLabel: "Project details",
 		trust: ["Open source", "Runs locally", "Docker", "RWTH PADS"],
 	},
