@@ -3,6 +3,8 @@ title: Overview
 description: What to know before writing your first Ocelescope plugin.
 ---
 
+import { LinkCard } from '@astrojs/starlight/components';
+
 A plugin is a Python package, distributed as a `.zip`, that contributes one or more methods, object-centric process mining (OCPM) functions other users can run from the Ocelescope UI. This section covers writing one. For the user-facing side, what a plugin is and what it does for someone running Ocelescope, see [Plugins](/ocelescope/plugins/).
 
 ## Plugin Capabilities
@@ -52,3 +54,9 @@ It explains the plugin structure and how it is represented in the code, and walk
 </div>
 
 If you'd rather dive straight in yourself, start with the [Tutorial](/plugin-development/tutorial-plugin-development/) or fork the [minimal plugin template](https://github.com/Grkmr/minimal-plugin) referenced in [Plugin Structure](/plugin-development/plugin-structure/).
+
+<LinkCard
+  title="Submit a Plugin"
+  description="Once your plugin is ready and published as a GitHub release, add it to the public Ocelescope plugin library."
+  href="/community/submit-plugin/"
+/>
