@@ -53,6 +53,10 @@ export default defineConfig({
 						{ label: "Submit a Plugin", slug: "community/submit-plugin" },
 						{ label: "Report a Bug", slug: "community/report-bug" },
 						{ label: "Request a Feature", slug: "community/request-feature" },
+						{
+							label: "Request additional package",
+							slug: "community/request-package",
+						},
 						{ label: "Troubleshooting", slug: "community/troubleshooting" },
 					],
 				},
@@ -91,10 +95,6 @@ export default defineConfig({
 						{
 							label: "Tutorial: Plugin Development",
 							slug: "plugin-development/tutorial-plugin-development",
-						},
-						{
-							label: "Request additional package",
-							slug: "plugin-development/request-package",
 						},
 					],
 				},
