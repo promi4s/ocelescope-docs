@@ -78,7 +78,7 @@ export default defineConfig({
 				{
 					label: "Plugin Development",
 					items: [
-						{ label: "Overview", slug: "plugin-development" },
+						{ label: "Plugin Development Intro", slug: "plugin-development" },
 						{
 							label: "Plugin Structure",
 							slug: "plugin-development/plugin-structure",
