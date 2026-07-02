@@ -33,11 +33,18 @@ PAGES: list[tuple[str, str, list[str]]] = [
     ("ocel/managers/o2o", "O2O Manager", ["ocelescope.ocel.managers.o2o"]),
     ("ocel/models/relations", "Relation Models", ["ocelescope.ocel.models.relations"]),
     ("plugins/index", "Plugins", ["ocelescope.plugin"]),
+    ("discovery/index", "Discovery", ["ocelescope.discovery"]),
+    ("resources/index", "Resource", ["ocelescope.resource.resource"]),
     ("resources/base/petri-net", "Petri Net", ["ocelescope.resource.default.petri_net"]),
     (
         "resources/base/directly-follows-graph",
         "Directly-Follows Graph",
         ["ocelescope.resource.default.dfg"],
+    ),
+    (
+        "resources/visualizations/index",
+        "Visualization",
+        ["ocelescope.visualization.visualization"],
     ),
     ("resources/visualizations/plotly", "Plotly", ["ocelescope.visualization.default.plotly"]),
     ("resources/visualizations/svg", "SVG", ["ocelescope.visualization.default.svg"]),
