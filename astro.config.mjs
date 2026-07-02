@@ -25,6 +25,10 @@ export default defineConfig({
 					label: "Getting Started",
 					items: [
 						{
+							label: "Introduction and Demo",
+							slug: "getting-started/ocelescope-introduction",
+						},
+						{
 							label: "Start Ocelescope",
 							slug: "getting-started/download",
 						},
