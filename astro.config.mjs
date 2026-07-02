@@ -98,7 +98,7 @@ export default defineConfig({
 						},
 					],
 				},
-				{
+				/* {
 					label: "Module Development",
 					items: [
 						{ label: "Overview", slug: "module-development" },
@@ -119,7 +119,7 @@ export default defineConfig({
 							slug: "module-development/register-module",
 						},
 					],
-				},
+				}, */
 				{
 					label: "API References",
 					items: [{ autogenerate: { directory: "api-references" } }],
