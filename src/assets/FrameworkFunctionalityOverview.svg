@@ -1,0 +1,79 @@
+<svg viewBox="0 0 1000 700" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, -apple-system, Segoe UI, sans-serif">
+  <defs>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="hsl(249, 100%, 60%)"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="hsl(234, 90%, 55%)"/>
+    </marker>
+    <marker id="arrow-turquoise" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="hsl(192, 82%, 40%)"/>
+    </marker>
+  </defs>
+
+  <!-- Modules box (blue family, same as Base Tool since it is compiled into it) -->
+  <rect x="60" y="40" width="300" height="170" rx="14" fill="hsl(234, 90%, 97%)" stroke="hsl(234, 90%, 55%)" stroke-width="2" stroke-dasharray="7,5"/>
+  <text x="82" y="74" font-size="22" font-weight="700" fill="hsl(234, 55%, 32%)">Modules</text>
+  <text x="82" y="102" font-size="14" fill="hsl(234, 45%, 38%)">Custom React views +</text>
+  <text x="82" y="121" font-size="14" fill="hsl(234, 45%, 38%)">their own Python backend</text>
+  <text x="82" y="152" font-size="13" fill="hsl(234, 45%, 38%)" font-style="italic">Live in a separate repo,</text>
+  <text x="82" y="169" font-size="13" fill="hsl(234, 45%, 38%)" font-style="italic">bundled into the build</text>
+
+  <!-- Plugins box (turquoise) -->
+  <rect x="640" y="40" width="300" height="170" rx="14" fill="hsl(192, 82%, 94%)" stroke="hsl(192, 82%, 40%)" stroke-width="2"/>
+  <text x="662" y="74" font-size="22" font-weight="700" fill="hsl(192, 70%, 26%)">Plugins</text>
+  <text x="662" y="102" font-size="14" fill="hsl(192, 55%, 32%)">Pure Python, UI generated</text>
+  <text x="662" y="121" font-size="14" fill="hsl(192, 55%, 32%)">automatically from the code</text>
+  <text x="662" y="152" font-size="13" fill="hsl(192, 55%, 32%)" font-style="italic">Dropped in as a .zip,</text>
+  <text x="662" y="169" font-size="13" fill="hsl(192, 55%, 32%)" font-style="italic">no build required</text>
+
+  <!-- Base Tool box (blue) -->
+  <rect x="60" y="300" width="880" height="230" rx="16" fill="hsl(234, 90%, 95%)" stroke="hsl(234, 90%, 55%)" stroke-width="2.5"/>
+  <text x="85" y="335" font-size="26" font-weight="700" fill="hsl(234, 55%, 30%)">Base Tool</text>
+
+  <!-- feature pills -->
+  <g font-size="14" fill="hsl(234, 55%, 30%)">
+    <rect x="85" y="355" width="195" height="150" rx="10" fill="#ffffff" stroke="hsl(234, 80%, 82%)"/>
+    <text x="100" y="379" font-weight="600">Log Management</text>
+    <text x="100" y="404">Inspection</text>
+    <text x="100" y="424">Filtering</text>
+    <text x="100" y="444" fill="hsl(234, 20%, 55%)" font-style="italic">Editing (planned)</text>
+
+    <rect x="292" y="355" width="195" height="150" rx="10" fill="#ffffff" stroke="hsl(234, 80%, 82%)"/>
+    <text x="307" y="379" font-weight="600">Discovery</text>
+    <text x="307" y="404">Basic OCPM</text>
+    <text x="307" y="424">algorithms, out of</text>
+    <text x="307" y="444">the box</text>
+
+    <rect x="499" y="355" width="195" height="150" rx="10" fill="#ffffff" stroke="hsl(234, 80%, 82%)"/>
+    <text x="514" y="379" font-weight="600">Resource Mgmt</text>
+    <text x="514" y="404">Import, export, and</text>
+    <text x="514" y="424">share resources across</text>
+    <text x="514" y="444">the whole framework</text>
+
+    <rect x="706" y="355" width="209" height="150" rx="10" fill="#ffffff" stroke="hsl(234, 80%, 82%)"/>
+    <text x="721" y="379" font-weight="600">Plugin Mgmt</text>
+    <text x="721" y="404">Load plugins, run</text>
+    <text x="721" y="424">their methods, and</text>
+    <text x="721" y="444">auto-generate forms</text>
+  </g>
+
+  <!-- Library band (purple) -->
+  <rect x="60" y="590" width="880" height="80" rx="14" fill="hsl(249, 100%, 96%)" stroke="hsl(249, 100%, 60%)" stroke-width="2.5"/>
+  <text x="85" y="620" font-size="20" font-weight="700" fill="hsl(249, 55%, 38%)">Ocelescope Library</text>
+  <text x="85" y="644" font-size="13.5" fill="hsl(249, 45%, 42%)">OCEL model, Plugin / Resource / Visualization base classes</text>
+  <text x="85" y="662" font-size="13.5" fill="hsl(249, 45%, 42%)">shared by the base tool and every plugin</text>
+
+  <!-- Arrows -->
+  <path d="M500,590 L500,532" stroke="hsl(249, 100%, 60%)" stroke-width="2.5" fill="none" marker-end="url(#arrow-purple)"/>
+  <text x="514" y="565" font-size="12.5" fill="hsl(249, 45%, 42%)">PM base classes</text>
+
+  <path d="M865,590 C 915,470 900,270 818,212" stroke="hsl(249, 100%, 60%)" stroke-width="2" fill="none" stroke-dasharray="5,4" marker-end="url(#arrow-purple)"/>
+  <text x="924" y="420" font-size="12.5" fill="hsl(249, 45%, 42%)" transform="rotate(-90 924 420)">defines the plugin environment</text>
+
+  <path d="M210,210 L210,298" stroke="hsl(234, 90%, 55%)" stroke-width="2.5" fill="none" marker-end="url(#arrow-blue)"/>
+  <text x="222" y="260" font-size="12.5" fill="hsl(234, 45%, 38%)">added at build time</text>
+
+  <path d="M790,210 L812,353" stroke="hsl(192, 82%, 40%)" stroke-width="2.5" fill="none" marker-end="url(#arrow-turquoise)"/>
+  <text x="826" y="270" font-size="12.5" fill="hsl(192, 55%, 32%)">uploaded at runtime</text>
+</svg>

@@ -1,0 +1,92 @@
+<svg viewBox="0 0 1200 950" xmlns="http://www.w3.org/2000/svg" font-family="system-ui, -apple-system, Segoe UI, sans-serif">
+  <defs>
+    <marker id="a-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="hsl(234, 90%, 55%)"/>
+    </marker>
+    <marker id="a-turquoise" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="hsl(192, 82%, 40%)"/>
+    </marker>
+    <marker id="a-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="hsl(249, 100%, 60%)"/>
+    </marker>
+    <marker id="a-gray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+  </defs>
+
+  <!-- Outer Base Tool container -->
+  <rect x="300" y="30" width="860" height="570" rx="18" fill="none" stroke="#334155" stroke-width="2" stroke-dasharray="7,5"/>
+  <text x="322" y="20" font-size="24" font-weight="700" fill="#1e293b">Base Tool</text>
+
+  <!-- Frontend column (blue) -->
+  <rect x="330" y="90" width="380" height="480" rx="14" fill="hsl(234, 90%, 95%)" stroke="hsl(234, 90%, 55%)" stroke-width="2"/>
+  <text x="352" y="122" font-size="20" font-weight="700" fill="hsl(234, 55%, 30%)">Frontend</text>
+
+  <rect x="358" y="150" width="324" height="100" rx="10" fill="#ffffff" stroke="hsl(234, 80%, 82%)"/>
+  <text x="378" y="188" font-size="15" font-weight="600" fill="hsl(234, 55%, 30%)">Session Management</text>
+  <text x="378" y="208" font-size="15" font-weight="600" fill="hsl(234, 55%, 30%)">Interface</text>
+  <text x="378" y="232" font-size="12.5" fill="#475569">Uploads, log &amp; resource views</text>
+
+  <rect x="358" y="420" width="324" height="100" rx="10" fill="#ffffff" stroke="hsl(234, 80%, 82%)"/>
+  <text x="378" y="458" font-size="15" font-weight="600" fill="hsl(234, 55%, 30%)">Plugin Interface</text>
+  <text x="378" y="480" font-size="12.5" fill="#475569">Drop a plugin .zip,</text>
+  <text x="378" y="498" font-size="12.5" fill="#475569">run its generated form</text>
+
+  <!-- Backend column (turquoise) -->
+  <rect x="750" y="90" width="380" height="480" rx="14" fill="hsl(192, 82%, 94%)" stroke="hsl(192, 82%, 40%)" stroke-width="2"/>
+  <text x="772" y="122" font-size="20" font-weight="700" fill="hsl(192, 70%, 26%)">Backend</text>
+
+  <rect x="778" y="150" width="324" height="180" rx="10" fill="none" stroke="hsl(192, 60%, 72%)" stroke-width="1.5"/>
+  <text x="792" y="172" font-size="13.5" font-weight="600" fill="hsl(192, 70%, 26%)">Session</text>
+
+  <rect x="792" y="184" width="296" height="60" rx="8" fill="#ffffff" stroke="hsl(192, 60%, 72%)"/>
+  <text x="806" y="220" font-size="14.5" fill="hsl(192, 70%, 26%)">OCEL Storage</text>
+
+  <rect x="792" y="254" width="296" height="60" rx="8" fill="#ffffff" stroke="hsl(192, 60%, 72%)"/>
+  <text x="806" y="290" font-size="14.5" fill="hsl(192, 70%, 26%)">Resource Storage</text>
+
+  <rect x="778" y="350" width="324" height="80" rx="10" fill="#ffffff" stroke="hsl(192, 60%, 72%)"/>
+  <text x="792" y="384" font-size="15" font-weight="600" fill="hsl(192, 70%, 26%)">Plugin Manager</text>
+  <text x="792" y="404" font-size="12.5" fill="hsl(192, 70%, 26%)">Loads plugins, runs methods</text>
+
+  <rect x="778" y="450" width="324" height="80" rx="10" fill="#ffffff" stroke="hsl(192, 60%, 72%)"/>
+  <text x="792" y="484" font-size="15" font-weight="600" fill="hsl(192, 70%, 26%)">Basic OCPM Functions</text>
+  <text x="792" y="504" font-size="12.5" fill="hsl(192, 70%, 26%)">Filtering, discovery, ...</text>
+
+  <!-- REST API connections -->
+  <path d="M684,198 L776,198" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#a-gray)" marker-start="url(#a-gray)"/>
+  <text x="695" y="188" font-size="13" fill="#334155">REST API</text>
+
+  <path d="M684,468 L776,388" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#a-gray)" marker-start="url(#a-gray)"/>
+  <text x="692" y="450" font-size="13" fill="#334155">REST API</text>
+
+  <!-- Modules row (purple) -->
+  <rect x="300" y="660" width="860" height="180" rx="16" fill="hsl(249, 100%, 97%)" stroke="hsl(249, 100%, 60%)" stroke-width="2" stroke-dasharray="7,5"/>
+  <text x="322" y="650" font-size="22" font-weight="700" fill="hsl(249, 55%, 38%)">Modules</text>
+
+  <rect x="358" y="700" width="324" height="100" rx="10" fill="#ffffff" stroke="hsl(249, 80%, 85%)"/>
+  <text x="378" y="738" font-size="15" font-weight="600" fill="hsl(249, 55%, 38%)">Micro Frontend</text>
+  <text x="378" y="760" font-size="12.5" fill="hsl(249, 40%, 46%)">Own views + navigation entry</text>
+
+  <rect x="778" y="700" width="324" height="100" rx="10" fill="#ffffff" stroke="hsl(249, 80%, 85%)"/>
+  <text x="792" y="738" font-size="15" font-weight="600" fill="hsl(249, 55%, 38%)">Micro Service</text>
+  <text x="792" y="760" font-size="12.5" fill="hsl(249, 40%, 46%)">Own FastAPI sub-app</text>
+
+  <path d="M520,700 L520,574" stroke="hsl(249, 100%, 60%)" stroke-width="2" fill="none" marker-end="url(#a-purple)"/>
+  <path d="M940,700 L940,574" stroke="hsl(249, 100%, 60%)" stroke-width="2" fill="none" marker-end="url(#a-purple)"/>
+  <text x="600" y="635" font-size="13" fill="hsl(249, 55%, 38%)">integrated at build time</text>
+
+  <!-- External: Browser -->
+  <rect x="20" y="150" width="220" height="90" rx="12" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+  <text x="40" y="188" font-size="16" font-weight="600" fill="#1e293b">Browser</text>
+  <text x="40" y="210" font-size="12.5" fill="#475569">the user's UI</text>
+  <path d="M242,195 L356,195" stroke="#475569" stroke-width="2" fill="none" marker-end="url(#a-gray)"/>
+  <text x="255" y="185" font-size="12" fill="#334155">HTTP</text>
+
+  <!-- External: Plugin zip -->
+  <rect x="20" y="420" width="220" height="90" rx="12" fill="#f1f5f9" stroke="#475569" stroke-width="1.5"/>
+  <text x="40" y="458" font-size="16" font-weight="600" fill="#1e293b">Plugin (.zip)</text>
+  <text x="40" y="480" font-size="12.5" fill="#475569">a researcher's code</text>
+  <path d="M242,465 L356,465" stroke="hsl(192, 82%, 40%)" stroke-width="2" fill="none" marker-end="url(#a-turquoise)"/>
+  <text x="252" y="455" font-size="12" fill="hsl(192, 70%, 26%)">drag &amp; drop</text>
+</svg>
