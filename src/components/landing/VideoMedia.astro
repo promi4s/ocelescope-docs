@@ -23,9 +23,5 @@ const { src, caption } = Astro.props;
         display: block;
         width: 100%;
         height: auto;
-        /* Crisp rendering. Prevents browser from applying bicubic smoothing that
-       blurs fine UI text on sub-native display sizes. */
-        image-rendering: -webkit-optimize-contrast;
-        image-rendering: crisp-edges;
     }
 </style>
