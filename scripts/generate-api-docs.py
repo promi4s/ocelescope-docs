@@ -33,7 +33,6 @@ PAGES: list[tuple[str, str, list[str]]] = [
     ("ocel/managers/o2o", "O2O Manager", ["ocelescope.ocel.managers.o2o"]),
     ("ocel/models/relations", "Relation Models", ["ocelescope.ocel.models.relations"]),
     ("plugins/index", "Plugins", ["ocelescope.plugin"]),
-    ("discovery/index", "Discovery", ["ocelescope.discovery"]),
     ("resources/index", "Resource", ["ocelescope.resource.resource"]),
     ("resources/base/petri-net", "Petri Net", ["ocelescope.resource.default.petri_net"]),
     (
@@ -51,6 +50,10 @@ PAGES: list[tuple[str, str, list[str]]] = [
     ("resources/visualizations/dot", "Dot (Graphviz)", ["ocelescope.visualization.default.dot"]),
     ("resources/visualizations/table", "Table", ["ocelescope.visualization.default.table"]),
     ("resources/visualizations/graph", "Graph", ["ocelescope.visualization.default.graph"]),
+    # Kept last so it sorts to the bottom of the sidebar -- see the
+    # `sidebar.order` frontmatter below, which ranks top-level directories
+    # (ocel/plugins/resources/discovery) by their first appearance here.
+    ("discovery/index", "Discovery", ["ocelescope.discovery"]),
 ]
 
 
@@ -229,6 +232,16 @@ def main() -> None:
     )
     ctx = Ctx(loader=loader, src_root=src_root)
 
+    # Starlight's sidebar autogenerate sorts alphabetically unless a page sets
+    # `sidebar.order`, so PAGES's write order alone doesn't affect navigation
+    # position. Rank each top-level directory (ocel/plugins/resources/...) by
+    # where it first appears in PAGES, and stamp every page under it with that
+    # rank -- ties within a directory still fall back to alphabetical order.
+    dir_rank: dict[str, int] = {}
+    for rel_path, _, _ in PAGES:
+        top_dir = rel_path.split("/", 1)[0]
+        dir_rank.setdefault(top_dir, len(dir_rank))
+
     for rel_path, title, modules in PAGES:
         lines: list[str] = []
         for dotted in modules:
@@ -238,8 +251,9 @@ def main() -> None:
             print(f"warning: no content for {rel_path}, skipping", file=sys.stderr)
             continue
 
+        order = dir_rank[rel_path.split("/", 1)[0]]
         body = "\n\n".join(lines)
-        frontmatter = f'---\ntitle: "{title}"\n---\n\n'
+        frontmatter = f'---\ntitle: "{title}"\nsidebar:\n  order: {order}\n---\n\n'
         target = output_dir / f"{rel_path}.md"
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(frontmatter + body + "\n")
