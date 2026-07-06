@@ -391,4 +391,26 @@ def mine_ocel_graph(ocel: OCEL, input: OCELGraphInput):
             });
         });
     });
+
+    // Keep the code card's height locked to the screencast's rendered height,
+    // since a grid row otherwise sizes to the taller of the two (usually the code).
+    const stackedQuery = window.matchMedia("(max-width: 920px)");
+
+    document.querySelectorAll(".builder-grid").forEach((grid) => {
+        const codeCard = grid.querySelector(".code-card");
+        const frame = grid.querySelector(".builder-preview .browser-frame");
+        if (!(codeCard instanceof HTMLElement) || !frame) return;
+
+        const syncHeight = () => {
+            if (stackedQuery.matches) {
+                codeCard.style.height = "";
+                return;
+            }
+            codeCard.style.height = `${frame.getBoundingClientRect().height}px`;
+        };
+
+        new ResizeObserver(syncHeight).observe(frame);
+        stackedQuery.addEventListener("change", syncHeight);
+        syncHeight();
+    });
 </script>

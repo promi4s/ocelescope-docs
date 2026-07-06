@@ -753,8 +753,7 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
 
 .section-heading { max-width: 680px; margin-bottom: 40px; }
 .builder-grid {
-  align-items: end;
-  container-type: inline-size;
+  align-items: stretch;
 }
 .code-card,
 .form-card {
@@ -763,6 +762,9 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   box-shadow: 0 30px 60px -38px rgba(10,24,32,.5);
 }
 .code-card {
+  display: flex;
+  flex-direction: column;
+  height: 396px;
   border: 1px solid rgba(255,255,255,.08);
   background: #0d1117; /* matches github-dark theme background */
   position: relative;
@@ -814,17 +816,12 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   box-shadow: inset 0 -2px 0 hsl(192, 72%, 55%);
 }
 .code-panel {
-  height: 396px;
+  flex: 1;
+  min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
 }
 .code-panel[hidden] { display: none !important; }
-
-@supports (height: 1cqw) {
-  .builder-grid .code-panel {
-    height: clamp(280px, calc(34.68cqw - 20px), 396px);
-  }
-}
 
 /* Shiki / Astro <Code> output: reset injected background and sizing */
 .code-card pre {
@@ -1213,6 +1210,8 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   }
   .feature-grid-reverse .feature-copy { order: 0; }
   .card-grid.three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .code-card { height: auto; }
+  .code-panel { flex: none; height: 340px; }
 }
 
 @media (max-width: 640px) {
