@@ -35,7 +35,7 @@
   --terminal-text: hsl(200, 22%, 84%);
   --terminal-muted: hsl(200, 15%, 56%);
 
-  --max: 1200px;
+  --max: 1440px;
   --pad: 28px;
   --play: running;
 }
