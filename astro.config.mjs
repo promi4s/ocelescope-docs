@@ -41,7 +41,7 @@ export default defineConfig({
 							slug: "getting-started/loading-plugins",
 						},
 						{
-							label: "Loading Modules",
+							label: "Build an Ocelescope-Based Tool",
 							slug: "getting-started/loading-modules",
 						},
 					],
@@ -98,7 +98,7 @@ export default defineConfig({
 						},
 					],
 				},
-				/* {
+				{
 					label: "Module Development",
 					items: [
 						{ label: "Overview", slug: "module-development" },
@@ -118,8 +118,12 @@ export default defineConfig({
 							label: "Register a Module",
 							slug: "module-development/register-module",
 						},
+						{
+							label: "Module Library",
+							slug: "module-development/module-library",
+						},
 					],
-				}, */
+				},
 				{
 					label: "API References",
 					items: [{ autogenerate: { directory: "api-references" } }],
