@@ -1,0 +1,273 @@
+---
+// Renders the module catalog from src/data/modules.ts as a grid of preview
+// cards. Add modules by editing that config, not this file.
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import { modules, type ModuleLinkKind } from "../data/modules";
+
+// Eagerly resolve every preview so cards can look theirs up by basename.
+const previews = import.meta.glob<{ default: ImageMetadata }>(
+	"../assets/moduleLibrary/*.png",
+	{ eager: true },
+);
+
+const previewFor = (name: string) => {
+	const match = previews[`../assets/moduleLibrary/${name}.png`];
+	if (!match) throw new Error(`No preview image for module "${name}"`);
+	return match.default;
+};
+
+// Inline single-path glyphs keep the chips self-contained (no icon deps).
+const kindIcon: Record<ModuleLinkKind, string> = {
+	npm: "M0 8.5h16v-1H0zM1.5 15h6V9.5H6V13H4.5V9.5H1.5zM9.5 15h3V13h2V9.5h-5zm3-4v1.5H11V11z",
+	pypi: "M8 1 2 4v4c0 3.5 2.5 6.5 6 7 3.5-.5 6-3.5 6-7V4zm0 2.2 4 2v2.8c0 2.5-1.7 4.7-4 5.2V3.2z",
+	github:
+		"M8 0a8 8 0 0 0-2.5 15.6c.4.1.5-.2.5-.4v-1.4c-2 .4-2.5-.9-2.5-.9-.4-.9-.9-1.1-.9-1.1-.7-.5 0-.5 0-.5.8.1 1.2.8 1.2.8.7 1.2 1.9.9 2.3.7.1-.5.3-.9.5-1.1-1.6-.2-3.3-.8-3.3-3.6 0-.8.3-1.4.8-1.9-.1-.2-.3-1 .1-2 0 0 .6-.2 2 .8a7 7 0 0 1 3.6 0c1.4-1 2-.8 2-.8.4 1 .1 1.8.1 2 .5.5.8 1.1.8 1.9 0 2.8-1.7 3.4-3.3 3.6.3.2.5.7.5 1.4v2.1c0 .2.1.5.5.4A8 8 0 0 0 8 0z",
+};
+
+const kindLabel: Record<ModuleLinkKind, string> = {
+	npm: "npm",
+	pypi: "PyPI",
+	github: "GitHub",
+};
+---
+
+<div class="module-grid not-content">
+	{
+		modules.map((mod) => (
+			<article class="module-card">
+				<div class="module-preview">
+					<Image
+						src={previewFor(mod.image)}
+						alt={`${mod.name} module preview`}
+						loading="lazy"
+					/>
+				</div>
+				<div class="module-body">
+					<header class="module-head">
+						<h3 id={mod.name.toLowerCase().replace(/\s+/g, "-")}>{mod.name}</h3>
+						{mod.badge && <span class="module-badge">{mod.badge}</span>}
+						<a
+							class="module-source"
+							href={mod.source.href}
+							target="_blank"
+							rel="noreferrer"
+							title={`${mod.source.label}: ${mod.source.name}`}
+						>
+							<svg
+								viewBox="0 0 16 16"
+								width="15"
+								height="15"
+								aria-hidden="true"
+							>
+								<path d={kindIcon[mod.source.kind]} fill="currentColor" />
+							</svg>
+							<span>{mod.source.label}</span>
+						</a>
+					</header>
+					<p class="module-desc" set:html={mod.description} />
+					{mod.note && <p class="module-note" set:html={mod.note} />}
+					<ul class="module-links">
+						{mod.links.map((link) => (
+							<li>
+								<a href={link.href} target="_blank" rel="noreferrer">
+									<svg
+										class="module-chip-icon"
+										viewBox="0 0 16 16"
+										width="14"
+										height="14"
+										aria-hidden="true"
+									>
+										<path d={kindIcon[link.kind]} fill="currentColor" />
+									</svg>
+									<span class="module-chip-text">
+										<span class="module-chip-role">{link.label}</span>
+										<code>{link.name}</code>
+									</span>
+									<span class="module-chip-kind">{kindLabel[link.kind]}</span>
+								</a>
+							</li>
+						))}
+					</ul>
+				</div>
+			</article>
+		))
+	}
+</div>
+
+<!--
+	This component only renders on the Module Library page, so this global
+	override widens that page alone — with the table of contents disabled, the
+	content pane can reclaim the freed space instead of Starlight's 45rem cap.
+-->
+<style is:global>
+	:root {
+		--sl-content-width: 72rem;
+	}
+</style>
+
+<style>
+	.module-grid {
+		display: grid;
+		gap: 22px;
+		grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+		margin-top: 1.5rem;
+	}
+
+	.module-card {
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 16px;
+		background: var(--sl-color-gray-6);
+	}
+
+	.module-preview {
+		position: relative;
+		aspect-ratio: 16 / 9;
+		border-bottom: 1px solid var(--sl-color-gray-5);
+		background: var(--sl-color-black);
+		overflow: hidden;
+	}
+	.module-preview :global(img) {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		object-position: top center;
+	}
+
+	.module-body {
+		display: flex;
+		flex-direction: column;
+		gap: 10px;
+		padding: 20px;
+	}
+
+	.module-head {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+	}
+	.module-head h3 {
+		margin: 0;
+		font-size: var(--sl-text-h4);
+		line-height: 1.2;
+		color: var(--sl-color-white);
+	}
+	.module-badge {
+		border: 1px solid color-mix(in srgb, var(--sl-color-accent) 45%, transparent);
+		border-radius: 999px;
+		background: color-mix(in srgb, var(--sl-color-accent) 14%, transparent);
+		color: var(--sl-color-accent-high, var(--sl-color-accent));
+		padding: 3px 10px;
+		font: 600 11px var(--sl-font-mono, monospace);
+		letter-spacing: 0.02em;
+		white-space: nowrap;
+	}
+
+	.module-source {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		margin-left: auto;
+		padding: 4px 10px;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 999px;
+		color: var(--sl-color-gray-2);
+		font: 600 12px var(--sl-font-mono, monospace);
+		text-decoration: none;
+		white-space: nowrap;
+	}
+	.module-source:hover {
+		color: var(--sl-color-accent);
+		border-color: color-mix(in srgb, var(--sl-color-accent) 45%, transparent);
+	}
+
+	.module-desc {
+		margin: 0;
+		color: var(--sl-color-gray-2);
+		line-height: 1.55;
+	}
+	.module-note {
+		margin: 0;
+		color: var(--sl-color-gray-3);
+		font-size: var(--sl-text-sm);
+		line-height: 1.5;
+	}
+	.module-desc :global(a),
+	.module-note :global(a) {
+		color: var(--sl-color-accent);
+		text-decoration: none;
+	}
+	.module-desc :global(a:hover),
+	.module-note :global(a:hover) {
+		text-decoration: underline;
+	}
+
+	.module-links {
+		list-style: none;
+		margin: 6px 0 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 8px;
+	}
+	.module-links a {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		padding: 9px 12px;
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 10px;
+		background: var(--sl-color-black);
+		color: var(--sl-color-gray-2);
+		text-decoration: none;
+	}
+	.module-links a:hover {
+		border-color: color-mix(in srgb, var(--sl-color-accent) 45%, transparent);
+	}
+	.module-chip-icon {
+		flex: none;
+		color: var(--sl-color-gray-3);
+	}
+	.module-chip-text {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		min-width: 0;
+		flex: 1;
+	}
+	.module-chip-role {
+		font-size: 11px;
+		text-transform: uppercase;
+		letter-spacing: 0.04em;
+		color: var(--sl-color-gray-3);
+	}
+	.module-chip-text code {
+		font: 500 12.5px var(--sl-font-mono, monospace);
+		color: var(--sl-color-white);
+		background: none;
+		border: none;
+		padding: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.module-chip-kind {
+		flex: none;
+		font: 600 10px var(--sl-font-mono, monospace);
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		color: var(--sl-color-gray-3);
+		border: 1px solid var(--sl-color-gray-5);
+		border-radius: 999px;
+		padding: 2px 8px;
+	}
+
+	@media (max-width: 640px) {
+		.module-grid {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>

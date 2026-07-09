@@ -1,69 +1,11 @@
 ---
 title: Module Library
 description: The modules that make up the current Ocelescope system, with their packages and source.
+tableOfContents: false
 ---
 
-import { Image } from 'astro:assets';
+import ModuleLibrary from "../../../components/ModuleLibrary.astro";
 
-Each module listed here can be integrated into an Ocelescope-based tool as described in [Create an Ocelescope-Based Tool](/getting-started/loading-modules/).
+Each module listed here can be integrated into an Ocelescope-based tool as described in [Build an Ocelescope-Based Tool](/getting-started/loading-modules/).
 
-## Management
-
-![Management module preview](../../../assets/moduleLibrary/management.png)
-
-Manage OCELs and resources: upload logs, inspect them, and organize the resources derived from them.
-This is the minimal module included in the [module template](https://github.com/promi4s/ocelescope-module-template).
-
-- **Frontend package:** [`@ocelescope/management`](https://www.npmjs.com/package/@ocelescope/management)
-- **Source:** [`src/frontend/modules/management`](https://github.com/promi4s/ocelescope/tree/main/src/frontend/modules/management)
-
-## Log Overview
-
-![Log Overview module preview](../../../assets/moduleLibrary/overview.png)
-
-A high-level summary of OCELs, including its key statistics and structure at a glance.
-
-- **Frontend package:** [`@ocelescope/log-overview`](https://www.npmjs.com/package/@ocelescope/log-overview)
-- **Source:** [`src/frontend/modules/log-overview`](https://github.com/promi4s/ocelescope/tree/main/src/frontend/modules/log-overview)
-
-## Discovery
-
-![Discovery module preview](../../../assets/moduleLibrary/discovery.png)
-
-Process discovery: derive and visualize process models from OCELs.
-
-- **Frontend package:** [`@ocelescope/discovery`](https://www.npmjs.com/package/@ocelescope/discovery)
-- **Source:** [`src/frontend/modules/discovery`](https://github.com/promi4s/ocelescope/tree/main/src/frontend/modules/discovery)
-
-## Filter
-
-![Filter module preview](../../../assets/moduleLibrary/filter.png)
-
-Filter uploaded OCELs.
-Every other view then works on the filtered version of the log until the filter is removed.
-This is the module added in the [Create an Ocelescope-Based Tool](/getting-started/loading-modules/) walkthrough.
-
-- **Frontend package:** [`@ocelescope/filter`](https://www.npmjs.com/package/@ocelescope/filter)
-- **Backend package:** [`ocelescope-module-filter`](https://pypi.org/project/ocelescope-module-filter/)
-- **Frontend source:** [`src/frontend/modules/filter`](https://github.com/promi4s/ocelescope/tree/main/src/frontend/modules/filter)
-- **Backend source:** [`src/backend/modules/ocelescope-module-filter`](https://github.com/promi4s/ocelescope/tree/main/src/backend/modules/ocelescope-module-filter)
-
-## Plugin
-
-![Plugin module preview](../../../assets/moduleLibrary/plugin.png)
-
-Plugin runner: run installed [plugins](/ocelescope/plugins/) through their generated forms and view their results.
-
-- **Frontend package:** [`@ocelescope/plugin`](https://www.npmjs.com/package/@ocelescope/plugin)
-- **Source:** [`src/frontend/modules/plugin`](https://github.com/promi4s/ocelescope/tree/main/src/frontend/modules/plugin)
-
-## Ocelot
-
-![Ocelot module preview](../../../assets/moduleLibrary/ocelot.png)
-
-An Ocelescope adaptation of the [Ocelot](https://ocelot.pm/) tool for interactively exploring how individual events and objects relate, searching entities, and visualizing their relationships as a graph.
-Ocelot is bundled into the default Ocelescope images, so it is available out of the box without a custom build.
-
-- **Frontend package:** [`@ocelescope/ocelot`](https://www.npmjs.com/package/@ocelescope/ocelot)
-- **Backend package:** [`ocelescope-module-ocelot`](https://pypi.org/project/ocelescope-module-ocelot/)
-- **Source:** [`promi4s/ocelescope`](https://github.com/promi4s/ocelescope)
+<ModuleLibrary />
