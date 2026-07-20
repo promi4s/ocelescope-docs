@@ -48,4 +48,11 @@ export const plugins: Plugin[] = [
 		doi: "10.1007/s44311-026-00052-w",
 		showLanding: true,
 	},
+	{
+		name: "OCEL Analysis",
+		href: "https://github.com/uysah/OCEL_analysis_plugin",
+		monogram: "OA",
+		author: "Uy Sa Huynh",
+		showLanding: true,
+	},
 ];
