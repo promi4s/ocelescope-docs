@@ -27,7 +27,7 @@ export const plugins: Plugin[] = [
 	},
 	{
 		name: "OC-DECLARE",
-		href: "https://github.com/Grkmr/O}}}C-Declare",
+		href: "https://github.com/Grkmr/OC-Declare",
 		monogram: "OD",
 		author: "Görkem Öztürk",
 		showLanding: true,
