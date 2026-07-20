@@ -27,7 +27,7 @@ export const plugins: Plugin[] = [
 	},
 	{
 		name: "OC-DECLARE",
-		href: "https://github.com/Grkmr/OC-Declare",
+		href: "https://github.com/Grkmr/O}}}C-Declare",
 		monogram: "OD",
 		author: "Görkem Öztürk",
 		showLanding: true,
@@ -52,6 +52,13 @@ export const plugins: Plugin[] = [
 		name: "OCEL Analysis",
 		href: "https://github.com/uysah/OCEL_analysis_plugin",
 		monogram: "OA",
+		author: "Uy Sa Huynh",
+		showLanding: true,
+	},
+	{
+		name: "Multi-Level Resource Detection",
+		href: "https://github.com/promi4s/Multi-Level-Resource-Detection-Plugin",
+		monogram: "MR",
 		author: "Uy Sa Huynh",
 		showLanding: true,
 	},
