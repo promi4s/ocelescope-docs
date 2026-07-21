@@ -103,10 +103,6 @@ export default defineConfig({
 					items: [
 						{ label: "Overview", slug: "module-development" },
 						{
-							label: "Module Structure",
-							slug: "module-development/module-structure",
-						},
-						{
 							label: "Backend Module",
 							slug: "module-development/backend-module",
 						},
