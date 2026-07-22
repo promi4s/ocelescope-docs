@@ -1,0 +1,100 @@
+---
+title: Structure
+description: How an Ocelescope-based tool is structured.
+---
+
+As described in the overview, Ocelescope is a web application consisting of a frontend and a backend. This page explains how to structure a custom Ocelescope-based tool by looking at the [Ocelescope module template](https://github.com/promi4s/ocelescope-module-template).
+
+## Structure of the template
+
+The [Ocelescope module template](https://github.com/promi4s/ocelescope-module-template) is a single repository that contains everything needed to build and run an Ocelescope-based tool.
+
+```text
+.
+├── app/
+├── backend-modules/
+├── frontend-modules/
+├── data/
+├── docker/
+├── compose.yaml
+├── docker-bake.hcl
+├── package.json
+├── pnpm-workspace.yaml
+├── pyproject.toml
+└── .env.example
+```
+
+## Frontend
+
+The `app` directory contains a Next.js application that is already configured as an Ocelescope frontend through the [`@ocelescope/core`](https://www.npmjs.com/package/@ocelescope/core) package.
+
+In most cases, you only need to change `app/ocelescope.config.ts`. This file is used to add the frontend modules that should be available in your tool.
+
+The template also includes a minimal frontend module in `frontend-modules/example`. You can use this module as a reference or copy it as a starting point for your own frontend module.
+
+### Adding frontend modules
+
+The frontend is managed as a [pnpm workspace](https://pnpm.io/workspaces). The workspace includes the main application in `app` and all local frontend modules in `frontend-modules`.
+
+#### Adding a local module
+
+To add a module from `frontend-modules` to the application:
+
+1. Add the local module as a dependency of the `app` package:
+
+   ```bash
+   pnpm --filter @instance/app add "@instance/example-module@workspace:*"
+   ```
+
+2. Add the module package to `transpilePackages` in `app/next.config.ts`:
+
+   ```ts
+   transpilePackages: [
+     "@instance/example-module",
+   ],
+   ```
+
+3. Import and register the module in `app/ocelescope.config.ts`:
+
+   ```ts
+   import type { OcelescopeConfig } from "@ocelescope/core";
+   import exampleModule from "@instance/example-module";
+
+   export default {
+     modules: [exampleModule],
+   } satisfies OcelescopeConfig;
+   ```
+
+#### Adding an external module
+
+An external module is installed from a package registry instead of being part of the local workspace.
+
+1. Add the module as a dependency of the `app` package:
+
+   ```bash
+   pnpm --filter @instance/app add @ocelescope/example-module
+   ```
+
+2. Import and register the module in `app/ocelescope.config.ts` in the same way as a local module.
+
+## Backend
+
+The backend is provided by the [`ocelescope-backend`](https://pypi.org/project/ocelescope-backend/) package. The template uses this package as the base backend application.
+
+Custom backend modules are stored in the `backend-modules` directory. Each module is a Python package that extends the backend with its own functionality.
+
+The template includes a minimal backend module in `backend-modules/example`. You can use it as a reference or copy it as a starting point for your own backend module.
+
+### Adding backend modules
+
+Add a backend module from the repository root:
+
+```bash
+uv add ocelescope-module-example
+```
+
+Replace `ocelescope-module-example` with the package name of the module you want to use.
+
+If a module with this name is located in `backend-modules`, `uv` uses the local workspace package. Otherwise, it installs the package from a Python package registry.
+
+After adding a module, Ocelescope discovers and loads it automatically when the backend starts.
