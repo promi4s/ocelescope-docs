@@ -1,36 +1,54 @@
 ---
 title: Overview
-description: Build full-stack modules that extend Ocelescope with custom views and APIs.
+description: Build full-stack modules that extend Ocelescope.
 ---
 
-A **module** extends Ocelescope with a complete feature: its own backend API and its own frontend views. Where a [plugin](/plugin-development/) contributes a single process mining method with a generated form, a module gives you full control over both the interface and the endpoints behind it.
+Ocelescope is designed as a modular framework for building specialized object-centric process mining tools.
 
-Reach for a module when:
+Many process mining tools are built as separate applications.
+As a result, they often need their own installation process and reimplement common features such as importing and exporting logs, browsing logs, and filtering data.
+Ocelescope provides these shared capabilities as a foundation, so you can focus on the functionality that makes your tool unique.
 
-- a generated plugin form is not enough and you need a **custom, interactive UI**,
-- you need **API endpoints** beyond running one method,
-- you are adding a **new kind of view** to the application rather than a single analysis.
+You can extend Ocelescope by developing modules.
+A module adds new functionality to the base application while using the shared features provided by Ocelescope.
+You can use modules to build a dedicated tool, combine them with other modules, or publish them for use in other Ocelescope-based tools.
 
-If your idea is really a method that consumes and produces OCELs or resources, build a [plugin](/plugin-development/) instead. It is the lighter path and loads at runtime without a rebuild.
+## How Ocelescope is structured
 
-## How a module is built
+Ocelescope runs as a web application with a frontend and a backend.
+The frontend provides the user interface and is built with Next.js and React.
+The backend handles process-mining tasks and is written in Python using the FastAPI framework.
 
-A module has two halves that are developed together:
+Ocelescope-based tools are built using base packages. These packages provide shared functionality and make it possible to integrate modules into both the frontend and backend.
 
-- A **backend package** that mounts a [FastAPI](https://fastapi.tiangolo.com/) sub-application, discovered through a Python entry point. See [Backend Module](/module-development/backend-module/).
-- A **frontend package** that defines the module's metadata and routes as React views. See [Frontend Module](/module-development/frontend-module/).
+![Overview of the Ocelescope framework](../../../assets/modulesGuide/OcelescopeFrameworkOverview.png)
 
-The frontend talks to the backend through a typed API client generated from the backend module's OpenAPI schema.
+### Frontend
 
-## Built into the build
+The frontend is provided by the [`@ocelescope/core`](https://www.npmjs.com/package/@ocelescope/core) package.
+This package wraps the Next.js application and provides the Ocelescope app shell, including the navigation and sidebar.
 
-Modules are not uploaded at runtime like plugins. Both halves are compiled into the Ocelescope backend and frontend images, so they are developed inside the Ocelescope project as workspace packages. The bundled **Ocelot** view is a module integrated exactly this way, and it is the best reference to read alongside these pages.
+A frontend module adds React views that are integrated into this app shell.
 
-## This guide
+![Overview of the Ocelescope frontend](../../../assets/modulesGuide/frontend_overview.png)
 
-<br />
+### Backend
 
-- [Module Structure](/module-development/module-structure/) introduces the two-package layout.
-- [Backend Module](/module-development/backend-module/) covers the Python sub-application and its entry point.
-- [Frontend Module](/module-development/frontend-module/) covers the React module, its routes, and the generated API client.
-- [Register a Module](/module-development/register-module/) wires both halves into Ocelescope.
+The backend is provided by the [`ocelescope-backend`](https://pypi.org/project/ocelescope-backend/) package.
+This Python package provides the base FastAPI application, where process-mining tasks are performed.
+
+The backend is session-based.
+Each user works in an individual session that can contain multiple OCELs and other resources.
+Backend modules can access these resources to provide their functionality.
+
+![Overview of the Ocelescope backend](../../../assets/modulesGuide/backend_overview.png)
+
+The frontend and backend communicate through a REST API.
+
+## Getting started
+
+We recommend using the [Ocelescope module template](https://github.com/promi4s/ocelescope-module-template) as a starting point when creating a module or an Ocelescope-based tool.
+
+For instructions on creating and loading your own Ocelescope-based tool, see [Getting started](/getting-started/loading-modules/).
+
+The following pages use the module template as their starting point.
