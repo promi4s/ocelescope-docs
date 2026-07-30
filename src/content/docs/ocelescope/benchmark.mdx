@@ -1,0 +1,309 @@
+---
+title: Benchmarks
+description: Measured runtimes for importing, exporting, filtering, and discovery on public OCEL logs.
+---
+
+import BenchmarkChart from '../../../components/BenchmarkChart.astro';
+
+Measured runtimes for the core operations of the Ocelescope base tool on public object-centric event logs: **import**, **export**, **filtering**, and **discovery**.
+
+Each configuration was run 5 times on the machine below, and the reported value is the median in seconds. Charts show these medians; the complete per-run numbers are in the **All runs** table under each section.
+
+## Environment
+
+| | |
+|---|---|
+| **Ocelescope** | v1.0.3 |
+| **OS** | Arch Linux |
+| **Kernel** | 7.1.3-arch1-2, x86_64 |
+| **CPU** | 12th Gen Intel Core i7-1260P |
+| **Cores / threads** | 12 cores (4 P + 8 E) / 16 threads |
+| **Memory** | 32 GB (31.0 GiB) |
+
+## Logs
+
+| Short name | Log variant | Source | Events | Objects |
+|---|---|---|---:|---:|
+| p2p | p2p | [10.5281/zenodo.8412920](https://doi.org/10.5281/zenodo.8412920) | 14,671 | 9,543 |
+| order-mgmt | order-management | [10.5281/zenodo.18373906](https://doi.org/10.5281/zenodo.18373906) | 21,008 | 10,840 |
+| container | container logistics | [10.5281/zenodo.18373888](https://doi.org/10.5281/zenodo.18373888) | 35,372 | 13,882 |
+| aoe2 | aoe2 | [10.5281/zenodo.13365584](https://doi.org/10.5281/zenodo.13365584) | 2,372,505 | 630,590 |
+| steel | steel logistics | *proprietary, not public* | 865,859 | 110,834 |
+| hinge | hinge | [10.5281/zenodo.13638681](https://doi.org/10.5281/zenodo.13638681) | 38,528 | 23,771 |
+| angular | angular github comments | [10.5281/zenodo.8430332](https://doi.org/10.5281/zenodo.8430332) | 27,847 | 28,317 |
+| BPI 2017 | BPI Challenge 2017 | [4121/uuid:5f3067df…](https://doi.org/10.4121/uuid:5f3067df-f10b-45da-b98b-86ae4c7a310b) | 1,202,267 | 31,509 |
+
+## Import
+
+<BenchmarkChart
+  title="Median import time by file format"
+  subtitle="Logs ordered by size."
+  axis="log"
+  note="Logarithmic time axis: bar length is not proportional to the value."
+  series={[
+    { key: "xml", label: "xml" },
+    { key: "json", label: "json" },
+    { key: "sqlite", label: "sqlite" },
+    { key: "xes", label: "xes" },
+  ]}
+  groups={[
+    { label: "p2p", sublabel: "14.7k events", bars: [
+      { key: "xml", value: 0.487 }, { key: "json", value: 0.604 }, { key: "sqlite", value: 0.435 },
+    ]},
+    { label: "order-mgmt", sublabel: "21.0k events", bars: [
+      { key: "xml", value: 0.309 }, { key: "json", value: 0.419 }, { key: "sqlite", value: 0.251 },
+    ]},
+    { label: "container", sublabel: "35.4k events", bars: [
+      { key: "xml", value: 0.278 }, { key: "json", value: 0.343 }, { key: "sqlite", value: 0.235 },
+    ]},
+    { label: "hinge", sublabel: "38.5k events", bars: [
+      { key: "xml", value: 0.647 }, { key: "json", value: 0.955 }, { key: "sqlite", value: 0.496 },
+    ]},
+    { label: "steel", sublabel: "866k events", bars: [
+      { key: "xml", value: 47.019 }, { key: "json", value: 51.361 }, { key: "sqlite", value: 17.833 },
+    ]},
+    { label: "aoe2", sublabel: "2.37M events", bars: [
+      { key: "xml", value: 45.031 }, { key: "json", value: 46.675 }, { key: "sqlite", value: 8.519 },
+    ]},
+    { label: "BPI 2017", sublabel: "1.20M events", bars: [
+      { key: "xes", value: 5.558 },
+    ]},
+  ]}
+/>
+
+<details>
+<summary><strong>All runs</strong></summary>
+
+| Log variant | Format | File size | Run 1 | Run 2 | Run 3 | Run 4 | Run 5 | **Median** |
+|---|---|---:|---:|---:|---:|---:|---:|---:|
+| p2p | xml | 17.6 MB | 0.527 | 0.474 | 0.530 | 0.487 | 0.485 | **0.487** |
+| p2p | json | 13.6 MB | 0.604 | 0.607 | 0.622 | 0.603 | 0.600 | **0.604** |
+| p2p | sqlite | 13.1 MB | 0.446 | 0.427 | 0.429 | 0.435 | 0.442 | **0.435** |
+| order-mgmt | xml | 15.2 MB | 0.317 | 0.309 | 0.302 | 0.321 | 0.296 | **0.309** |
+| order-mgmt | json | 12.6 MB | 0.422 | 0.421 | 0.419 | 0.416 | 0.414 | **0.419** |
+| order-mgmt | sqlite | 36.6 MB | 0.251 | 0.237 | 0.249 | 0.256 | 0.253 | **0.251** |
+| container | xml | 13.4 MB | 0.276 | 0.278 | 0.282 | 0.277 | 0.285 | **0.278** |
+| container | json | 10.0 MB | 0.346 | 0.352 | 0.340 | 0.336 | 0.343 | **0.343** |
+| container | sqlite | 23.0 MB | 0.234 | 0.248 | 0.235 | 0.237 | 0.231 | **0.235** |
+| aoe2 | xml | 1.3 GB | 44.579 | 44.279 | 45.856 | 45.031 | 45.914 | **45.031** |
+| aoe2 | json | 1.6 GB | 46.261 | 46.675 | 46.921 | 46.647 | 47.226 | **46.675** |
+| aoe2 | sqlite | 891.9 MB | 8.662 | 8.542 | 8.444 | 8.519 | 8.506 | **8.519** |
+| steel | xml | 1.1 GB | 46.423 | 47.019 | 47.365 | 47.822 | 46.719 | **47.019** |
+| steel | json | 922.7 MB | 51.213 | 51.482 | 52.912 | 51.361 | 48.163 | **51.361** |
+| steel | sqlite | 580.1 MB | 17.796 | 17.833 | 17.920 | 17.566 | 17.945 | **17.833** |
+| hinge | xml | 40.2 MB | 0.654 | 0.649 | 0.644 | 0.647 | 0.644 | **0.647** |
+| hinge | json | 29.1 MB | 0.951 | 0.935 | 0.955 | 0.974 | 0.961 | **0.955** |
+| hinge | sqlite | 19.8 MB | 0.496 | 0.495 | 0.491 | 0.498 | 0.497 | **0.496** |
+| angular | xml | 178.1 MB | 2.238 | 2.312 | 2.260 | 2.236 | 2.340 | **2.260** |
+| BPI 2017 | xes | 29.7 MB | 5.524 | 5.594 | 5.558 | 5.544 | 5.605 | **5.558** |
+
+</details>
+
+## Export
+
+<BenchmarkChart
+  title="Median export time by file format"
+  subtitle="Native OCEL exports. The flattened xes export writes a single object type and is listed in the table below only."
+  axis="log"
+  note="Logarithmic time axis: bar length is not proportional to the value."
+  series={[
+    { key: "xml", label: "xml" },
+    { key: "json", label: "json" },
+    { key: "sqlite", label: "sqlite" },
+  ]}
+  groups={[
+    { label: "p2p", sublabel: "14.7k events", bars: [
+      { key: "xml", value: 1.194 }, { key: "json", value: 0.414 }, { key: "sqlite", value: 0.394 },
+    ]},
+    { label: "order-mgmt", sublabel: "21.0k events", bars: [
+      { key: "xml", value: 1.236 }, { key: "json", value: 0.375 }, { key: "sqlite", value: 0.301 },
+    ]},
+    { label: "container", sublabel: "35.4k events", bars: [
+      { key: "xml", value: 1.144 }, { key: "json", value: 0.294 }, { key: "sqlite", value: 0.316 },
+    ]},
+    { label: "hinge", sublabel: "38.5k events", bars: [
+      { key: "xml", value: 2.894 }, { key: "json", value: 0.746 }, { key: "sqlite", value: 0.558 },
+    ]},
+    { label: "steel", sublabel: "866k events", bars: [
+      { key: "xml", value: 76.137 }, { key: "json", value: 18.590 }, { key: "sqlite", value: 23.511 },
+    ]},
+    { label: "aoe2", sublabel: "2.37M events", bars: [
+      { key: "xml", value: 89.143 }, { key: "json", value: 20.557 }, { key: "sqlite", value: 22.179 },
+    ]},
+  ]}
+/>
+
+<details>
+<summary><strong>All runs</strong></summary>
+
+A blank *Flattened type* means no flattening (native OCEL export).
+
+| Log variant | Format | Flattened type | Run 1 | Run 2 | Run 3 | Run 4 | Run 5 | **Median** |
+|---|---|---|---:|---:|---:|---:|---:|---:|
+| p2p | xml | — | 1.194 | 1.220 | 1.182 | 1.209 | 1.178 | **1.194** |
+| p2p | json | — | 0.418 | 0.418 | 0.401 | 0.414 | 0.406 | **0.414** |
+| p2p | sqlite | — | 0.385 | 0.394 | 0.403 | 0.388 | 0.411 | **0.394** |
+| p2p | xes | material | 0.264 | 0.270 | 0.258 | 0.278 | 0.294 | **0.270** |
+| order-mgmt | xml | — | 1.239 | 1.236 | 1.234 | 1.244 | 1.224 | **1.236** |
+| order-mgmt | json | — | 0.375 | 0.360 | 0.446 | 0.384 | 0.371 | **0.375** |
+| order-mgmt | sqlite | — | 0.294 | 0.317 | 0.292 | 0.322 | 0.301 | **0.301** |
+| order-mgmt | xes | items | 0.314 | 0.325 | 0.312 | 0.322 | 0.313 | **0.314** |
+| container | xml | — | 1.188 | 1.130 | 1.127 | 1.148 | 1.144 | **1.144** |
+| container | json | — | 0.303 | 0.291 | 0.291 | 0.300 | 0.294 | **0.294** |
+| container | sqlite | — | 0.316 | 0.341 | 0.318 | 0.289 | 0.308 | **0.316** |
+| container | xes | *not recorded* | 0.230 | 0.233 | 0.237 | 0.228 | 0.238 | **0.233** |
+| aoe2 | xml | — | 90.003 | 88.705 | 89.143 | — | — | **89.143** ⚠️ 3 runs |
+| aoe2 | json | — | 20.557 | 20.047 | 20.613 | 20.588 | 20.188 | **20.557** |
+| aoe2 | sqlite | — | 23.347 | 22.383 | 20.361 | 22.179 | 19.627 | **22.179** |
+| steel | xml | — | 75.897 | 76.916 | 76.137 | — | — | **76.137** ⚠️ 3 runs |
+| steel | json | — | 18.590 | 18.409 | 18.626 | 18.673 | 18.310 | **18.590** |
+| steel | sqlite | — | 23.327 | 23.674 | 23.942 | 23.511 | 22.874 | **23.511** |
+| steel | xes | stack | 7.904 | 7.675 | 7.676 | 7.789 | 7.865 | **7.789** |
+| hinge | xml | — | 2.879 | 2.792 | 2.958 | 2.932 | 2.894 | **2.894** |
+| hinge | json | — | 0.725 | 0.747 | 0.737 | 0.746 | 0.763 | **0.746** |
+| hinge | sqlite | — | 0.545 | 0.596 | 0.558 | 0.860 | 0.543 | **0.558** ⚠️ outlier |
+| hinge | xes | Workstation | 0.485 | 0.502 | 0.487 | 0.489 | 0.491 | **0.489** |
+
+</details>
+
+## Filtering
+
+<BenchmarkChart
+  title="Median filter time and how much each configuration removed"
+  subtitle="Nine filter configurations."
+  note="Each panel has its own axis: runtime is linear in seconds, exclusions are a logarithmic count, so bar lengths only compare within a panel. A configuration that excluded nothing shows 0 at the axis start."
+  panels={[
+    {
+      label: "median runtime",
+      series: [{ key: "time", label: "Runtime" }],
+    },
+    {
+      label: "excluded from the log",
+      axis: "log",
+      format: "count",
+      series: [
+        { key: "events", label: "Events excluded" },
+        { key: "objects", label: "Objects excluded" },
+      ],
+    },
+  ]}
+  groups={[
+    { label: "F1", sublabel: "p2p", bars: [
+      { key: "time", value: 0.312 }, { key: "events", value: 3551 }, { key: "objects", value: 0 },
+    ]},
+    { label: "F2", sublabel: "p2p", bars: [
+      { key: "time", value: 0.303 }, { key: "events", value: 8726 }, { key: "objects", value: 0 },
+    ]},
+    { label: "F3", sublabel: "p2p", bars: [
+      { key: "time", value: 0.288 }, { key: "events", value: 0 }, { key: "objects", value: 2919 },
+    ]},
+    { label: "F4", sublabel: "p2p", bars: [
+      { key: "time", value: 0.330 }, { key: "events", value: 206 }, { key: "objects", value: 0 },
+    ]},
+    { label: "F5", sublabel: "order-mgmt", bars: [
+      { key: "time", value: 0.157 }, { key: "events", value: 7617 }, { key: "objects", value: 10818 },
+    ]},
+    { label: "F6", sublabel: "container", bars: [
+      { key: "time", value: 0.184 }, { key: "events", value: 23110 }, { key: "objects", value: 7387 },
+    ]},
+    { label: "F7", sublabel: "aoe2", bars: [
+      { key: "time", value: 2.856 }, { key: "events", value: 2177411 }, { key: "objects", value: 386022 },
+    ]},
+    { label: "F8", sublabel: "steel", bars: [
+      { key: "time", value: 4.986 }, { key: "events", value: 441744 }, { key: "objects", value: 31077 },
+    ]},
+    { label: "F9", sublabel: "hinge", bars: [
+      { key: "time", value: 0.319 }, { key: "events", value: 29101 }, { key: "objects", value: 2225 },
+    ]},
+  ]}
+/>
+
+<details>
+<summary><strong>Summary</strong></summary>
+
+| ID | Log variant | Filter (summary) | Excl. events | Excl. objects | **Median (s)** |
+|---|---|---|---:|---:|---:|
+| F1 | p2p | Activity: exclude 5 activities | 3,551 | 0 | **0.312** |
+| F2 | p2p | Time frame: 2023-04-01 → 2024-04-01 | 8,726 | 0 | **0.303** |
+| F3 | p2p | Object attributes ×3 (regex + numeric range) | 0 | 2,919 | **0.288** |
+| F4 | p2p | E2O count ×2 | 206 | 0 | **0.330** |
+| F5 | order-mgmt | Object type + time frame + object attr. + E2O count (4 filters) | 7,617 | 10,818 | **0.157** |
+| F6 | container | Object type + time frame + 3× object attr. + 3× E2O count (8 filters) | 23,110 | 7,387 | **0.184** |
+| F7 | aoe2 | Object type + activity + O2O count + time frame + 2× E2O count (6 filters) | 2,177,411 | 386,022 | **2.856** |
+| F8 | steel | Object type + time frame + event attr. + 2× O2O count (5 filters) | 441,744 | 31,077 | **4.986** |
+| F9 | hinge | Object type + time frame + activity (3 filters) | 29,101 | 2,225 | **0.319** |
+
+</details>
+
+<details>
+<summary><strong>All runs</strong></summary>
+
+| ID | Run 1 | Run 2 | Run 3 | Run 4 | Run 5 | **Median** |
+|---|---:|---:|---:|---:|---:|---:|
+| F1 | 0.309 | 0.310 | 0.318 | 0.320 | 0.312 | **0.312** |
+| F2 | 0.303 | 0.303 | 0.305 | 0.296 | 0.298 | **0.303** |
+| F3 | 0.293 | 0.296 | 0.288 | 0.285 | 0.277 | **0.288** |
+| F4 | 0.321 | 0.335 | 0.330 | 0.317 | 0.331 | **0.330** |
+| F5 | 0.150 | 0.157 | 0.159 | 0.153 | 0.163 | **0.157** |
+| F6 | 0.174 | 0.184 | 0.186 | 0.186 | 0.182 | **0.184** |
+| F7 | 3.018 | 2.878 | 2.856 | 2.840 | 2.827 | **2.856** |
+| F8 | 4.929 | 4.986 | 5.238 | 5.199 | 4.945 | **4.986** |
+| F9 | 0.321 | 0.318 | 0.319 | 0.317 | 0.327 | **0.319** |
+
+</details>
+
+## Discovery
+
+Settings: **OC-DFG** at frequency threshold 1.0, **Inductive Miner (flattening)** at frequency threshold 0.8. The two largest logs were pre-filtered first; the sizes below are after filtering. aoe2 was reduced to its top 80% activities and 90% objects; steel logistics by a two-part exclusion filter listing **87 object types** and **587 activity types** explicitly (largely storage locations, installations, and movement events).
+
+<BenchmarkChart
+  title="Median discovery time by algorithm"
+  subtitle="Logs ordered by size."
+  axis="log"
+  note="Logarithmic time axis: bar length is not proportional to the value."
+  series={[
+    { key: "ocdfg", label: "OC-DFG" },
+    { key: "im", label: "Inductive Miner" },
+  ]}
+  groups={[
+    { label: "p2p", sublabel: "14.7k events", bars: [
+      { key: "ocdfg", value: 1.886 }, { key: "im", value: 1.403 },
+    ]},
+    { label: "order-mgmt", sublabel: "21.0k events", bars: [
+      { key: "ocdfg", value: 3.174 }, { key: "im", value: 4.485 },
+    ]},
+    { label: "container", sublabel: "35.4k events", bars: [
+      { key: "ocdfg", value: 3.410 }, { key: "im", value: 2.454 },
+    ]},
+    { label: "hinge", sublabel: "38.5k events", bars: [
+      { key: "ocdfg", value: 4.859 }, { key: "im", value: 8.849 },
+    ]},
+    { label: "steel", sublabel: "557k events, pre-filtered", bars: [
+      { key: "ocdfg", value: null }, { key: "im", value: 39.857 },
+    ]},
+    { label: "aoe2", sublabel: "1.20M events, pre-filtered", bars: [
+      { key: "ocdfg", value: 118.566 }, { key: "im", value: 70.249 },
+    ]},
+  ]}
+/>
+
+<details>
+<summary><strong>All runs</strong></summary>
+
+The *Events* and *Objects* columns are the size of the log **after** the pre-filter was applied.
+
+| Log variant | Algorithm | Pre-filter | Events | Objects | Run 1 | Run 2 | Run 3 | Run 4 | Run 5 | **Median** |
+|---|---|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| p2p | OC-DFG | none | 14,671 | 9,543 | 1.836 | 1.888 | 1.893 | 1.866 | 1.886 | **1.886** |
+| p2p | Inductive Miner | none | 14,671 | 9,543 | 1.394 | 1.396 | 1.486 | 1.404 | 1.403 | **1.403** |
+| order-mgmt | OC-DFG | none | 21,008 | 10,840 | 3.282 | 3.170 | 3.174 | 3.105 | 3.253 | **3.174** |
+| order-mgmt | Inductive Miner | none | 21,008 | 10,840 | 4.485 | 4.456 | 4.553 | 4.381 | 4.537 | **4.485** |
+| container | OC-DFG | none | 35,372 | 13,882 | 3.382 | 3.361 | 3.410 | 3.422 | 3.520 | **3.410** |
+| container | Inductive Miner | none | 35,372 | 13,882 | 2.439 | 2.445 | 2.454 | 2.468 | 2.463 | **2.454** |
+| aoe2 | OC-DFG | top 80% activities / 90% objects | 1,204,066 | 308,295 | 117.451 | 116.754 | 120.701 | 118.750 | 118.566 | **118.566** |
+| aoe2 | Inductive Miner | top 80% activities / 90% objects | 1,204,066 | 308,295 | 68.952 | 70.249 | 70.437 | 70.214 | 70.854 | **70.249** |
+| steel | Inductive Miner | exclude 87 object types + 587 activities | 557,063 | 66,349 | 55.718 | 38.956 | 57.457 | 39.857 | 38.959 | **39.857** ⚠️ bimodal |
+| hinge | OC-DFG | none | 38,528 | 23,771 | 4.989 | 4.735 | 4.909 | 4.859 | 4.753 | **4.859** |
+| hinge | Inductive Miner | none | 38,528 | 23,771 | 8.729 | 8.849 | 8.868 | 8.937 | 8.728 | **8.849** |
+
+</details>
