@@ -1,0 +1,548 @@
+---
+/**
+ * Grouped horizontal bar chart used on the Benchmarks page.
+ *
+ * One chart per benchmark group: every log variant is a category on the y-axis
+ * and every file format / algorithm is a series. Wide value ranges use a
+ * logarithmic x-axis. Titles and the legend stay as real HTML so the chart still
+ * says what it is with JavaScript disabled; the numbers live in the tables too.
+ */
+
+export interface Bar {
+	/** Series key; must match one of `series[].key` when `series` is given. */
+	key?: string;
+	/** Median runtime. `null` renders as "not run" with no bar. */
+	value: number | null;
+}
+
+export interface Group {
+	label: string;
+	sublabel?: string;
+	bars: Bar[];
+}
+
+export interface Panel {
+	/** Caption under this panel's own x-axis, e.g. "seconds". */
+	label?: string;
+	/** The series drawn in this panel. Omit for a single-series panel. */
+	series?: { key: string; label: string }[];
+	/** Logarithmic x-axis, for value ranges spanning orders of magnitude. */
+	axis?: "linear" | "log";
+	/** "time" formats seconds, "count" formats whole numbers. */
+	format?: "time" | "count";
+	unit?: string;
+}
+
+interface Props {
+	title: string;
+	subtitle?: string;
+	/** The series being compared. Omit for a single-series chart. */
+	series?: { key: string; label: string }[];
+	groups: Group[];
+	unit?: string;
+	/** Logarithmic x-axis, for value ranges spanning orders of magnitude. */
+	axis?: "linear" | "log";
+	/** "time" formats seconds, "count" formats whole numbers. */
+	format?: "time" | "count";
+	/**
+	 * Two measures over the same categories — say a runtime and a row count —
+	 * drawn side by side as small multiples. Each panel keeps its own scale and
+	 * unit, which is what makes this honest: one shared axis would invite
+	 * comparing seconds against counts by bar length.
+	 */
+	panels?: Panel[];
+	note?: string;
+}
+
+const {
+	title,
+	subtitle,
+	series = [],
+	groups,
+	unit = "s",
+	axis = "linear",
+	format = "time",
+	panels,
+	note,
+} = Astro.props;
+
+/** Round down to a decade, up to the next 1/2/5 x 10^k. */
+const niceMin = (v: number) => 10 ** Math.floor(Math.log10(v));
+const niceMax = (v: number) => {
+	const decade = 10 ** Math.floor(Math.log10(v));
+	const step =
+		[1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find((s) => v <= s * decade) ?? 10;
+	return step * decade;
+};
+
+const fmt = (v: number, format: "time" | "count") =>
+	format === "count"
+		? v.toLocaleString("en-US")
+		: v >= 10
+			? v.toFixed(1)
+			: v >= 1
+				? v.toFixed(2)
+				: v.toFixed(3);
+const label = (v: number, format: "time" | "count", unit: string) =>
+	format === "count" ? fmt(v, format) : `${fmt(v, format)} ${unit}`;
+
+// One panel is the ordinary chart; the props for it live at the top level.
+const panelInput: Panel[] = panels ?? [{ series, axis, format, unit }];
+
+// Hues are handed out across the whole figure, not per panel, so every series
+// in the legend keeps its own colour even when it sits in another panel.
+let nextSlot = 0;
+
+const panelList = panelInput.map((p) => {
+	const pAxis = p.axis ?? "linear";
+	const pFormat = p.format ?? "time";
+	const pUnit = p.unit ?? "s";
+	const pSeries = (
+		p.series?.length ? p.series : [{ key: "__single", label: title }]
+	).map((s) => ({ ...s, slot: nextSlot++ }));
+
+	const barFor = (g: Group, key: string) =>
+		key === "__single" ? g.bars[0] : g.bars.find((b) => b.key === key);
+
+	const values = groups.flatMap((g) =>
+		pSeries
+			.map((s) => barFor(g, s.key)?.value)
+			.filter((v): v is number => v !== null && v !== undefined),
+	);
+
+	// Zeros are legitimate data (a filter that excluded no objects) but have no
+	// place on a log scale, so they sit out of the axis range and render at the
+	// origin with their own label.
+	const positive = values.filter((v) => v > 0);
+	const min = pAxis === "log" ? niceMin(Math.min(...positive)) : 0;
+	// A log axis ends on a decade so every tick label is a clean power of ten.
+	const max =
+		pAxis === "log"
+			? 10 ** Math.ceil(Math.log10(Math.max(...values)))
+			: niceMax(Math.max(...values));
+
+	return {
+		label: p.label,
+		axis: pAxis,
+		format: pFormat,
+		unit: pUnit,
+		min,
+		max,
+		series: pSeries.map((s) => ({
+			label: s.label,
+			slot: s.slot,
+			data: groups.map((g) => {
+				const bar = barFor(g, s.key);
+				// No entry at all means this series was never measured for this group
+				// (a log benchmarked in only one format) — draw nothing. An entry with
+				// an explicit null was in scope but not run, and says so.
+				if (!bar)
+					return { value: null, absent: true, display: null, exact: null };
+				const value = bar.value;
+				return {
+					value,
+					absent: false,
+					display: value === null ? null : label(value, pFormat, pUnit),
+					exact:
+						value === null
+							? null
+							: pFormat === "count"
+								? label(value, pFormat, pUnit)
+								: `${value.toFixed(3)} ${pUnit}`,
+				};
+			}),
+		})),
+	};
+});
+
+const chart = {
+	categories: groups.map((g) => ({ label: g.label, sublabel: g.sublabel })),
+	panels: panelList,
+};
+
+const legend = panelList.flatMap((p) => p.series);
+
+/** Row height per category, sized to the busiest panel's bars. */
+const rowBars = Math.max(...panelList.map((p) => p.series.length));
+const height =
+	groups.length * (rowBars * 15 + 22) +
+	34 +
+	(panelList.some((p) => p.label) ? 18 : 0);
+---
+
+{/* `not-content` opts out of Starlight's markdown spacing rules, which would
+    otherwise inject margins between the chart parts. */}
+<figure class="bmc not-content">
+	<figcaption class="bmc-head">
+		<span class="bmc-title">{title}</span>
+		{subtitle && <span class="bmc-subtitle">{subtitle}</span>}
+	</figcaption>
+
+	{
+		legend.length > 1 && (
+			<ul class="bmc-legend">
+				{legend.map((s) => (
+					<li>
+						<span class="bmc-swatch" style={`--c: var(--bmc-s${s.slot + 1});`} />
+						{s.label}
+					</li>
+				))}
+			</ul>
+		)
+	}
+
+	<div
+		class="bmc-plot"
+		data-bench-chart
+		data-chart={JSON.stringify(chart)}
+		style={`height: ${height}px;`}
+	>
+	</div>
+
+	<noscript>
+		<p class="bmc-note">
+			This chart needs JavaScript. Every value it shows is also in the tables on
+			this page.
+		</p>
+	</noscript>
+
+	{note && <p class="bmc-note">{note}</p>}
+</figure>
+
+<script>
+	import * as echarts from "echarts/core";
+	import { BarChart } from "echarts/charts";
+	import { GridComponent, TooltipComponent } from "echarts/components";
+	import { CanvasRenderer } from "echarts/renderers";
+
+	echarts.use([BarChart, GridComponent, TooltipComponent, CanvasRenderer]);
+
+	type Datum = {
+		value: number | null;
+		absent: boolean;
+		display: string | null;
+		exact: string | null;
+	};
+	type Panel = {
+		label?: string;
+		axis: "linear" | "log";
+		format: "time" | "count";
+		min: number;
+		max: number;
+		unit: string;
+		series: { label: string; slot: number; data: Datum[] }[];
+	};
+	type Chart = {
+		categories: { label: string; sublabel?: string }[];
+		panels: Panel[];
+	};
+
+	/** Categorical slots 1–4 of the validated palette, stepped per mode. */
+	const THEMES = {
+		light: {
+			series: ["#2a78d6", "#eb6834", "#1baf7a", "#eda100"],
+			ink: "#17181c",
+			muted: "#5c5f6b",
+			grid: "#e6e7ea",
+			surface: "#ffffff",
+			tooltipBorder: "rgba(23, 24, 28, 0.12)",
+		},
+		dark: {
+			series: ["#3987e5", "#d95926", "#199e70", "#c98500"],
+			ink: "#ffffff",
+			muted: "#9599a5",
+			grid: "#2c2e35",
+			surface: "#1c1e24",
+			tooltipBorder: "rgba(255, 255, 255, 0.14)",
+		},
+	} as const;
+
+	const currentTheme = () =>
+		document.documentElement.dataset.theme === "light" ? "light" : "dark";
+
+	const buildOption = (chart: Chart, mode: "light" | "dark") => {
+		const t = THEMES[mode];
+		const n = chart.panels.length;
+		const bottom = chart.panels.some((p) => p.label) ? 42 : 24;
+		// The right-hand gutter holds the value labels at the bar ends; counts run
+		// to seven digits and need a little more of it than seconds do.
+		const gutter = chart.panels[n - 1].format === "count" ? 66 : 58;
+
+		// ECharts anchors bars at the axis zero, which on a native log axis is
+		// 1 s — meaningless here. So plot decades-above-the-axis-start on a linear
+		// axis: the baseline lands on the axis start, and the tick labels are
+		// formatted back into real times.
+		const view = chart.panels.map((p) => {
+			const isLog = p.axis === "log";
+			const base = isLog ? Math.log10(p.min) : 0;
+			// A zero has no log; park it on the origin so its label still shows.
+			const toX = (v: number) =>
+				isLog ? (v > 0 ? Math.log10(v) - base : 0) : v;
+			const fromX = (x: number) => (isLog ? 10 ** (x + base) : x);
+			const axisLabel = (x: number) => {
+				// 10 ** n reintroduces float noise (5e6 comes back as 4.999…e6).
+				const v = Number(fromX(x).toPrecision(6));
+				if (p.format === "count") {
+					if (v >= 1_000_000) return `${v / 1_000_000}M`;
+					if (v >= 1_000) return `${v / 1_000}k`;
+					return `${v}`;
+				}
+				return `${v >= 1 ? v : Number(v.toPrecision(2))} ${p.unit}`;
+			};
+			return { isLog, toX, axisLabel };
+		});
+
+		// Panels split the width evenly. Only the first one carries the category
+		// labels; the others start a slice further in, which leaves the panel
+		// before them room for its value labels.
+		const share = 100 / n;
+		const grid = chart.panels.map((_, i) => ({
+			left: i === 0 ? 2 : `${share * i + 2}%`,
+			right: i === n - 1 ? gutter : `${share * (n - 1 - i) + 6}%`,
+			top: 4,
+			bottom,
+			containLabel: true,
+		}));
+
+		// Flat series order, so a tooltip can find its panel back from an index.
+		const flat = chart.panels.flatMap((p, i) =>
+			p.series.map((s) => ({ panel: p, index: i, series: s })),
+		);
+
+		return {
+			animation: false,
+			grid,
+			tooltip: {
+				trigger: "item",
+				backgroundColor: t.surface,
+				borderColor: t.tooltipBorder,
+				borderWidth: 1,
+				padding: [6, 9],
+				textStyle: { color: t.ink, fontSize: 12 },
+				formatter: (p: { seriesIndex: number; dataIndex: number }) => {
+					const s = flat[p.seriesIndex].series;
+					const d = s.data[p.dataIndex];
+					const cat = chart.categories[p.dataIndex];
+					return `${cat.label} · ${s.label}<br/><strong>${
+						d.exact ?? "not run"
+					}</strong>`;
+				},
+			},
+			xAxis: chart.panels.map((p, i) => ({
+				gridIndex: i,
+				type: "value",
+				min: 0,
+				max: view[i].toX(p.max),
+				interval: view[i].isLog ? 1 : undefined,
+				name: p.label,
+				nameLocation: "middle",
+				nameGap: 26,
+				nameTextStyle: { color: t.muted, fontSize: 11 },
+				axisLine: { show: false },
+				axisTick: { show: false },
+				axisLabel: {
+					color: t.muted,
+					fontSize: 11,
+					formatter: view[i].axisLabel,
+				},
+				splitLine: { lineStyle: { color: t.grid, width: 1, type: "solid" } },
+			})),
+			yAxis: chart.panels.map((_, i) => ({
+				gridIndex: i,
+				type: "category",
+				inverse: true,
+				data: chart.categories.map((c) => c.label),
+				axisLine: { show: false },
+				axisTick: { show: false },
+				axisLabel: {
+					// The category names belong to the whole row, so only the leftmost
+					// panel prints them.
+					show: i === 0,
+					margin: 12,
+					formatter: (value: string, index: number) => {
+						const sub = chart.categories[index]?.sublabel;
+						return sub ? `{a|${value}}\n{b|${sub}}` : `{a|${value}}`;
+					},
+					rich: {
+						a: { color: t.ink, fontSize: 12, fontWeight: 600, align: "right" },
+						b: {
+							color: t.muted,
+							fontSize: 10.5,
+							align: "right",
+							padding: [3, 0, 0, 0],
+						},
+					},
+				},
+			})),
+			series: flat.map(({ panel, index, series: s }) => ({
+				type: "bar",
+				xAxisIndex: index,
+				yAxisIndex: index,
+				barWidth: 9,
+				barGap: "35%",
+				barCategoryGap: "38%",
+				data: s.data.map((d) => {
+					// Never measured: no bar, no label, no row of its own.
+					if (d.absent) return { value: null, label: { show: false } };
+					// A null bar is pinned to the axis origin so its "not run" label
+					// still lands in the right row instead of leaving a silent gap.
+					// A zero lands there too, but keeps its real "0" label.
+					const empty = d.value === null || d.value === 0;
+					return {
+						value: view[index].toX(d.value ?? panel.min),
+						itemStyle: {
+							color: empty ? "transparent" : t.series[s.slot % t.series.length],
+							borderRadius: [0, 3, 3, 0],
+						},
+						label: {
+							show: true,
+							position: "right",
+							distance: empty ? 2 : 7,
+							color: empty ? t.muted : t.ink,
+							fontStyle: d.value === null ? "italic" : "normal",
+							fontSize: 11.5,
+							formatter: d.display ?? "not run",
+						},
+					};
+				}),
+			})),
+		};
+	};
+
+	const charts: { instance: ReturnType<typeof echarts.init>; chart: Chart }[] =
+		[];
+
+	const render = () => {
+		const mode = currentTheme();
+		for (const { instance, chart } of charts) {
+			instance.setOption(buildOption(chart, mode), true);
+		}
+	};
+
+	const init = () => {
+		for (const el of document.querySelectorAll<HTMLElement>(
+			"[data-bench-chart]",
+		)) {
+			if (el.dataset.benchReady) continue;
+			el.dataset.benchReady = "true";
+			const chart = JSON.parse(el.dataset.chart ?? "{}") as Chart;
+			charts.push({ instance: echarts.init(el, null, { renderer: "canvas" }), chart });
+		}
+		if (!charts.length) return;
+		render();
+
+		const resize = new ResizeObserver(() => {
+			for (const { instance } of charts) instance.resize();
+		});
+		for (const { instance } of charts) {
+			const dom = instance.getDom();
+			if (dom) resize.observe(dom);
+		}
+
+		// Starlight's theme toggle flips data-theme on <html>; re-render on it.
+		new MutationObserver(render).observe(document.documentElement, {
+			attributes: true,
+			attributeFilter: ["data-theme"],
+		});
+	};
+
+	init();
+	// Starlight ships view transitions, so re-run after client-side navigation.
+	document.addEventListener("astro:page-load", init);
+</script>
+
+<style>
+	.bmc {
+		--bmc-s1: #2a78d6;
+		--bmc-s2: #eb6834;
+		--bmc-s3: #1baf7a;
+		--bmc-s4: #eda100;
+		--bmc-ink: #17181c;
+		--bmc-muted: #5c5f6b;
+		--bmc-hairline: rgba(23, 24, 28, 0.1);
+
+		margin: 1.75rem 0;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		:root:where(:not([data-theme="light"])) .bmc {
+			--bmc-s1: #3987e5;
+			--bmc-s2: #d95926;
+			--bmc-s3: #199e70;
+			--bmc-s4: #c98500;
+			--bmc-ink: #ffffff;
+			--bmc-muted: #9599a5;
+			--bmc-hairline: rgba(255, 255, 255, 0.1);
+		}
+	}
+
+	:root[data-theme="dark"] .bmc {
+		--bmc-s1: #3987e5;
+		--bmc-s2: #d95926;
+		--bmc-s3: #199e70;
+		--bmc-s4: #c98500;
+		--bmc-ink: #ffffff;
+		--bmc-muted: #9599a5;
+		--bmc-hairline: rgba(255, 255, 255, 0.1);
+	}
+
+	.bmc-head {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+		margin-bottom: 0.6rem;
+	}
+
+	.bmc-title {
+		font-size: 0.95rem;
+		font-weight: 600;
+		color: var(--bmc-ink);
+		line-height: 1.35;
+	}
+
+	.bmc-subtitle {
+		font-size: 0.8rem;
+		color: var(--bmc-muted);
+		line-height: 1.45;
+	}
+
+	.bmc-legend {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.35rem 1rem;
+		margin: 0 0 0.75rem;
+		padding: 0;
+		list-style: none;
+		font-size: 0.78rem;
+		color: var(--bmc-muted);
+	}
+
+	.bmc-legend li {
+		display: flex;
+		align-items: center;
+		gap: 0.4rem;
+		margin: 0;
+	}
+
+	.bmc-swatch {
+		width: 0.7rem;
+		height: 0.7rem;
+		border-radius: 0.2rem;
+		background: var(--c);
+		flex: none;
+	}
+
+	.bmc-plot {
+		width: 100%;
+		border: 1px solid var(--bmc-hairline);
+		border-radius: 0.5rem;
+		padding: 0.5rem 0.4rem;
+	}
+
+	.bmc-note {
+		margin: 0.6rem 0 0;
+		font-size: 0.78rem;
+		color: var(--bmc-muted);
+		line-height: 1.5;
+	}
+</style>
