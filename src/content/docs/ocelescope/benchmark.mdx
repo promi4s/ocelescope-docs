@@ -1,6 +1,6 @@
 ---
 title: Benchmarks
-description: Measured runtimes for importing, exporting, filtering, and discovery on public OCEL logs.
+description: Measured runtimes for importing, exporting, filtering, and discovery on public OCEL logs, plus a memory comparison against pm4py.
 ---
 
 import BenchmarkChart from '../../../components/BenchmarkChart.astro';
@@ -8,6 +8,8 @@ import BenchmarkChart from '../../../components/BenchmarkChart.astro';
 Measured runtimes for the core operations of the Ocelescope base tool on public object-centric event logs: **import**, **export**, **filtering**, and **discovery**.
 
 Each configuration was run 5 times on the machine below, and the reported value is the median in seconds. Charts show these medians; the complete per-run numbers are in the **All runs** table under each section.
+
+A separate suite at the end of this page compares the `ocelescope` **library** against [pm4py](https://pm4py.fit.fraunhofer.de/).
 
 ## Environment
 
@@ -307,3 +309,241 @@ The *Events* and *Objects* columns are the size of the log **after** the pre-fil
 | hinge | Inductive Miner | none | 38,528 | 23,771 | 8.729 | 8.849 | 8.868 | 8.937 | 8.728 | **8.849** |
 
 </details>
+
+## Comparison with pm4py
+
+The sections above measure the base tool. This one measures the [`ocelescope` library](/ocelescope/ocelescope-library/) on its own, against [pm4py](https://pm4py.fit.fraunhofer.de/) doing the same three things to the same files: **import**, **filtering**, and **export**. The logs are **container**, **order-mgmt**, and **aoe2** from the table at the top of the page.
+
+The two libraries hold a log differently, and that is what the numbers are about. pm4py keeps every table as an in-memory pandas DataFrame. `ocelescope` keeps the log in a DuckDB database and reshapes DataFrames out of it only when something asks for them, so what a log costs in RAM is decoupled from what it costs to work with. Both readers `OCEL.read` offers are measured: the default `variant="r4pm"` and `variant="streamed"`. `.sqlite` logs always stream, so they have no separate `r4pm` row.
+
+### Setup
+
+| | |
+|---|---|
+| **ocelescope** | 0.6.0 |
+| **pm4py** | 2.7.23.4 |
+| **Python** | 3.13.11 |
+| **Kernel** | 7.1.8-arch1-3, x86_64 |
+| **Runs per case** | 3 |
+
+Time is the fastest of the three runs and RAM the highest peak, rather than the median-of-five used earlier on the page. The suite that produced these numbers is at [promi4s/ocelescope-library-benchmarks](https://github.com/promi4s/ocelescope-library-benchmarks).
+
+### Import memory
+
+<BenchmarkChart
+  title="Peak RAM above baseline while importing"
+  subtitle="Three readers per log and format. Lower is better."
+  axis="log"
+  format="size"
+  note="Logarithmic axis: bar length is not proportional to the value. Sub-gigabyte differences between the small logs are real but visually compressed."
+  series={[
+    { key: "streamed", label: "ocelescope (streamed)" },
+    { key: "r4pm", label: "ocelescope (r4pm)" },
+    { key: "pm4py", label: "pm4py" },
+  ]}
+  groups={[
+    { label: "container", sublabel: "json", bars: [
+      { key: "streamed", value: 122.6 }, { key: "r4pm", value: 201.8 }, { key: "pm4py", value: 160.1 },
+    ]},
+    { label: "container", sublabel: "xml", bars: [
+      { key: "streamed", value: 133.5 }, { key: "r4pm", value: 227.1 }, { key: "pm4py", value: 163.5 },
+    ]},
+    { label: "container", sublabel: "sqlite", bars: [
+      { key: "streamed", value: 125.8 }, { key: "pm4py", value: 122.9 },
+    ]},
+    { label: "order-mgmt", sublabel: "json", bars: [
+      { key: "streamed", value: 138.1 }, { key: "r4pm", value: 222.8 }, { key: "pm4py", value: 208.9 },
+    ]},
+    { label: "order-mgmt", sublabel: "xml", bars: [
+      { key: "streamed", value: 149.3 }, { key: "r4pm", value: 243.0 }, { key: "pm4py", value: 209.1 },
+    ]},
+    { label: "order-mgmt", sublabel: "sqlite", bars: [
+      { key: "streamed", value: 126.6 }, { key: "pm4py", value: 126.5 },
+    ]},
+    { label: "aoe2", sublabel: "json", bars: [
+      { key: "streamed", value: 925.4 }, { key: "r4pm", value: 6429.6 }, { key: "pm4py", value: 6433.4 },
+    ]},
+    { label: "aoe2", sublabel: "xml", bars: [
+      { key: "streamed", value: 2226.6 }, { key: "r4pm", value: 6428.6 }, { key: "pm4py", value: 6433.8 },
+    ]},
+    { label: "aoe2", sublabel: "sqlite", bars: [
+      { key: "streamed", value: 979.7 }, { key: "pm4py", value: 6657.1 },
+    ]},
+  ]}
+/>
+
+### Import time
+
+<BenchmarkChart
+  title="Import wall time by reader"
+  subtitle="Fastest of three runs."
+  axis="log"
+  note="Logarithmic time axis: bar length is not proportional to the value."
+  series={[
+    { key: "streamed", label: "ocelescope (streamed)" },
+    { key: "r4pm", label: "ocelescope (r4pm)" },
+    { key: "pm4py", label: "pm4py" },
+  ]}
+  groups={[
+    { label: "container", sublabel: "json", bars: [
+      { key: "streamed", value: 0.377 }, { key: "r4pm", value: 0.260 }, { key: "pm4py", value: 0.117 },
+    ]},
+    { label: "container", sublabel: "xml", bars: [
+      { key: "streamed", value: 0.450 }, { key: "r4pm", value: 0.220 }, { key: "pm4py", value: 0.136 },
+    ]},
+    { label: "container", sublabel: "sqlite", bars: [
+      { key: "streamed", value: 0.137 }, { key: "pm4py", value: 0.870 },
+    ]},
+    { label: "order-mgmt", sublabel: "json", bars: [
+      { key: "streamed", value: 0.494 }, { key: "r4pm", value: 0.300 }, { key: "pm4py", value: 0.151 },
+    ]},
+    { label: "order-mgmt", sublabel: "xml", bars: [
+      { key: "streamed", value: 0.503 }, { key: "r4pm", value: 0.231 }, { key: "pm4py", value: 0.164 },
+    ]},
+    { label: "order-mgmt", sublabel: "sqlite", bars: [
+      { key: "streamed", value: 0.153 }, { key: "pm4py", value: 0.762 },
+    ]},
+    { label: "aoe2", sublabel: "json", bars: [
+      { key: "streamed", value: 33.86 }, { key: "r4pm", value: 16.49 }, { key: "pm4py", value: 9.31 },
+    ]},
+    { label: "aoe2", sublabel: "xml", bars: [
+      { key: "streamed", value: 36.38 }, { key: "r4pm", value: 9.68 }, { key: "pm4py", value: 8.49 },
+    ]},
+    { label: "aoe2", sublabel: "sqlite", bars: [
+      { key: "streamed", value: 7.38 }, { key: "pm4py", value: 63.29 },
+    ]},
+  ]}
+/>
+
+<details>
+<summary><strong>All runs</strong></summary>
+
+Wall time per run, in seconds:
+
+| Log | Format | Reader | Run 1 | Run 2 | Run 3 | **Best** |
+|---|---|---|---:|---:|---:|---:|
+| container | json | ocelescope (streamed) | 0.377 | 0.393 | 0.393 | **0.377** |
+| container | json | ocelescope (r4pm) | 0.324 | 0.261 | 0.260 | **0.260** |
+| container | json | pm4py | 0.121 | 0.117 | 0.118 | **0.117** |
+| container | xml | ocelescope (streamed) | 0.450 | 0.454 | 0.457 | **0.450** |
+| container | xml | ocelescope (r4pm) | 0.234 | 0.220 | 0.226 | **0.220** |
+| container | xml | pm4py | 0.136 | 0.146 | 0.140 | **0.136** |
+| container | sqlite | ocelescope (streamed) | 0.137 | 0.144 | 0.139 | **0.137** |
+| container | sqlite | pm4py | 0.896 | 0.901 | 0.870 | **0.870** |
+| order-mgmt | json | ocelescope (streamed) | 0.514 | 0.494 | 0.531 | **0.494** |
+| order-mgmt | json | ocelescope (r4pm) | 0.308 | 0.312 | 0.300 | **0.300** |
+| order-mgmt | json | pm4py | 0.158 | 0.151 | 0.152 | **0.151** |
+| order-mgmt | xml | ocelescope (streamed) | 0.503 | 0.529 | 0.514 | **0.503** |
+| order-mgmt | xml | ocelescope (r4pm) | 0.239 | 0.231 | 0.239 | **0.231** |
+| order-mgmt | xml | pm4py | 0.167 | 0.164 | 0.166 | **0.164** |
+| order-mgmt | sqlite | ocelescope (streamed) | 0.157 | 0.155 | 0.153 | **0.153** |
+| order-mgmt | sqlite | pm4py | 0.764 | 0.762 | 0.771 | **0.762** |
+| aoe2 | json | ocelescope (streamed) | 33.97 | 34.22 | 33.86 | **33.86** |
+| aoe2 | json | ocelescope (r4pm) | 16.49 | 16.76 | 16.88 | **16.49** |
+| aoe2 | json | pm4py | 9.53 | 9.31 | 9.69 | **9.31** |
+| aoe2 | xml | ocelescope (streamed) | 36.91 | 36.38 | 36.96 | **36.38** |
+| aoe2 | xml | ocelescope (r4pm) | 9.71 | 9.78 | 9.68 | **9.68** |
+| aoe2 | xml | pm4py | 8.57 | 8.55 | 8.49 | **8.49** |
+| aoe2 | sqlite | ocelescope (streamed) | 7.38 | 7.42 | 7.57 | **7.38** |
+| aoe2 | sqlite | pm4py | 63.41 | 63.44 | 63.29 | **63.29** |
+
+Peak RAM above baseline per run, in MB:
+
+| Log | Format | Reader | Run 1 | Run 2 | Run 3 | **Max** | Retained |
+|---|---|---|---:|---:|---:|---:|---:|
+| container | json | ocelescope (streamed) | 118 | 119 | 123 | **123** | 124 |
+| container | json | ocelescope (r4pm) | 200 | 202 | 200 | **202** | 203 |
+| container | json | pm4py | 158 | 159 | 160 | **160** | 161 |
+| container | xml | ocelescope (streamed) | 132 | 132 | 134 | **134** | 121 |
+| container | xml | ocelescope (r4pm) | 216 | 206 | 227 | **227** | 215 |
+| container | xml | pm4py | 163 | 158 | 160 | **163** | 164 |
+| container | sqlite | ocelescope (streamed) | 118 | 118 | 126 | **126** | 127 |
+| container | sqlite | pm4py | 123 | 123 | 123 | **123** | 102 |
+| order-mgmt | json | ocelescope (streamed) | 138 | 134 | 134 | **138** | 138 |
+| order-mgmt | json | ocelescope (r4pm) | 216 | 211 | 223 | **223** | 224 |
+| order-mgmt | json | pm4py | 209 | 203 | 207 | **209** | 197 |
+| order-mgmt | xml | ocelescope (streamed) | 149 | 142 | 139 | **149** | 134 |
+| order-mgmt | xml | ocelescope (r4pm) | 241 | 226 | 243 | **243** | 229 |
+| order-mgmt | xml | pm4py | 209 | 209 | 208 | **209** | 198 |
+| order-mgmt | sqlite | ocelescope (streamed) | 127 | 120 | 112 | **127** | 128 |
+| order-mgmt | sqlite | pm4py | 126 | 126 | 126 | **126** | 119 |
+| aoe2 | json | ocelescope (streamed) | 925 | 874 | 909 | **925** | 913 |
+| aoe2 | json | ocelescope (r4pm) | 6,427 | 6,426 | 6,430 | **6,430** | 1,789 |
+| aoe2 | json | pm4py | 6,432 | 6,429 | 6,433 | **6,433** | 3,814 |
+| aoe2 | xml | ocelescope (streamed) | 2,159 | 2,171 | 2,227 | **2,227** | 926 |
+| aoe2 | xml | ocelescope (r4pm) | 6,428 | 6,426 | 6,429 | **6,429** | 2,455 |
+| aoe2 | xml | pm4py | 6,431 | 6,434 | 6,431 | **6,434** | 3,818 |
+| aoe2 | sqlite | ocelescope (streamed) | 980 | 978 | 975 | **980** | 980 |
+| aoe2 | sqlite | pm4py | 6,657 | 6,657 | 6,657 | **6,657** | 4,036 |
+
+</details>
+
+### Filtering
+
+All on aoe2, both libraries starting from the same sqlite log. The log is loaded once per library and **only the filter call is timed**, so import cost stays out of the numbers.
+
+| Filter | ocelescope | pm4py |
+|---|---|---|
+| `activity` | `EventTypeFilter` | `filter_ocel_event_attribute` |
+| `object-type` | `ObjectTypeFilter` | `filter_ocel_object_types` |
+| `timeframe` | `TimeFrameFilter` | `filter_ocel_events_timestamp` |
+
+`activity` keeps every activity at least as frequent as *Start Build Farm*, `object-type` keeps Villager / Farm / House, `timeframe` keeps 2023-11-30 to 2023-12-14.
+
+<BenchmarkChart
+  title="Filter time on aoe2"
+  subtitle="Fastest of three runs, filter call only."
+  series={[
+    { key: "ocelescope", label: "ocelescope" },
+    { key: "pm4py", label: "pm4py" },
+  ]}
+  groups={[
+    { label: "activity", bars: [
+      { key: "ocelescope", value: 1.97 }, { key: "pm4py", value: 7.65 },
+    ]},
+    { label: "object-type", bars: [
+      { key: "ocelescope", value: 1.62 }, { key: "pm4py", value: 8.12 },
+    ]},
+    { label: "timeframe", bars: [
+      { key: "ocelescope", value: 1.81 }, { key: "pm4py", value: 8.83 },
+    ]},
+  ]}
+/>
+
+<details>
+<summary><strong>All timings</strong></summary>
+
+| Filter | Engine | Time |
+|---|---|---:|
+| activity | ocelescope | **1.97 s** |
+| activity | pm4py | 7.65 s |
+| object-type | ocelescope | **1.62 s** |
+| object-type | pm4py | 8.12 s |
+| timeframe | ocelescope | **1.81 s** |
+| timeframe | pm4py | 8.83 s |
+
+</details>
+
+### Export
+
+Also aoe2, also loaded from sqlite, with the clock starting once the log is instantiated. Each library writes all three formats.
+
+<BenchmarkChart
+  title="Export time by format on aoe2"
+  subtitle="Fastest of three runs."
+  series={[
+    { key: "ocelescope", label: "ocelescope" },
+    { key: "pm4py", label: "pm4py" },
+  ]}
+  groups={[
+    { label: "sqlite", bars: [
+      { key: "ocelescope", value: 12.2 }, { key: "pm4py", value: 45.2 },
+    ]},
+    { label: "jsonocel", bars: [
+      { key: "ocelescope", value: 14.9 }, { key: "pm4py", value: 151.2 },
+    ]},
+    { label: "xmlocel", bars: [
+      { key: "ocelescope", value: 62.9 }, { key: "pm4py", value: 142.5 },
+    ]},
+  ]}
+/>

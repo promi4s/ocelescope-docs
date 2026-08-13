@@ -28,8 +28,8 @@ export interface Panel {
 	series?: { key: string; label: string }[];
 	/** Logarithmic x-axis, for value ranges spanning orders of magnitude. */
 	axis?: "linear" | "log";
-	/** "time" formats seconds, "count" formats whole numbers. */
-	format?: "time" | "count";
+	/** "time" seconds, "count" whole numbers, "size" megabytes carrying their own unit. */
+	format?: "time" | "count" | "size";
 	unit?: string;
 }
 
@@ -42,8 +42,8 @@ interface Props {
 	unit?: string;
 	/** Logarithmic x-axis, for value ranges spanning orders of magnitude. */
 	axis?: "linear" | "log";
-	/** "time" formats seconds, "count" formats whole numbers. */
-	format?: "time" | "count";
+	/** "time" seconds, "count" whole numbers, "size" megabytes carrying their own unit. */
+	format?: "time" | "count" | "size";
 	/**
 	 * Two measures over the same categories — say a runtime and a row count —
 	 * drawn side by side as small multiples. Each panel keeps its own scale and
@@ -75,16 +75,25 @@ const niceMax = (v: number) => {
 	return step * decade;
 };
 
-const fmt = (v: number, format: "time" | "count") =>
+type Format = "time" | "count" | "size";
+
+// Sizes come in as megabytes and print their own unit, so a chart can mix a
+// 120 MB baseline with a 6 GB peak without either end losing its scale.
+const fmtSize = (v: number) =>
+	v >= 1000 ? `${(v / 1000).toFixed(2)} GB` : `${Math.round(v)} MB`;
+
+const fmt = (v: number, format: Format) =>
 	format === "count"
 		? v.toLocaleString("en-US")
-		: v >= 10
-			? v.toFixed(1)
-			: v >= 1
-				? v.toFixed(2)
-				: v.toFixed(3);
-const label = (v: number, format: "time" | "count", unit: string) =>
-	format === "count" ? fmt(v, format) : `${fmt(v, format)} ${unit}`;
+		: format === "size"
+			? fmtSize(v)
+			: v >= 10
+				? v.toFixed(1)
+				: v >= 1
+					? v.toFixed(2)
+					: v.toFixed(3);
+const label = (v: number, format: Format, unit: string) =>
+	format === "time" ? `${fmt(v, format)} ${unit}` : fmt(v, format);
 
 // One panel is the ordinary chart; the props for it live at the top level.
 const panelInput: Panel[] = panels ?? [{ series, axis, format, unit }];
@@ -146,9 +155,9 @@ const panelList = panelInput.map((p) => {
 					exact:
 						value === null
 							? null
-							: pFormat === "count"
-								? label(value, pFormat, pUnit)
-								: `${value.toFixed(3)} ${pUnit}`,
+							: pFormat === "time"
+								? `${value.toFixed(3)} ${pUnit}`
+								: label(value, pFormat, pUnit),
 				};
 			}),
 		})),
@@ -226,7 +235,7 @@ const height =
 	type Panel = {
 		label?: string;
 		axis: "linear" | "log";
-		format: "time" | "count";
+		format: "time" | "count" | "size";
 		min: number;
 		max: number;
 		unit: string;
@@ -287,6 +296,10 @@ const height =
 					if (v >= 1_000) return `${v / 1_000}k`;
 					return `${v}`;
 				}
+				// Ticks land on round numbers, so sizes drop the decimals the bar
+				// labels keep: "1 GB", not "1.00 GB".
+				if (p.format === "size")
+					return v >= 1000 ? `${v / 1000} GB` : `${v} MB`;
 				return `${v >= 1 ? v : Number(v.toPrecision(2))} ${p.unit}`;
 			};
 			return { isLog, toX, axisLabel };
