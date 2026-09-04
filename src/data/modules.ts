@@ -108,6 +108,21 @@ export const modules: Module[] = [
 				href: "https://pypi.org/project/ocelescope-module-filter/",
 			},
 		],
+  },
+  {
+		name: "Variants",
+		image: "variants",
+		description:
+			"Inspeact case-centric variants and export them as XES.",
+		source,
+		links: [
+			{
+				kind: "npm",
+				label: "Frontend package",
+				name: "@ocelescope/variants",
+				href: "https://www.npmjs.com/package/@ocelescope/variants",
+			},
+		],
 	},
 	{
 		name: "Plugin",
