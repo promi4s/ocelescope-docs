@@ -68,7 +68,6 @@ export default defineConfig({
 						{ label: "Plugins", slug: "ocelescope/plugins" },
 						{ label: "Modules", slug: "ocelescope/modules" },
 						{ label: "Resources", slug: "ocelescope/resources" },
-						{ label: "Extensions", slug: "ocelescope/extensions" },
 						{
 							label: "Ocelescope Library",
 							slug: "ocelescope/ocelescope-library",

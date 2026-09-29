@@ -17,7 +17,7 @@ A plugin class contains:
     border-radius: 0.75rem;
   "
 >
-  ![Example of an Ocelescope plugin in code and in the app.](../../../assets/plugintouimapping.png)
+  ![A plugin class next to its card in the Ocelescope Plugin Overview. The class attributes label, description and version appear as the card's title, description and version number, and each @plugin_method, such as Discover PetriNet, appears as an entry in the card's Methods list.](../../../assets/plugin/PluginStructureToUIMap.png)
 </div>
 
 Each plugin package must export **exactly one** plugin class via its `__init__.py`.
@@ -54,13 +54,15 @@ __all__ = [
 Functions in Ocelescope are **object-centric process mining (OCPM)** operations. They consume and produce:
 
 - **OCELs** (`OCEL`), and/or
-- **OCPM artifacts**, exposed in Ocelescope as **resources** (e.g., `PetriNet`, custom resource types).
+- **OCPM artifacts**, exposed in Ocelescope as [**resources**](/ocelescope/resources/) (e.g., `PetriNet`, custom resource types).
 
 Functions are defined as **methods on the plugin class** and must be decorated with `@plugin_method`.  
 The **function signature** defines the interface:
 
 - **Inputs** are derived from the method parameters (type annotations determine expected resource types).
 - **Outputs** are derived from the return type annotation (including collections such as `list[Variant]`).
+
+![A plugin method next to its entry on the plugin's page in Ocelescope. The label and description from @plugin_method become the method's title and description, the OCEL parameter is shown as its input, and the DirectlyFollowsGraph return type is shown as its output.](../../../assets/plugin/MethodToUIMap.png)
 
 ```py title="Some example plugin methods"
 from ocelescope import OCEL, PetriNet, Plugin, plugin_method
