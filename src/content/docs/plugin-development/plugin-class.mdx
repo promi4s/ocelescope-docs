@@ -49,22 +49,19 @@ __all__ = [
 
 :::
 
-## Functions
+## Plugin Methods
 
-Functions in Ocelescope are **object-centric process mining (OCPM)** operations. They consume and produce:
+Plugin methods are the **object-centric process mining (OCPM)** operations a plugin offers.
+Each one is a method on the plugin class, decorated with `@plugin_method` from the `ocelescope` package.
 
-- **OCELs** (`OCEL`), and/or
-- **OCPM artifacts**, exposed in Ocelescope as [**resources**](/ocelescope/resources/) (e.g., `PetriNet`, custom resource types).
+A plugin method takes OCELs, [Resources](/ocelescope/resources/) (process mining artifacts such as Petri nets) and an optional configuration input, and returns OCELs and/or Resources.
+Ocelescope generates an input form from the method's signature and shows each returned value with its visualization.
 
-Functions are defined as **methods on the plugin class** and must be decorated with `@plugin_method`.  
-The **function signature** defines the interface:
+![A plugin method as a pipeline. Its inputs (OCELs, Resources and a configuration input) generate the method's input form, and its outputs (OCELs and Resources) are shown as visualizations in Ocelescope.](../../../assets/plugin/PluginMethodExample.png)
 
-- **Inputs** are derived from the method parameters (type annotations determine expected resource types).
-- **Outputs** are derived from the return type annotation (including collections such as `list[Variant]`).
+:::tip[Some example plugin methods]
 
-![A plugin method next to its entry on the plugin's page in Ocelescope. The label and description from @plugin_method become the method's title and description, the OCEL parameter is shown as its input, and the DirectlyFollowsGraph return type is shown as its output.](../../../assets/plugin/MethodToUIMap.png)
-
-```py title="Some example plugin methods"
+```py
 from ocelescope import OCEL, PetriNet, Plugin, plugin_method
 
 from .custom_resources import ConformanceResult, Variant
@@ -83,7 +80,7 @@ class DiscoveryPlugin(Plugin):
         label="Discover Variants",
         description="Discover variants",
     )
-    def discover_olpm(self, ocel: OCEL) -> list[Variant]: ...
+    def discover_variants(self, ocel: OCEL) -> list[Variant]: ...
 
     @plugin_method(
         label="Alignment-based Conformance",
@@ -96,31 +93,87 @@ class DiscoveryPlugin(Plugin):
     ) -> ConformanceResult: ...
 ```
 
-The function definitions (decorator metadata, parameter types, and return types) are used to **automatically generate an input form** in the frontend.
+:::
 
-:::tip[Metadata]
+### Input Definition
 
-In addition to the `@plugin_method` metadata, you can annotate input parameters with
-`ResourceAnnotation` and `OCELAnnotation` from the Ocelescope package to provide extra context - such as a **human-readable title** or **description** - for the function and its inputs.
+The parameters of a plugin method define its inputs. A method can take:
 
-<div
-  style="
-    display: inline-block;
-    background: white;
-    padding: 1rem;
-    border-radius: 0.75rem;
-  "
->
-  ![An example plugin usage of adding metadata](../../../assets/functionMetadata.png)
-</div>
+- any number of **OCELs**
+- any number of **Resources**
+- at most one **configuration input**
+
+Ocelescope builds the method's input form from these parameters, together with the label and description passed to `@plugin_method`.
+
+![A plugin method next to the input form Ocelescope generates for it. The @plugin_method label and description become the form's title and description, the annotated OCEL and PetriNet parameters become the "Event Log" and "Petri Net" selectors, and the fields of the ConformanceInput configuration class become the "Conformance metrics" field.](../../../assets/plugin/MethodFormMap.png)
+
+#### OCEL Inputs
+
+To accept an OCEL, type a parameter as `OCEL` from the `ocelescope` package. A method can take any number of them.
+
+By default the form uses the parameter name as the field label. To set a label and description, wrap the type in `Annotated` with an `OCELAnnotation`.
+To make an OCEL optional, type it as `OCEL | None` and give it a default of `None`.
+
+![Three OCEL parameters next to the form fields they produce. A plain OCEL parameter is shown under its parameter name, an annotated one with its label and description, and an optional one without the required marker and with a clear button.](../../../assets/plugin/OCELInput.png)
+
+:::tip[Example OCEL inputs]
+
+```py
+from typing import Annotated
+
+from ocelescope import OCEL, OCELAnnotation, plugin_method
+
+@plugin_method(label="OCEL input example")
+def ocel_input_example(
+    self,
+    ocel_basic: OCEL,
+    ocel_annotated: Annotated[
+        OCEL,
+        OCELAnnotation(
+            label="Annotated OCEL",
+            description="An OCEL with a label and description",
+        ),
+    ],
+    ocel_optional: Annotated[
+        OCEL | None, OCELAnnotation(label="An optional OCEL")
+    ] = None,
+) -> OCEL: ...
+```
 
 :::
 
-### Configuration Inputs
+#### Resource Inputs
+
+Resources represent process mining artifacts such as Petri nets or directly-follows graphs. A method can take any number of Resources, of the same or different types.
+
+You can use the Resources the `ocelescope` package already provides or [define your own](/ocelescope/resources/).
+They work like OCEL inputs: annotate them with `ResourceAnnotation` to set a label and description, and use `| None = None` to make them optional.
+
+:::tip[Example Resource inputs]
+
+```py
+from typing import Annotated
+
+from ocelescope import DirectlyFollowsGraph, PetriNet, ResourceAnnotation, plugin_method
+
+@plugin_method(label="Resource input example")
+def resource_input_example(
+    self,
+    resource_basic: PetriNet,
+    resource_annotated: Annotated[
+        DirectlyFollowsGraph, ResourceAnnotation(label="An annotated DFG input")
+    ],
+    resource_optional: PetriNet | None = None,
+) -> PetriNet: ...
+```
+
+:::
+
+#### Configuration Inputs
 
 In addition to `Resource` and `OCEL` parameters, a plugin method can define **one extra configuration parameter** of type `PluginInput`.
 
-Use a `PluginInput` when your method needs **user-provided settings** - for example:
+Use a `PluginInput` when your method needs **user-provided settings**, for example:
 
 - a **noise threshold** between `0` and `1`
 - selecting a **leading object type** for computing process executions
@@ -178,8 +231,8 @@ class Input(PluginInput):
 
     string_field: str = Field(
         default="id_1",
-        pattern="id_*",
-        max_digits=10,
+        pattern=r"^id_",
+        max_length=10,
         description="A string that has to start with id_",
     )
 
@@ -205,7 +258,7 @@ class MinimalPlugin(Plugin):
 
 #### OCEL Fields
 
-OCEL fields let you populate configuration inputs with values taken directly from the selected OCEL log - for example:
+OCEL fields let you populate configuration inputs with values taken directly from the selected OCEL, for example:
 
 - available **object types**
 - available **event types / activities**
@@ -267,7 +320,7 @@ class MinimalPlugin(Plugin):
 
 Computed inputs are fields whose available values are generated dynamically from the **current state of the input form**.
 
-They are useful when the options depend on what the user has already entered - for example, generating a list of values based on a prefix, or filtering choices based on earlier selections.
+They are useful when the options depend on what the user has already entered, for example, generating a list of values based on a prefix, or filtering choices based on earlier selections.
 
 Computed inputs are defined with `COMPUTED_SELECTION`. You provide the name of a **provider function** (as a string). Ocelescope calls that function whenever the user changes the form, and uses the returned list as the selectable values.
 
