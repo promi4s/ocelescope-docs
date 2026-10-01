@@ -363,3 +363,49 @@ class MinimalPlugin(Plugin):
 ```
 
 </details>
+
+### Output Definition
+
+The return type annotation of a plugin method defines its outputs. A method can return:
+
+- an **OCEL**, for example a filtered or enriched log
+- a **Resource**, such as a `PetriNet` or one of your own Resources
+- a **list** of OCELs or of Resources, for example `list[Variant]`
+- **several outputs at once**, written as a `tuple[...]` of the types above
+
+Ocelescope adds each returned OCEL to the available logs, and shows each returned Resource with its visualization.
+
+**Important:** The return type annotation is required, and it may only contain `OCEL`, `Resource` subclasses, `list[...]`, `T | None` and `tuple[...]`. Any other type raises a `TypeError` when the plugin is loaded.
+
+:::tip[Example outputs]
+
+```py
+from ocelescope import OCEL, PetriNet, Plugin, plugin_method
+
+from .custom_resources import ConformanceResult, Variant
+
+
+class ExamplePlugin(Plugin):
+    ...
+
+    # A single OCEL
+    @plugin_method(label="Filter Log")
+    def filter_log(self, ocel: OCEL) -> OCEL: ...
+
+    # A single Resource
+    @plugin_method(label="Discover Petri Net")
+    def discover_ocpn(self, ocel: OCEL) -> PetriNet: ...
+
+    # A list of Resources
+    @plugin_method(label="Discover Variants")
+    def discover_variants(self, ocel: OCEL) -> list[Variant]: ...
+
+    # Several outputs at once
+    @plugin_method(label="Discover and Check")
+    def discover_and_check(self, ocel: OCEL) -> tuple[PetriNet, ConformanceResult]:
+        petri_net = ...
+        result = ...
+        return petri_net, result
+```
+
+:::
