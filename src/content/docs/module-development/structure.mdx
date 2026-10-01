@@ -3,19 +3,37 @@ title: Structure
 description: How an Ocelescope-based tool is structured.
 ---
 
-As described in the overview, Ocelescope is a web application consisting of a frontend and a backend. This page explains how to structure a custom Ocelescope-based tool by looking at the [Ocelescope module template](https://github.com/promi4s/ocelescope-module-template).
+import { Steps } from '@astrojs/starlight/components';
+import { Image } from 'astro:assets';
+import managementModule from '../../../assets/modulesGuide/management-module.png';
+
+As described in the [overview](/module-development/), Ocelescope is a web application consisting of a frontend and a backend.
+This page explains how an Ocelescope-based tool is structured, using the [Ocelescope module template](https://github.com/promi4s/ocelescope-module-template) as an example, and how modules are added to it.
+
+## Getting the template
+
+You can either clone the template repository:
+
+```sh
+git clone https://github.com/promi4s/ocelescope-module-template.git
+```
+
+Or create your own repository from it on GitHub by selecting **Use this template**:
+
+![Creating a new repository from the module template on GitHub](../../../assets/modulesGuide/module-template.png)
 
 ## Structure of the template
 
-The [Ocelescope module template](https://github.com/promi4s/ocelescope-module-template) is a single repository that contains everything needed to build and run an Ocelescope-based tool.
+The template is a single repository that contains everything needed to build and run an Ocelescope-based tool.
 
 ```text
 .
-├── app/
-├── backend-modules/
-├── frontend-modules/
-├── data/
+├── app/                 # Next.js frontend application
+├── backend-modules/     # Local backend modules (Python packages)
+├── frontend-modules/    # Local frontend modules (pnpm packages)
+├── data/                # Default OCELs offered in the upload dialog
 ├── docker/
+├── scripts/             # Scripts to create new modules from templates
 ├── compose.yaml
 ├── docker-bake.hcl
 ├── package.json
@@ -24,50 +42,19 @@ The [Ocelescope module template](https://github.com/promi4s/ocelescope-module-te
 └── .env.example
 ```
 
+New backend and frontend modules are created from templates using the scripts in `scripts/`.
+How to create and develop them is explained in [Backend Module](/module-development/backend-module/) and [Frontend Module](/module-development/frontend-module/).
+
 ## Frontend
 
 The `app` directory contains a Next.js application that is already configured as an Ocelescope frontend through the [`@ocelescope/core`](https://www.npmjs.com/package/@ocelescope/core) package.
+In most cases, the only file you need to change is `app/ocelescope.config.ts`, which defines the frontend modules available in your tool.
 
-In most cases, you only need to change `app/ocelescope.config.ts`. This file is used to add the frontend modules that should be available in your tool.
+The frontend is managed as a [pnpm workspace](https://pnpm.io/workspaces) that includes the application in `app` and all local frontend modules in `frontend-modules`.
 
-The template also includes a minimal frontend module in `frontend-modules/example`. You can use this module as a reference or copy it as a starting point for your own frontend module.
+To add a frontend module:
 
-### Adding frontend modules
-
-The frontend is managed as a [pnpm workspace](https://pnpm.io/workspaces). The workspace includes the main application in `app` and all local frontend modules in `frontend-modules`.
-
-#### Adding a local module
-
-To add a module from `frontend-modules` to the application:
-
-1. Add the local module as a dependency of the `app` package:
-
-   ```bash
-   pnpm --filter @instance/app add "@instance/example-module@workspace:*"
-   ```
-
-2. Add the module package to `transpilePackages` in `app/next.config.ts`:
-
-   ```ts
-   transpilePackages: [
-     "@instance/example-module",
-   ],
-   ```
-
-3. Import and register the module in `app/ocelescope.config.ts`:
-
-   ```ts
-   import type { OcelescopeConfig } from "@ocelescope/core";
-   import exampleModule from "@instance/example-module";
-
-   export default {
-     modules: [exampleModule],
-   } satisfies OcelescopeConfig;
-   ```
-
-#### Adding an external module
-
-An external module is installed from a package registry instead of being part of the local workspace.
+<Steps>
 
 1. Add the module as a dependency of the `app` package:
 
@@ -75,19 +62,27 @@ An external module is installed from a package registry instead of being part of
    pnpm --filter @instance/app add @ocelescope/example-module
    ```
 
-2. Import and register the module in `app/ocelescope.config.ts` in the same way as a local module.
+   Replace `@ocelescope/example-module` with the package name of the module you want to use.
+
+2. Import and register the module in `app/ocelescope.config.ts`:
+
+   ```ts title="app/ocelescope.config.ts"
+   import type { OcelescopeConfig } from "@ocelescope/core";
+   import exampleModule from "@ocelescope/example-module";
+
+   export default {
+     modules: [exampleModule],
+   } satisfies OcelescopeConfig;
+   ```
+
+</Steps>
 
 ## Backend
 
-The backend is provided by the [`ocelescope-backend`](https://pypi.org/project/ocelescope-backend/) package. The template uses this package as the base backend application.
+The backend is provided by the [`ocelescope-backend`](https://pypi.org/project/ocelescope-backend/) package, which the template uses as its base application.
+Backend modules are Python packages that extend this application with their own functionality. Local backend modules are stored in `backend-modules`.
 
-Custom backend modules are stored in the `backend-modules` directory. Each module is a Python package that extends the backend with its own functionality.
-
-The template includes a minimal backend module in `backend-modules/example`. You can use it as a reference or copy it as a starting point for your own backend module.
-
-### Adding backend modules
-
-Add a backend module from the repository root:
+To add a backend module, run the following from the repository root:
 
 ```bash
 uv add ocelescope-module-example
@@ -95,6 +90,73 @@ uv add ocelescope-module-example
 
 Replace `ocelescope-module-example` with the package name of the module you want to use.
 
-If a module with this name is located in `backend-modules`, `uv` uses the local workspace package. Otherwise, it installs the package from a Python package registry.
+If a module with this name exists in `backend-modules`, `uv` uses the local workspace package. Otherwise, it installs the package from a Python package registry.
+Once added, Ocelescope discovers and loads the module automatically when the backend starts.
 
-After adding a module, Ocelescope discovers and loads it automatically when the backend starts.
+## Management and default OCELs
+
+The template already includes the [`@ocelescope/management`](https://www.npmjs.com/package/@ocelescope/management) frontend module and the [`ocelescope-module-ocel`](https://pypi.org/project/ocelescope-module-ocel/) backend module.
+Together, they provide a management view as the start page of your tool, where users can import, inspect and export OCELs and resources.
+
+They also let you ship default OCELs: event logs that users can load into their session with a single click.
+This is a good way to give users ready-made logs that fit your specific application.
+The default OCELs are listed below the dropzone in the upload dialog:
+
+<Image
+  src={managementModule}
+  alt="The upload dialog of the management module, with the default OCELs listed below the dropzone"
+  width={560}
+  style={{ display: "block", margin: "0 auto" }}
+/>
+
+Default OCELs are stored in the `data` directory and listed in `data/event_logs.json`:
+
+```json title="data/event_logs.json"
+{
+  "base_path": "event_logs",
+  "event_logs": [
+    {
+      "key": "container-logistics",
+      "name": "Container Logistics",
+      "version": "3",
+      "file": "container_logistics.db",
+      "url": "https://doi.org/10.5281/zenodo.18373888"
+    }
+  ]
+}
+```
+
+- `base_path` is the directory, relative to `data`, that contains the event log files.
+- `key` and `version` identify the log.
+- `name` is the name shown to users.
+- `file` is the file name of the log inside `base_path`.
+- `url` is an optional link to the source of the log.
+
+To add a default OCEL:
+
+<Steps>
+
+1. Convert the log to the DuckDB format used by Ocelescope with the [`ocelescope`](/ocelescope/ocelescope-library/) package. OCEL 2.0 logs in SQLite, JSON and XML are supported:
+
+   ```python
+   from ocelescope.ocel.io import convert_ocel_duckdb
+
+   convert_ocel_duckdb("my_log.sqlite", "data/event_logs/my_log.db")
+   ```
+
+2. Add an entry for the log to `data/event_logs.json`:
+
+   ```json
+   {
+     "key": "my-log",
+     "name": "My Log",
+     "version": "1",
+     "file": "my_log.db"
+   }
+   ```
+
+</Steps>
+
+The backend reads the default OCELs from the directory set in the `DATA_DIR` environment variable.
+When running the backend locally, set `DATA_DIR="data"` in your `.env` file.
+With Docker, the `data` directory is copied into the backend image, so rebuild the backend after changing it.
