@@ -5,29 +5,72 @@ description: Build the FastAPI sub-application that backs an Ocelescope module.
 
 The backend half of a module is a Python package that exposes a [FastAPI](https://fastapi.tiangolo.com/) sub-application. Ocelescope discovers it through a Python entry point and mounts it under a versioned path.
 
+## Creating a backend module
+
+The [module template](/module-development/structure/) includes scripts that generate new modules from templates.
+To create a backend module, run the following from the repository root:
+
+```bash
+pnpm run add:backend ocel-stats
+```
+
+`ocel-stats` is the name of the folder the module is created in. To create a backend and a [frontend module](/module-development/frontend-module/) together, use `pnpm run add:module` instead.
+
+The script uses [Copier](https://copier.readthedocs.io) to generate the module from the [backend module template](https://github.com/promi4s/create-ocelescope-backend-module).
+It asks for the module's name, a short description and an author. All other names are derived from the module name:
+
+| Module name  | Python package                 | Module key       | Class            |
+| ------------ | ------------------------------ | ---------------- | ---------------- |
+| `OCEL Stats` | `ocelescope-module-ocel-stats` | `ocelStats`      | `OCELStats`      |
+| `3D Viewer`  | `ocelescope-module-3d-viewer`  | `module3dViewer` | `Module3DViewer` |
+
+The module is created in `backend-modules/<folder>`:
+
+```text
+backend-modules/ocel-stats/
+├── src/ocelescope_module_ocel_stats/
+│   ├── __init__.py
+│   ├── module.py        # The Module class
+│   └── routes.py        # The module's API endpoints
+├── .copier-answers.yml  # Your answers, used to update the module later
+├── pyproject.toml
+└── README.md
+```
+
+The script then adds the module to the root `pyproject.toml`, so it is installed as part of the backend.
+Install it and start the development servers:
+
+```bash
+pnpm run sync
+pnpm run dev
+```
+
+The backend loads the module on startup and serves it under `/modules/<key>/v1`.
+The generated module contains a single example endpoint, which you can open at [`http://localhost:8000/modules/ocelStats/v1/hello`](http://localhost:8000/modules/ocelStats/v1/hello).
+
+The following sections explain the generated files and how to extend them.
+
+:::tip
+To pull in later changes to the backend module template, commit your work and run `uvx copier update` in the module's folder.
+:::
+
 ## The `Module` class
 
-Define a class that inherits from `Module` (from `ocelescope_backend.app.modules`). It declares its identity through `meta` and builds its FastAPI app in `create_app`.
+`module.py` defines the module itself: a class that inherits from `Module` (from `ocelescope_backend.app.modules`). It declares its identity through `meta` and builds its FastAPI app in `create_app`.
 
-```python title="module.py"
+```python title="src/ocelescope_module_ocel_stats/module.py"
 from fastapi import FastAPI
 from ocelescope_backend.app.modules import Module, ModuleMeta
 from packaging.version import Version
 
-from ocelescope_module_example.routes import router
+from ocelescope_module_ocel_stats.routes import router
 
 
-class Example(Module):
-    meta = ModuleMeta(key="example", version=Version("1.0"))
+class OCELStats(Module):
+    meta = ModuleMeta(key="ocelStats", version=Version("1.0"))
 
-    @classmethod
-    def create_app(cls) -> FastAPI:
-        app = FastAPI(
-            title="Example",
-            version=str(cls.meta.version),
-            docs_url=None,
-            redoc_url=None,
-        )
+    def create_app(self) -> FastAPI:
+        app = FastAPI(title="OCEL Stats", version=str(self.meta.version))
         app.include_router(router)
         return app
 ```
@@ -37,28 +80,38 @@ class Example(Module):
 
 ## Defining routes
 
-Put your endpoints on an `APIRouter`. Give every operation a stable `operation_id`, because it becomes the name of the generated frontend hook.
+`routes.py` contains the module's endpoints on an `APIRouter`. The generated module comes with a single example endpoint:
 
-```python title="routes.py"
+```python title="src/ocelescope_module_ocel_stats/routes.py"
 from fastapi import APIRouter
-from ocelescope_backend.app.dependencies import ApiSession, ApiOcel
+from pydantic import BaseModel
 
 router = APIRouter()
 
 
-@router.get("/{ocel_id}/summary", operation_id="getSummary")
-def get_summary(ocel_id: str, session: ApiSession) -> dict:
-    ...
+class HelloResponse(BaseModel):
+    message: str
+
+
+@router.get("/hello", operation_id="hello", response_model=HelloResponse)
+def hello() -> HelloResponse:
+    return HelloResponse(message="Hello from the OCEL Stats backend module")
 ```
+
+Give every endpoint a stable `operation_id`, because it becomes the name of the generated frontend hook.
+Declaring the response as a Pydantic model gives the generated frontend client fully typed responses.
 
 ### Accessing the session and OCELs
 
 Two dependencies from `ocelescope_backend.app.dependencies` give you access to the current session and its logs:
 
 - `ApiSession` injects the active `Session`, which holds the uploaded OCELs and resources.
-- `ApiOcel` injects an `OCEL` directly, resolved from the request's `ocel_id`.
+- `ApiOcel` injects an `OCEL` directly, resolved from the `ocel_id` path parameter.
 
-```python
+```python title="src/ocelescope_module_ocel_stats/routes.py"
+from ocelescope_backend.app.dependencies import ApiOcel
+
+
 @router.get("/{ocel_id}/object-types", operation_id="getObjectTypes")
 def get_object_types(ocel: ApiOcel) -> list[str]:
     return ocel.objects.types
@@ -68,19 +121,26 @@ The injected `OCEL` is the same [`ocelescope` library](/ocelescope/ocelescope-li
 
 ## Registering the entry point
 
-Ocelescope finds modules through the `ocelescope_backend.modules` entry point group. Declare it in your `pyproject.toml`:
+Ocelescope finds modules through the `ocelescope_backend.modules` entry point group. The generated `pyproject.toml` already declares the module under its key:
 
 ```toml title="pyproject.toml"
 [project]
-name = "ocelescope-module-example"
+name = "ocelescope-module-ocel-stats"
 version = "0.1.0"
+readme = "README.md"
+description = "An Ocelescope module"
+authors = [{ name = "Your Name" }]
 requires-python = ">=3.11"
-dependencies = ["fastapi", "ocelescope-backend"]
+dependencies = [
+  "ocelescope-backend>=0.10.1",
+]
 
 [project.entry-points."ocelescope_backend.modules"]
-exampleV1 = "ocelescope_module_example.module:Example"
+ocelStats = "ocelescope_module_ocel_stats.module:OCELStats"
 ```
 
 When the backend starts, it loads every entry point in that group, checks each is a `Module` subclass, and mounts it. Duplicate `key` and major-version pairs are skipped, so install only one package per major version.
+
+Add further Python dependencies of your module from its folder with `uv add <package>`.
 
 Once the backend is in place, build the [Frontend Module](/module-development/frontend-module/) that consumes it.
