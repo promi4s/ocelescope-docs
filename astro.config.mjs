@@ -73,6 +73,7 @@ export default defineConfig({
 							slug: "ocelescope/ocelescope-library",
 						},
 						{ label: "Benchmarks", slug: "ocelescope/benchmark" },
+						{ label: "Cite Ocelescope", slug: "ocelescope/citing" },
 					],
 				},
 				{
