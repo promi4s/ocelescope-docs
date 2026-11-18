@@ -162,9 +162,11 @@ export const landing = {
 			{ name: "Aaron Küsters", role: "Advisor" },
 			{ name: "Uy Sa Huynh", role: "Developer" },
 			// { name: "Philipp Facklam", role: "Contributor" },
+			{ name: "Benedikt Allendorf", role: "Industrial Advisor" },
 			{ name: "Lukas Liss" },
 			// { name: "Niklas van Detten", initials: "NvD" },
 			{ name: "Sander Leemans" },
+			{ name: "Andreas Fritsch" },
 		],
 	},
 	resourcesHeading: {
