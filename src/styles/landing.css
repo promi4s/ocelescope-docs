@@ -1082,6 +1082,66 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
 }
 .plugin-download:hover small { text-decoration: underline; }
 
+/* ─── Contributors ───────────────────────────────────────────────────────── */
+/* Always a deep blue band, in both themes, with dark tiles and light text */
+.contributors-section {
+  padding: 92px 0;
+  position: relative;
+  background:
+    radial-gradient(ellipse 60% 80% at 10% 0%, hsl(192 82% 43% / .22), transparent 60%),
+    radial-gradient(ellipse 55% 70% at 95% 100%, hsl(249 100% 67% / .20), transparent 60%),
+    linear-gradient(160deg, hsl(214 62% 16%) 0%, hsl(220 58% 11%) 55%, hsl(226 52% 9%) 100%);
+  color: hsl(205, 40%, 94%);
+}
+.contributors-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, hsl(192 82% 43% / .5) 30%, hsl(249 100% 67% / .4) 70%, transparent 100%);
+}
+.contributors-section .eyebrow { color: hsl(192, 80%, 62%); }
+.contributors-section .section-heading h2 { color: hsl(205, 40%, 96%); }
+
+.card-grid.people { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+
+.person-card,
+[data-theme="light"] .person-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px;
+  background: linear-gradient(160deg, hsl(218 45% 17% / .85), hsl(222 48% 11% / .85));
+  border-color: hsl(205 60% 70% / .14);
+  box-shadow: 0 10px 30px -18px rgba(0, 0, 0, .7);
+  backdrop-filter: blur(6px);
+}
+.person-card:hover,
+[data-theme="light"] .person-card:hover {
+  border-color: hsl(192 82% 55% / .5);
+  box-shadow:
+    0 24px 48px -24px rgba(0, 0, 0, .8),
+    0 0 0 1px hsl(192 82% 55% / .25),
+    0 0 32px -8px hsl(192 82% 55% / .25);
+}
+.person-card .monogram {
+  width: 44px;
+  height: 44px;
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, .12), 0 6px 18px -8px hsl(192 82% 43% / .7);
+}
+.person-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+.person-card strong { color: hsl(205, 40%, 96%); }
+.person-role {
+  color: hsl(200, 30%, 72%);
+  font: 500 12px "Geist Mono", monospace;
+}
+.person-card [hidden] { display: none; }
+
 /* ─── Resources ──────────────────────────────────────────────────────────── */
 .resources-section {
   padding: 92px 0;
@@ -1220,6 +1280,7 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   .feature-section,
   .plugin-section,
   .ecosystem-section,
+  .contributors-section,
   .resources-section,
   .quickstart-section { padding-block: 68px; }
   .statement-section {

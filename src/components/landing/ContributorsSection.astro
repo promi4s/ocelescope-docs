@@ -1,0 +1,30 @@
+---
+const { contributors } = Astro.props;
+
+// First and last capitalised name parts, e.g. "Nina Graves" -> "NG";
+// a person can override this with an explicit `initials` field.
+const initials = (name: string) => {
+  const parts = name.split(/\s+/).filter((part) => part[0] === part[0].toUpperCase());
+  return parts.length > 1 ? parts[0][0] + parts[parts.length - 1][0] : parts[0][0];
+};
+---
+
+<section id="contributors" class="contributors-section">
+  <div class="landing-container">
+    <div class="section-heading">
+      <p class="eyebrow">{contributors.eyebrow}</p>
+      <h2>{contributors.title}</h2>
+    </div>
+    <div class="card-grid people">
+      {contributors.people.map((person: any, index: number) => (
+        <div class="person-card lift-card">
+          <span class={`monogram monogram-${(index % 3) + 1}`}>{person.initials ?? initials(person.name)}</span>
+          <span class="person-card-body">
+            <strong>{person.name}</strong>
+            <span class="person-role" hidden={!person.role}>{person.role}</span>
+          </span>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -150,6 +150,23 @@ export const landing = {
 		},
 		cardCta: "Download",
 	},
+	contributors: {
+		eyebrow: "COMMUNITY",
+		title: "Ocelescope contributors and enthusiasts.",
+		people: [
+			{ name: "Görkem Öztürk", role: "Main Developer" },
+			{ name: "Nina Graves", role: "Project Manager" },
+			{ name: "Sebastian Menne", role: "Developer" },
+			{ name: "Wil van der Aalst", role: "Supervisor", initials: "WvdA" },
+			{ name: "Felicia Schlesier", role: "Contributor" },
+			{ name: "Aaron Küsters", role: "Advisor" },
+			{ name: "Uy Sa Huynh", role: "Developer" },
+			// { name: "Philipp Facklam", role: "Contributor" },
+			{ name: "Lukas Liss" },
+			// { name: "Niklas van Detten", initials: "NvD" },
+			{ name: "Sander Leemans" },
+		],
+	},
 	resourcesHeading: {
 		eyebrow: "RESOURCES",
 		title: "Everything to get unstuck.",

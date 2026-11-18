@@ -2,6 +2,7 @@
 import StarlightPage from "@astrojs/starlight/components/StarlightPage.astro";
 import "../styles/landing.css";
 import BrowserFrame from "../components/landing/BrowserFrame.astro";
+import ContributorsSection from "../components/landing/ContributorsSection.astro";
 import EcosystemSection from "../components/landing/EcosystemSection.astro";
 import FeatureCopy from "../components/landing/FeatureCopy.astro";
 import FeatureSection from "../components/landing/FeatureSection.astro";
@@ -49,6 +50,7 @@ const plugins = await enrichPlugins(sampledPlugins);
     </section>
 
     <EcosystemSection ecosystem={landing.ecosystem} plugins={plugins} />
+    <ContributorsSection contributors={landing.contributors} />
     <ResourcesSection heading={landing.resourcesHeading} groups={landing.resourceGroups} />
     <QuickstartSection quickstart={landing.quickstart} terminal={landing.terminal} />
     <MarketingFooter brand={landing.brand} footer={landing.footer} year={year} />
