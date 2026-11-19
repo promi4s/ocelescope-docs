@@ -164,7 +164,7 @@ export const landing = {
 			// { name: "Philipp Facklam", role: "Contributor" },
 			{ name: "Benedikt Allendorf", role: "Industrial Advisor" },
 			{ name: "Lukas Liss" },
-			// { name: "Niklas van Detten", initials: "NvD" },
+			{ name: "Niklas van Detten", initials: "NvD" },
 			{ name: "Sander Leemans" },
 			{ name: "Andreas Fritsch" },
 		],
