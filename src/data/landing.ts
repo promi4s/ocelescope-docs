@@ -167,6 +167,7 @@ export const landing = {
 			{ name: "Niklas van Detten", initials: "NvD" },
 			{ name: "Sander Leemans" },
 			{ name: "Andreas Fritsch" },
+			{ name: "Boris Wiegand" },
 		],
 	},
 	resourcesHeading: {
