@@ -1136,9 +1136,18 @@ main:has(.landing-shell) > .content-panel:has(.landing-shell) > .sl-container > 
   min-width: 0;
 }
 .person-card strong { color: hsl(205, 40%, 96%); }
-.person-role {
+.person-meta {
   color: hsl(200, 30%, 72%);
   font: 500 12px "Geist Mono", monospace;
+}
+.person-role {
+  color: hsl(192, 80%, 62%);
+  font-weight: 600;
+}
+/* Separator glued to the affiliation so a wrap never strands it after the title */
+.person-role + .person-affiliation::before {
+  content: "·";
+  margin-right: 5px;
 }
 .person-card [hidden] { display: none; }
 

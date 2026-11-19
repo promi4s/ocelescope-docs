@@ -21,7 +21,10 @@ const initials = (name: string) => {
           <span class={`monogram monogram-${(index % 3) + 1}`}>{person.initials ?? initials(person.name)}</span>
           <span class="person-card-body">
             <strong>{person.name}</strong>
-            <span class="person-role" hidden={!person.role}>{person.role}</span>
+            <span class="person-meta" hidden={!person.role && !person.affiliation}>
+              {person.role && <span class="person-role">{person.role}</span>}
+              {person.affiliation && <span class="person-affiliation">{person.affiliation}</span>}
+            </span>
           </span>
         </div>
       ))}
