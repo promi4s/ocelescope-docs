@@ -62,4 +62,12 @@ export const plugins: Plugin[] = [
 		author: "Uy Sa Huynh",
 		showLanding: true,
 	},
+	{
+		name: "Sus4PM",
+		href: "https://github.com/martinrubio/Sus4PM-Ocelescope-Plugin",
+		monogram: "SP",
+		author: "Martín Rubio",
+		showLanding: true,
+		doi: "10.1007/978-3-032-18408-5_30",
+	},
 ];
