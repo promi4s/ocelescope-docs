@@ -99,6 +99,17 @@ const cardCta = landing.ecosystem.cardCta;
   }
 </script>
 
+<!--
+  This component only renders on the Plugin Library page, so this global
+  override widens that page alone — with the table of contents disabled, the
+  content pane can reclaim the freed space instead of Starlight's 45rem cap.
+-->
+<style is:global>
+  :root {
+    --sl-content-width: 72rem;
+  }
+</style>
+
 <style>
   .plugin-list {
     margin-top: 1.5rem;
