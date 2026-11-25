@@ -70,4 +70,10 @@ export const plugins: Plugin[] = [
 		showLanding: true,
 		doi: "10.1007/978-3-032-18408-5_30",
 	},
+	{
+		name: "Carbon Footprint",
+		href: "https://github.com/sakethreddy21/carbon-footprint-plugin-for-object-centric-event-logs",
+		monogram: "CF",
+		author: "Saketh Reddy Kokkonda",
+	},
 ];
